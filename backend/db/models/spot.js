@@ -3,7 +3,7 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Spot extends Model {
     static associate(models) {
-      Spots.belongsTo(models.User, { foreignKey: "userId" });
+      Spot.belongsTo(models.User, { foreignKey: "userId" });
     }
   }
   Spot.init(
@@ -15,16 +15,28 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
       },
       city: {
-        type: DataTypes.STRING,
+        state: {
+          type: DataTypes.STRING,
+        },
         allowNull: false,
-      },
-      state: {
-        type: DataTypes.STRING,
         validate: {
           isAlpha: true,
         },
       },
-      country: DataTypes.STRING,
+      state: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          isAlpha: true,
+        },
+      },
+      country: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          isAlpha: true,
+        },
+      },
       lat: {
         type: DataTypes.FLOAT,
         validate: {
@@ -37,9 +49,21 @@ module.exports = (sequelize, DataTypes) => {
           isNumeric: true,
         },
       },
-      name: DataTypes.STRING,
-      description: DataTypes.STRING,
-      price: DataTypes.INTEGER,
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+      },
+      description: { type: DataTypes.STRING,
+      validate: {
+        len: [1, 500]
+      }},
+      price: {
+        type: DataTypes.DECIMAL,
+        validate: {
+          isNumeric: true,
+        },
+      },
     },
     {
       sequelize,
