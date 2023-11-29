@@ -4,6 +4,11 @@ module.exports = (sequelize, DataTypes) => {
   class Spot extends Model {
     static associate(models) {
       Spot.belongsTo(models.User, { foreignKey: "userId" });
+      Spot.belongsToMany(models.User, {
+        through: models.Booking,
+        foreignKey: "spotId",
+        otherKey: "userId",
+      });
     }
   }
   Spot.init(
@@ -52,12 +57,14 @@ module.exports = (sequelize, DataTypes) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true
+        unique: true,
       },
-      description: { type: DataTypes.STRING,
-      validate: {
-        len: [1, 500]
-      }},
+      description: {
+        type: DataTypes.STRING,
+        validate: {
+          len: [1, 500],
+        },
+      },
       price: {
         type: DataTypes.DECIMAL,
         validate: {
