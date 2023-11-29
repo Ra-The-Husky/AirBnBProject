@@ -19,7 +19,7 @@ module.exports = {
         lat: 4.5,
         lng: 5.5,
         name: "Fake-spot",
-        description: "This is a description for fake spot",
+        description: "This is a description for a fake spot",
         price: 300
       },
       {
@@ -38,8 +38,6 @@ module.exports = {
         city: 'Fake City',
         state: 'NY',
         country: "United States",
-        lat: 77.0,
-        lng: 159.32,
         name: "Hot-Fake-Spot",
         description: "This spot isn't real but is HOT, somehow.",
         price: 1.00
