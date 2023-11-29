@@ -3,7 +3,7 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Spot extends Model {
     static associate(models) {
-      Spot.belongsTo(models.User, { foreignKey: "userId" });
+      Spot.belongsTo(models.User, { foreignKey: "ownerId" });
       Spot.belongsToMany(models.User, {
         through: models.Booking,
         foreignKey: "spotId",
@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Spot.init(
     {
-      userId: DataTypes.INTEGER,
+      ownerId: DataTypes.INTEGER,
       address: {
         type: DataTypes.STRING,
         allowNull: false,
