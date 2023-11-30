@@ -1,7 +1,6 @@
 'use strict';
 const { Review } = require('../models');
 const bcrypt = require("bcryptjs");
-const review = require('../models/review');
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
