@@ -10,24 +10,27 @@ if (process.env.NODE_ENV === 'production') {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await Booking.bulkCreate([
+    await Booking.bulkCreate(
+      // options,
+       [
+
       {
         spotId: 1,
         userId: 1,
-        startDate: 10-1-2023,
-        endDate: 10-5-2023
+        startDate: "10-1-2023",
+        endDate: "10-5-2023"
       },
       {
         spotId: 2,
         userId: 2,
-        startDate: 11-5-2023,
-        endDate: 11-10-2023
+        startDate: "11-5-2023",
+        endDate: "11-10-2023"
       },
       {
         spotId: 3,
         userId: 3,
-        startDate: 11-25-2023,
-        endDate: 11-30-2023
+        startDate: "11-25-2023",
+        endDate: "11-30-2023"
       },
     ], { validate: true})
   },

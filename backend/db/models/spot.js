@@ -34,23 +34,23 @@ module.exports = (sequelize, DataTypes) => {
       city: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: {
-          isAlpha: true,
-        },
+        // validate: {
+        //   isAlpha: true,
+        // },
       },
       state: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: {
-          isAlpha: true,
-        },
+        // validate: {
+        //   isAlpha: true,
+        // },
       },
       country: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: {
-          isAlpha: true,
-        },
+        // validate: {
+        //   isAlpha: true,
+        // },
       },
       lat: {
         type: DataTypes.FLOAT,
