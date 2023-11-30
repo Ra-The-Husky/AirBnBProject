@@ -9,31 +9,31 @@ if (process.env.NODE_ENV === "production") {
 module.exports = {
   async up(queryInterface, Sequelize) {
     await Image.bulkCreate(
-      options,
+      // options,
       [
         {
           imageableId: 1,
-          imageabletype: "Spot",
+          imageableType: 'Spot'
         },
         {
           imageableId: 1,
-          imageabletype: "Review",
+          imageableType: 'Review'
         },
         {
           imageableId: 2,
-          imageabletype: "Spot",
+          imageableType: 'Spot'
         },
         {
           imageableId: 2,
-          imageabletype: "Review",
+          imageableType: 'Review'
         },
         {
           imageableId: 3,
-          imageabletype: "Spot",
+          imageableType: 'Spot'
         },
         {
           imageableId: 3,
-          imageabletype: "Review",
+          imageableType: 'Review'
         },
       ],
       { validate: true }
