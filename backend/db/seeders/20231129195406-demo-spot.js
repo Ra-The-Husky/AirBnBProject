@@ -10,6 +10,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     try {
       await Spot.bulkCreate(
+        options,
         [
           {
             ownerId: 1,
