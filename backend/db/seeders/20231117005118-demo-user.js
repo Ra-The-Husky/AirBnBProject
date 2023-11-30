@@ -5,12 +5,14 @@ const bcrypt = require("bcryptjs");
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA;  
+  options.schema = process.env.SCHEMA;
 }
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await User.bulkCreate([
+try
+    {
+      await User.bulkCreate([
       {
         email: 'demo@user.io',
         username: 'Demo-lition',
@@ -27,6 +29,9 @@ module.exports = {
         hashedPassword: bcrypt.hashSync('password3')
       }
     ], { validate: true });
+  } catch (error) {
+    console.log(error)
+  }
   },
 
   async down (queryInterface, Sequelize) {
