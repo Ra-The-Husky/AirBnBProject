@@ -1,6 +1,7 @@
 'use strict';
-const { Booking } = require('../models');
+const { Review } = require('../models');
 const bcrypt = require("bcryptjs");
+const review = require('../models/review');
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
@@ -9,7 +10,7 @@ if (process.env.NODE_ENV === 'production') {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await Spot.bulkCreate([
+    await Review.bulkCreate([
       {
         spotId: 1,
         userId: 1,
