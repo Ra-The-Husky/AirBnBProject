@@ -1,6 +1,5 @@
 "use strict";
 const { Spot } = require("../models");
-const bcrypt = require("bcryptjs");
 
 let options = {};
 if (process.env.NODE_ENV === "production") {
@@ -13,6 +12,7 @@ module.exports = {
     await Spot.bulkCreate(
       [
         {
+          ownerId: 1,
           address: "123 Fake Address Ln",
           city: "Fake City",
           state: "NY",
@@ -24,6 +24,7 @@ module.exports = {
           price: 300,
         },
         {
+          ownerId: 2,
           address: "456 Unknown Drive",
           city: "Falseton",
           state: "CT",
@@ -32,16 +33,17 @@ module.exports = {
           lng: 99.7,
           name: "Unknown-Joint",
           description: "This spot is unknown so this description is a warning",
-          price: 1.0,
+          price: 1.00,
         },
         {
+          ownerId: 3,
           address: "789 Fakest Ave",
           city: "Fake City",
           state: "NY",
           country: "United States",
           name: "Hot-Fake-Spot",
           description: "This spot isn't real but is HOT, somehow.",
-          price: 1.0,
+          price: 6000.50,
         },
       ],
       { validate: true }
