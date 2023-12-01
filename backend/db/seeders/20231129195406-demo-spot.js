@@ -10,26 +10,26 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     try {
       await Spot.bulkCreate(
-        options,
+        // options,
         [
           {
             ownerId: 1,
             address: "123 Fake Address Ln",
-            city: "Fake City",
+            city: "Fake-City",
             state: "NY",
             country: "United States",
             lat: 4.5,
             lng: 5.5,
             name: "Fake-spot",
-            description: "This is a description for a fake spot",
-            price: 300.0,
+            description: "This is a description for a fake spot"
+            price: 300,
           },
           {
             ownerId: 2,
             address: "456 Unknown Drive",
             city: "Falseton",
             state: "CT",
-            country: "United States",
+            country: "United-States",
             lat: 65.3,
             lng: 99.7,
             name: "Unknown-Joint",
@@ -40,12 +40,12 @@ module.exports = {
           {
             ownerId: 3,
             address: "789 Fakest Ave",
-            city: "Fake City",
+            city: "Fake-City",
             state: "NY",
-            country: "United States",
+            country: "United-States",
             name: "Hot-Fake-Spot",
             description: "This spot isn't real but is HOT, somehow.",
-            price: 6000.5,
+            price: 1.0,
           },
         ],
         { validate: true }

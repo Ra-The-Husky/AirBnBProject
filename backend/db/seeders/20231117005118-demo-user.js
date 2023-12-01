@@ -9,6 +9,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 module.exports = {
+
   async up(queryInterface, Sequelize) {
     await User.bulkCreate(
       options,
@@ -34,8 +35,7 @@ module.exports = {
           username: "FakeUser2",
           hashedPassword: bcrypt.hashSync("password3"),
         },
-      ],
-      { validate: true }
+    ], { validate: true });
     );
   },
 
