@@ -4,12 +4,11 @@ const { User } = require("../models");
 const bcrypt = require("bcryptjs");
 
 let options = {};
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === "production") {
   options.schema = process.env.SCHEMA;
 }
 
 module.exports = {
-
   async up(queryInterface, Sequelize) {
     await User.bulkCreate(
       options,
@@ -35,7 +34,8 @@ module.exports = {
           username: "FakeUser2",
           hashedPassword: bcrypt.hashSync("password3"),
         },
-    ], { validate: true });
+      ],
+      { validate: true }
     );
   },
 
