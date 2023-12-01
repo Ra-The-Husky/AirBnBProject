@@ -22,7 +22,7 @@ module.exports = {
             lng: 5.5,
             name: "Fake-spot",
             description: "This is a description for a fake spot",
-            price: 300,
+            price: 30,
           },
           {
             ownerId: 2,
