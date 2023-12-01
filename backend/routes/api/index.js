@@ -6,6 +6,14 @@ const { requireAuth } = require('../../utils/auth.js');
 const sessionRouter = require('./session.js');
 const usersRouter = require('./users.js');
 
+// Add a XSRF-TOKEN cookie
+router.get("/api/csrf/restore", (req, res) => {
+  const csrfToken = req.csrfToken();
+  res.cookie("XSRF-TOKEN", csrfToken);
+  res.status(200).json({
+    'XSRF-Token': csrfToken
+  });
+});
 // GET /api/set-token-cookie
 // router.get('/set-token-cookie', async (_req, res) => {
 //   const user = await User.findOne({
@@ -31,7 +39,7 @@ router.use(restoreUser);
   router.post('/test', (req, res) => {
     res.json({ requestBody: req.body });
   });
-  
+
 // GET /api/restore-user
 // router.get(
 //   '/restore-user',

@@ -1,13 +1,11 @@
 "use strict";
 const { Spot } = require("../models");
-const bcrypt = require("bcryptjs");
 
 let options = {};
 if (process.env.NODE_ENV === "production") {
   options.schema = process.env.SCHEMA;
 }
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     try {
@@ -23,7 +21,7 @@ module.exports = {
             lat: 4.5,
             lng: 5.5,
             name: "Fake-spot",
-            description: "This is a description for a fake spot",
+            description: "This is a description for a fake spot"
             price: 300,
           },
           {
