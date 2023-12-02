@@ -43,6 +43,8 @@ module.exports = {
             city: "Fake-City",
             state: "NY",
             country: "United-States",
+            lat: 956.32025,
+            lng: -3.25485,
             name: "Hot-Fake-Spot",
             description: "This spot isn't real but is HOT, somehow.",
             price: 1.0,
@@ -53,6 +55,8 @@ module.exports = {
             city: "Falseton",
             state: "CT",
             country: "United-States",
+            lat: -98.7785,
+            lng: 22.6902,
             name: "Some Void Place",
             description:
               "Get swallowed into a room of everlasting nothingness.",
