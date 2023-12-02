@@ -45,8 +45,7 @@ module.exports = {
           {
             spotId: 4,
             userId: 3,
-            review:
-              "Very quiet space outside of time. Great for when you REALLY need to get away.",
+            review: "Very quiet space outside of time. Great for when you REALLY need to get away.",
             stars: 9,
           },
         ],
