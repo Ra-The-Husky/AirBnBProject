@@ -21,6 +21,9 @@ module.exports = {
         imageableType: {
           type: Sequelize.STRING,
         },
+        imagePreview: {
+          type: Sequelize.BOOLEAN,
+        },
         createdAt: {
           allowNull: false,
           type: Sequelize.DATE,
