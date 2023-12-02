@@ -2,7 +2,11 @@ const express = require("express");
 const { Spot, Review, Image, User } = require("../../db/models");
 const { Op } = require("sequelize");
 const router = express.Router();
-const { setTokenCookie, restoreUser } = require("../../utils/auth");
+const {
+  setTokenCookie,
+  restoreUser,
+  requireAuth,
+} = require("../../utils/auth");
 
 router.get("/", async (req, res, next) => {
   const allSpots = await Spot.findAll({
@@ -60,39 +64,38 @@ router.get("/:spotId", async (req, res) => {
         model: Review,
       },
       {
-        model: Image, attributes: ['id', 'url', 'preview']
+        model: Image,
+        attributes: ["id", "url", "preview"],
       },
       {
-        model: User, attributes: ['id', 'firstName', 'lastName']
+        model: User,
+        attributes: ["id", "firstName", "lastName"],
       },
     ],
   });
 
   if (!spot) {
-    const err = new Error("Couldn't find a Spot with the specified id")
-    err.status = 404
-    res.status(404)
+    res.status(404);
     res.json({
       message: "Spot couldn't be found",
-      error: err.message,
-      code: err.status
-    })
+    });
   } else {
+    //Counts spot's reviews
     const numReviews = await Review.count({
       where: {
-        spotId: spot.id
-      }
-    })
+        spotId: spot.id,
+      },
+    });
+    //Adds spot's review's stars
+    const sumStars = await Review.sum("stars", {
+      where: {
+        spotId: spot.id,
+      },
+    });
+    //Calculates spot's average stars
+    const avgStars = sumStars / numReviews;
 
-    // const avgStars = await Review.sum({
-    //   where: {
-    //     stars: Review.stars
-    //   }
-    // })
-    // console.log(avgStars)
-  //  res.json(spot)
-
-    const data = {}
+    const data = {};
     data.spot = {
       id: spot.id,
       ownerId: spot.ownerId,
@@ -108,45 +111,12 @@ router.get("/:spotId", async (req, res) => {
       createdAt: spot.createdAt,
       updatedAt: spot.updatedAt,
       numReviews: numReviews,
-      avgStarRating: "average rating goes here, eventually.",
+      avgStarRating: avgStars,
       SpotImages: spot.Images,
-      Owner: spot.User
-    }
-    res.json(data)
+      Owner: spot.User,
+    };
+    res.json(data);
   }
 });
-
-
-
-//   // Calculates Average Rating
-//   spotsList.forEach((spot) => {
-//     if (spot.Reviews) {
-//       let starSum = 0;
-//       spot.Reviews.forEach((review) => {
-//         // console.log(review.stars)
-//         if (review.stars) {
-//           starSum += review.stars;
-//         }
-//         spot.avgRating = starSum / spot.Reviews.length;
-//       });
-//       delete spot.Reviews;
-//     }
-//   });
-
-//   // Shows preview images or says there is none.
-//   spotsList.forEach((spot) => {
-//     spot.Images.forEach((image) => {
-//       if (image.imagePreview === true) {
-//         spot.previewImage = image.url;
-//       } else {
-//         spot.previewImage = "No preview image available.";
-//       }
-//     });
-//     delete spot.Images;
-//   });
-
-//   res.json({
-//     Spots: spotsList,
-//   });
 
 module.exports = router;
