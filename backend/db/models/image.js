@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   class Image extends Model {
     static associate(models) {
       Image.belongsTo(models.Spot, {
-        foreignKey: "imageableId", 
+        foreignKey: "imageableId",
         constraints: false,
       });
       Image.belongsTo(models.Review, {
@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       imageableId: DataTypes.INTEGER,
       imageableType: DataTypes.STRING,
+      imagePreview: DataTypes.BOOLEAN
     },
     {
       sequelize,

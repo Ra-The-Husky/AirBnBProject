@@ -30,6 +30,12 @@ module.exports = {
             review: "This spot is hot, Hot, HOTTT!!!",
             stars: 5,
           },
+          {
+            spotId: 3,
+            userId: 2,
+            review: "This spot is too hot for me D:",
+            stars: 1,
+          },
         ],
         { validate: true }
       );

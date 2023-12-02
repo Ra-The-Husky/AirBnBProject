@@ -13,27 +13,33 @@ module.exports = {
       [
         {
           imageableId: 1,
-          imageableType: 'Spot'
+          imageableType: 'Spot',
+          imagePreview: true
         },
         {
           imageableId: 1,
-          imageableType: 'Review'
+          imageableType: 'Review',
+          imagePreview: true
         },
         {
           imageableId: 2,
-          imageableType: 'Spot'
+          imageableType: 'Spot',
+          imagePreview: false
         },
         {
           imageableId: 2,
-          imageableType: 'Review'
+          imageableType: 'Review',
+          imagePreview: false
         },
         {
           imageableId: 3,
-          imageableType: 'Spot'
+          imageableType: 'Spot',
+          imagePreview: true
         },
         {
           imageableId: 3,
-          imageableType: 'Review'
+          imageableType: 'Review',
+          imagePreview: false
         },
       ],
       { validate: true }
