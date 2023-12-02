@@ -121,29 +121,25 @@ const validateSpot = [
   check("address")
     .exists({ checkFalsy: true })
     .withMessage("Street address is required"),
-  check("city")
-    .exists({ checkFalsy: true })
-    .withMessage("City is required"),
-  check("state")
-    .exists({ checkFalsy: true })
-    .withMessage("State is required"),
+  check("city").exists({ checkFalsy: true }).withMessage("City is required"),
+  check("state").exists({ checkFalsy: true }).withMessage("State is required"),
   check("country")
     .exists({ checkFalsy: true })
     .withMessage("Country is required"),
-    check("lat")
+  check("lat")
     .exists({ checkFalsy: true })
     .withMessage("Latitude is not valid"),
-    check("lng")
+  check("lng")
     .exists({ checkFalsy: true })
     .withMessage("Longitude is not valid"),
-    check("name")
+  check("name")
     .exists({ checkFalsy: true })
     .isLength({ max: 50 })
     .withMessage("Name must be less than 50 characters"),
-    check("description")
+  check("description")
     .exists({ checkFalsy: true })
     .withMessage("Description is required"),
-    check("price")
+  check("price")
     .exists({ checkFalsy: true })
     .withMessage("Price per day is required"),
   handleValidationErrors,
@@ -151,8 +147,8 @@ const validateSpot = [
 
 // Create a new spot if user is fully authorized
 router.post("/", requireAuth, validateSpot, async (req, res) => {
-  const userId = req.user.id
-  console.log(userId)
+  const userId = req.user.id;
+  console.log(userId);
   const { address, city, state, country, lat, lng, name, description, price } =
     req.body;
   if (req.user) {
@@ -169,8 +165,58 @@ router.post("/", requireAuth, validateSpot, async (req, res) => {
       price: price,
     });
     await newSpot.save();
-    res.status(201)
+    res.status(201);
     res.json(newSpot);
   }
 });
+
+// Edit a spot that belongs to current user
+router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
+  const spotId = req.params.spotId;
+
+  const {
+    id,
+    ownerId,
+    address,
+    city,
+    state,
+    country,
+    lat,
+    lng,
+    name,
+    description,
+    price,
+  } = req.body;
+
+  const updateSpot = await Spot.findOne({
+    where: { id: spotId },
+  });
+
+  if (req.user) {
+    if (id !== Number(spotId)) {
+      console.log(req.user.id)
+      res.status(404);
+      res.json({
+        message: "Spot couldn't be found",
+      });
+    } else if (updateSpot.ownerId === req.user.id) {
+      updateSpot.set({
+        ownerId: ownerId,
+        address: address,
+        city: city,
+        state: state,
+        country: country,
+        lat: lat,
+        lng: lng,
+        name: name,
+        description: description,
+        price: price,
+      });
+      await updateSpot.save()
+      res.json(updateSpot)
+    }
+  }
+});
+
+
 module.exports = router;
