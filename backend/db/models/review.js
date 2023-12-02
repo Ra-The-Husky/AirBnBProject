@@ -7,10 +7,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "imageableId",
         constraints: false,
         scope: {
-          imageableType: "Review",
-        },
-      });
-      Review.belongsTo(models.Spot, { foreignKey: "spotId" });
+          imageableType: 'Review'
+        }
+      })
+      Review.belongsTo(models.Spot, { foreignKey: "spotId" })
     }
   }
   Review.init(
