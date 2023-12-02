@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       imageableId: DataTypes.INTEGER,
       imageableType: DataTypes.STRING,
-      imagePreview: DataTypes.BOOLEAN,
+      preview: DataTypes.BOOLEAN,
       url: DataTypes.STRING,
     },
     {

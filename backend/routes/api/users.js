@@ -41,7 +41,7 @@ router.get("/:userId/spots", requireAuth, async (req, res, next) => {
       { model: Image },
     ],
   });
-  
+
   if (req.user && userId === `${req.user.id}`) {
     if (userSpots.length >= 1) {
       let usersList = [];
@@ -66,7 +66,7 @@ router.get("/:userId/spots", requireAuth, async (req, res, next) => {
       // Shows preview images or says there is none.
       usersList.forEach((spot) => {
         spot.Images.forEach((image) => {
-          if (image.imagePreview === true) {
+          if (image.preview === true) {
             spot.previewImage = image.url;
           } else {
             spot.previewImage = "No preview image available.";
