@@ -3,7 +3,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 
 const { setTokenCookie, requireAuth } = require("../../utils/auth");
-const { User, Spot, Image, Review } = require("../../db/models");
+const { User, Session, Spot, Image, Review } = require("../../db/models");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const review = require("../../db/models/review");
@@ -27,10 +27,9 @@ const validateSignup = [
   handleValidationErrors,
 ];
 
-// Get all current user's spots
-router.get("/:userId/spots", async (req, res, next) => {
+// If logged in, get all current user's spots
+router.get("/:userId/spots", requireAuth, async (req, res, next) => {
   const userId = req.params.userId;
-
   let userSpots = await Spot.findAll({
     where: {
       ownerId: userId,
@@ -42,44 +41,55 @@ router.get("/:userId/spots", async (req, res, next) => {
       { model: Image },
     ],
   });
-
-  if (userSpots) {
-    let usersList = [];
-    userSpots.forEach((spot) => {
-      usersList.push(spot.toJSON());
-    });
-    // Calculates Average Rating
-    usersList.forEach((spot) => {
-      if (spot.Reviews) {
-        let starSum = 0;
-        spot.Reviews.forEach((review) => {
-          // console.log(review.stars)
-          if (review.stars) {
-            starSum += review.stars;
-          }
-          spot.avgRating = starSum / spot.Reviews.length;
-        });
-        delete spot.Reviews;
-      }
-    });
-
-    // Shows preview images or says there is none.
-    usersList.forEach((spot) => {
-      spot.Images.forEach((image) => {
-        if (image.imagePreview === true) {
-          spot.previewImage = image.url;
-        } else {
-          spot.previewImage = "No preview image available.";
+  
+  if (req.user && userId === `${req.user.id}`) {
+    if (userSpots.length >= 1) {
+      let usersList = [];
+      userSpots.forEach((spot) => {
+        usersList.push(spot.toJSON());
+      });
+      // Calculates Average Rating
+      usersList.forEach((spot) => {
+        if (spot.Reviews) {
+          let starSum = 0;
+          spot.Reviews.forEach((review) => {
+            // console.log(review.stars)
+            if (review.stars) {
+              starSum += review.stars;
+            }
+            spot.avgRating = starSum / spot.Reviews.length;
+          });
+          delete spot.Reviews;
         }
       });
-      delete spot.Images;
-    });
 
+      // Shows preview images or says there is none.
+      usersList.forEach((spot) => {
+        spot.Images.forEach((image) => {
+          if (image.imagePreview === true) {
+            spot.previewImage = image.url;
+          } else {
+            spot.previewImage = "No preview image available.";
+          }
+        });
+        delete spot.Images;
+      });
+
+      res.json({
+        Spots: usersList,
+      });
+    } else {
+      res.json({
+        msg: "User currently hasn't created any spots.",
+      });
+    }
+  } else {
     res.json({
-      Spots: usersList,
+      msg: "Not current user.",
     });
   }
 });
+
 // Sign up
 router.post("/", validateSignup, async (req, res) => {
   const { firstName, lastName, email, password, username } = req.body;

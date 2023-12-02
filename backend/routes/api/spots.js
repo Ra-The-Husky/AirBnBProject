@@ -3,7 +3,6 @@ const { Spot, Review, Image } = require("../../db/models");
 const { Op } = require("sequelize");
 const router = express.Router();
 const { setTokenCookie, restoreUser } = require("../../utils/auth");
-const spot = require("../../db/models/spot");
 
 router.get("/", async (req, res, next) => {
   const allSpots = await Spot.findAll({
