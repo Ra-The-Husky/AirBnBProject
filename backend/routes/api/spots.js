@@ -39,7 +39,7 @@ router.get("/", async (req, res, next) => {
   spotsList.forEach((spot) => {
     spot.Images.forEach((image) => {
       if (image.imagePreview === true) {
-        spot.previewImage = "image url";
+        spot.previewImage = image.url;
       } else {
         spot.previewImage = "No preview image available.";
       }
