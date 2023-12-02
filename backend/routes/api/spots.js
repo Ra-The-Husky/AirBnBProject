@@ -151,10 +151,13 @@ const validateSpot = [
 
 // Create a new spot if user is fully authorized
 router.post("/", requireAuth, validateSpot, async (req, res) => {
+  const userId = req.user.id
+  console.log(userId)
   const { address, city, state, country, lat, lng, name, description, price } =
     req.body;
   if (req.user) {
     const newSpot = Spot.build({
+      ownerId: userId,
       address: address,
       city: city,
       state: state,
@@ -168,8 +171,6 @@ router.post("/", requireAuth, validateSpot, async (req, res) => {
     await newSpot.save();
     res.status(201)
     res.json(newSpot);
-  } else {
-    
   }
 });
 module.exports = router;
