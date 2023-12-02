@@ -194,7 +194,7 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
 
   if (req.user) {
     if (id !== Number(spotId)) {
-      console.log(req.user.id)
+      console.log(req.user.id);
       res.status(404);
       res.json({
         message: "Spot couldn't be found",
@@ -212,29 +212,30 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
         description: description,
         price: price,
       });
-      await updateSpot.save()
-      res.json(updateSpot)
+      await updateSpot.save();
+      res.json(updateSpot);
     }
   }
 });
 
 // Deletes a spot owned by current user
-router.delete('/:spotId', requireAuth, async (req, res, next) => {
-  const spotId = req.params.spotId
-    const deleteSpot = await Spot.findOne({
-      where: { id: spotId },
-    })
-    if (req.user) {
-      if (deleteSpot && deleteSpot.ownerId === req.user.id) {
-        await deleteSpot.destroy()
-        res.json({
-          message: "Successfully deleted"
-        })
-      } else {
-        res.json({
-          message: "Spot couldn't be found"
-        })
-      }
+router.delete("/:spotId", requireAuth, async (req, res, next) => {
+  const spotId = req.params.spotId;
+  const deleteSpot = await Spot.findOne({
+    where: { id: spotId },
+  });
+  if (req.user) {
+    if (deleteSpot && deleteSpot.ownerId === req.user.id) {
+      await deleteSpot.destroy();
+      res.json({
+        message: "Successfully deleted",
+      });
+    } else {
+      res.status(404);
+      res.json({
+        message: "Spot couldn't be found",
+      });
     }
-})
+  }
+});
 module.exports = router;
