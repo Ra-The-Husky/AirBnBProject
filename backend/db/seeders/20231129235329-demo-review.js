@@ -36,6 +36,18 @@ module.exports = {
             review: "This spot is too hot for me D:",
             stars: 1,
           },
+          {
+            spotId: 4,
+            userId: 1,
+            review: "I almost couldn't find my way back to reality",
+            stars: 1,
+          },
+          {
+            spotId: 4,
+            userId: 3,
+            review: "Very quiet space outside of time. Great for when you REALLY need to get away.",
+            stars: 9,
+          },
         ],
         { validate: true }
       );

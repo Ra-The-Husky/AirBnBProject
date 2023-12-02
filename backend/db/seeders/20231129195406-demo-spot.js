@@ -22,7 +22,7 @@ module.exports = {
             lng: 5.5,
             name: "Fake-spot",
             description: "This is a description for a fake spot",
-            price: 30,
+            price: 200,
           },
           {
             ownerId: 2,
@@ -35,7 +35,7 @@ module.exports = {
             name: "Unknown-Joint",
             description:
               "This spot is unknown so this description is a warning",
-            price: 1.0,
+            price: 55,
           },
           {
             ownerId: 3,
@@ -46,6 +46,17 @@ module.exports = {
             name: "Hot-Fake-Spot",
             description: "This spot isn't real but is HOT, somehow.",
             price: 1.0,
+          },
+          {
+            ownerId: 2,
+            address: "404 Void St",
+            city: "Falseton",
+            state: "CT",
+            country: "United-States",
+            name: "Some Void Place",
+            description:
+              "Get swallowed into a room of everlasting nothingness.",
+            price: 80.55,
           },
         ],
         { validate: true }

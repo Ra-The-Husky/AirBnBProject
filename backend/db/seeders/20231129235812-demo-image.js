@@ -44,6 +44,11 @@ module.exports = {
           imageableType: 'Review',
           imagePreview: false
         },
+        {
+          imageableId: 4,
+          imageableType: 'Spot',
+          imagePreview: false,
+        },
       ],
       { validate: true }
     );
