@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
           imageableType: 'Review'
         }
       })
+      Review.belongsTo(models.Spot, { foreignKey: "spotId" })
     }
   }
   Review.init(

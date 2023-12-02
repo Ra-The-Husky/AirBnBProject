@@ -7,7 +7,16 @@ const { setTokenCookie, restoreUser } = require("../../utils/auth");
 router.get("/", async (req, res, next) => {
   let allSpots = [];
 
-  allSpots = await Spot.findAll();
+  allSpots = await Spot.findAll({
+    include: [
+      {
+        model: Review,
+      },
+      {
+        model: Image,
+      },
+    ],
+  });
   res.status(200);
   res.json(allSpots);
 });
