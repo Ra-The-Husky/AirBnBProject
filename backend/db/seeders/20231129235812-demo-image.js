@@ -60,7 +60,7 @@ module.exports = {
     return queryInterface.bulkDelete(
       options,
       {
-        imageableId: { [Op.in]: [1, 2, 3] },
+        imageableId: { [Op.in]: [1, 2, 3, 4] },
       },
       {}
     );

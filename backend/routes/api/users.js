@@ -3,11 +3,9 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 
 const { setTokenCookie, requireAuth } = require("../../utils/auth");
-const { User, Session, Spot, Image, Review } = require("../../db/models");
+const { User, Spot, Image, Review } = require("../../db/models");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
-const review = require("../../db/models/review");
-
 const router = express.Router();
 
 const validateSignup = [
@@ -28,7 +26,7 @@ const validateSignup = [
 ];
 
 // If logged in, get all current user's spots
-router.get("/:userId/spots", requireAuth, async (req, res, next) => {
+router.get("/:userId/spots", requireAuth, async (req, res) => {
   const userId = req.params.userId;
   let userSpots = await Spot.findAll({
     where: {
@@ -38,7 +36,9 @@ router.get("/:userId/spots", requireAuth, async (req, res, next) => {
       {
         model: Review,
       },
-      { model: Image },
+      {
+        model: Image,
+      },
     ],
   });
 
@@ -87,6 +87,35 @@ router.get("/:userId/spots", requireAuth, async (req, res, next) => {
     res.json({
       msg: "Not current user.",
     });
+  }
+});
+
+// Get current user's reviews
+router.get("/:userId/reviews", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    let userReviews = await Review.findAll({
+      where: {
+        userId: userId,
+      },
+      include: [
+        {
+          model: User,
+          attributes: ["id", "firstName", "lastName"],
+        },
+        {
+          model: Spot,
+          include: { model: Image },
+        },
+        {
+          model: Image,
+        },
+      ],
+    });
+    console.log(userReviews);
+    res.json(userReviews);
+  } catch (error) {
+    console.log(error);
   }
 });
 

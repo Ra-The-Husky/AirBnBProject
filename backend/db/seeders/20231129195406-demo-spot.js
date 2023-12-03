@@ -76,7 +76,7 @@ module.exports = {
     return queryInterface.bulkDelete(
       options,
       {
-        name: { [Op.in]: ["Fake-Spot", "Unknown-Joint", "Hot-Fake-Spot"] },
+        name: { [Op.in]: ["Fake-Spot", "Unknown-Joint", "Hot-Fake-Spot", "Some Void Place"] },
       },
       {}
     );
