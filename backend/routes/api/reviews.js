@@ -54,7 +54,6 @@ router.delete("/:reviewId", async (req, res) => {
   if (req.user) {
     if (deleteReview && deleteReview.userId === req.user.id) {
       deleteReview.destroy();
-
       res.json({
         message: "Successfully deleted",
       });
