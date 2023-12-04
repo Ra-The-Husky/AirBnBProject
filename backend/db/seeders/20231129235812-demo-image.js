@@ -31,7 +31,8 @@ module.exports = {
         {
           imageableId: 2,
           imageableType: 'Review',
-          preview: false
+          preview: true,
+          url: "https://media.tenor.com/MFE6UiMEpRoAAAAC/math-zack-galifianakis.gif"
         },
         {
           imageableId: 3,
@@ -47,7 +48,14 @@ module.exports = {
         {
           imageableId: 4,
           imageableType: 'Spot',
-          preview: false,
+          preview: true,
+          url: "https://t4.ftcdn.net/jpg/01/15/20/75/360_F_115207580_US2etunH78I7iMYHOoNVvxQTCIdoPdRj.jpg"
+        },
+        {
+          imageableId: 5,
+          imageableType: 'Review',
+          preview: true,
+          url: "https://media.tenor.com/MFE6UiMEpRoAAAAC/math-zack-galifianakis.gif"
         },
       ],
       { validate: true }

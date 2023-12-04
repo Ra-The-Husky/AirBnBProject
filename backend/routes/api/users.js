@@ -1,13 +1,12 @@
 // backend/routes/api/users.js
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const router = express.Router();
 
-const { setTokenCookie, requireAuth } = require("../../utils/auth");
 const { User, Spot, Image, Review } = require("../../db/models");
+const { setTokenCookie, requireAuth } = require("../../utils/auth");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
-const user = require("../../db/models/user");
-const router = express.Router();
 
 const validateSignup = [
   check("email")
@@ -25,6 +24,19 @@ const validateSignup = [
     .withMessage("Password must be 6 characters or more."),
   handleValidationErrors,
 ];
+
+//Changes object key's name to a different
+//key name without changing any of the values within the array of object
+function newKeyName(arr, oldKey, newKey) {
+  const newArr = arr.map((obj) => {
+    const newObj = { ...obj, [newKey]: obj[oldKey] };
+    if (oldKey !== newKey) {
+      delete newObj[oldKey];
+    }
+    return newObj;
+  });
+  return newArr;
+}
 
 // If logged in, get all current user's spots
 router.get("/:userId/spots", requireAuth, async (req, res) => {
@@ -92,9 +104,9 @@ router.get("/:userId/spots", requireAuth, async (req, res) => {
 });
 
 // Get current user's reviews
-router.get("/:userId/reviews", async (req, res) => {
-  try {
-    const userId = req.params.userId;
+router.get("/:userId/reviews", requireAuth, async (req, res) => {
+  const userId = req.params.userId;
+  if (req.user && userId === `${req.user.id}`) {
     const userReviews = await Review.findAll({
       where: {
         userId: userId,
@@ -141,14 +153,14 @@ router.get("/:userId/reviews", async (req, res) => {
       delete review.Spot.Images;
     });
 
-    if (reviewsList.Images) {
-      reviewsList.imagesSub = "Should be added into object";
-    }
+    const completeReviews = newKeyName(reviewsList, "Images", "ReviewImages");
 
-    console.log(reviewsList);
-    res.json({ Reviews: reviewsList });
-  } catch (error) {
-    console.log("Error", error);
+    res.json({ Reviews: completeReviews });
+  } else {
+    res.status(401);
+    res.json({
+      message: "Unauthorized Access",
+    });
   }
 });
 
