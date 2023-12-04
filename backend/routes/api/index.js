@@ -6,7 +6,7 @@ const { requireAuth } = require("../../utils/auth.js");
 const spotsRouter = require("./spots.js");
 const sessionRouter = require("./session.js");
 const usersRouter = require("./users.js");
-const reviewsRouter = require('./reviews.js')
+const reviewsRouter = require("./reviews.js")
 
 // Add a XSRF-TOKEN cookie
 router.get("/api/csrf/restore", (req, res) => {
