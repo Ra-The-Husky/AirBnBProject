@@ -6,6 +6,45 @@ const { requireAuth } = require("../../utils/auth");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 
+const validateSpot = [
+  check("address")
+    .exists({ checkFalsy: true })
+    .withMessage("Street address is required"),
+  check("city").exists({ checkFalsy: true }).withMessage("City is required"),
+  check("state").exists({ checkFalsy: true }).withMessage("State is required"),
+  check("country")
+    .exists({ checkFalsy: true })
+    .withMessage("Country is required"),
+  check("lat")
+    .exists({ checkFalsy: true })
+    .withMessage("Latitude is not valid"),
+  check("lng")
+    .exists({ checkFalsy: true })
+    .withMessage("Longitude is not valid"),
+  check("name")
+    .exists({ checkFalsy: true })
+    .isLength({ max: 50 })
+    .withMessage("Name must be less than 50 characters"),
+  check("description")
+    .exists({ checkFalsy: true })
+    .withMessage("Description is required"),
+  check("price")
+    .exists({ checkFalsy: true })
+    .withMessage("Price per day is required"),
+  handleValidationErrors,
+];
+
+function newKeyName(arr, oldKey, newKey) {
+  const newArr = arr.map((obj) => {
+    const newObj = { ...obj, [newKey]: obj[oldKey] };
+    if (oldKey !== newKey) {
+      delete newObj[oldKey];
+    }
+    return newObj;
+  });
+  return newArr;
+}
+
 router.get("/", async (req, res, next) => {
   const allSpots = await Spot.findAll({
     include: [
@@ -117,33 +156,44 @@ router.get("/:spotId", async (req, res) => {
   }
 });
 
-const validateSpot = [
-  check("address")
-    .exists({ checkFalsy: true })
-    .withMessage("Street address is required"),
-  check("city").exists({ checkFalsy: true }).withMessage("City is required"),
-  check("state").exists({ checkFalsy: true }).withMessage("State is required"),
-  check("country")
-    .exists({ checkFalsy: true })
-    .withMessage("Country is required"),
-  check("lat")
-    .exists({ checkFalsy: true })
-    .withMessage("Latitude is not valid"),
-  check("lng")
-    .exists({ checkFalsy: true })
-    .withMessage("Longitude is not valid"),
-  check("name")
-    .exists({ checkFalsy: true })
-    .isLength({ max: 50 })
-    .withMessage("Name must be less than 50 characters"),
-  check("description")
-    .exists({ checkFalsy: true })
-    .withMessage("Description is required"),
-  check("price")
-    .exists({ checkFalsy: true })
-    .withMessage("Price per day is required"),
-  handleValidationErrors,
-];
+// Get a spot's reviews
+router.get("/:spotId/reviews", async (req, res) => {
+  const spotId = req.params.spotId;
+  const findSpot = await Spot.findOne({
+    where: { id: spotId },
+  });
+
+  if (!findSpot) {
+    res.status(404);
+    res.json({
+      message: "Spot couldn't be found",
+    });
+  } else {
+    const spotReviews = await Review.findAll({
+      where: {
+        spotId: spotId,
+      },
+      include: [
+        {
+          model: User,
+          attributes: ["id", "firstName", "lastName"],
+        },
+        {
+          model: Image,
+          attributes: ["id", "url"],
+        },
+      ],
+    });
+
+    let reviewsList = [];
+    spotReviews.forEach((review) => {
+      reviewsList.push(review.toJSON());
+    });
+    const completeReviews = newKeyName(reviewsList, "Images", "ReviewImages");
+    console.log(Spot.id);
+    res.json({ Reviews: completeReviews });
+  }
+});
 
 // Create a new spot if user is fully authorized
 router.post("/", requireAuth, validateSpot, async (req, res) => {
