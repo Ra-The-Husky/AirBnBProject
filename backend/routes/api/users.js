@@ -94,7 +94,6 @@ router.get("/:userId/spots", requireAuth, async (req, res) => {
 // Get current user's reviews
 router.get("/:userId/reviews", async (req, res) => {
   try {
-
     const userId = req.params.userId;
     const userReviews = await Review.findAll({
       where: {
@@ -107,6 +106,19 @@ router.get("/:userId/reviews", async (req, res) => {
         },
         {
           model: Spot,
+          attributes: [
+            "id",
+            "ownerId",
+            "address",
+            "city",
+            "state",
+            "country",
+            "lat",
+            "lng",
+            "name",
+            "price",
+          ],
+          include: { model: Image },
         },
         {
           model: Image,
@@ -114,8 +126,27 @@ router.get("/:userId/reviews", async (req, res) => {
         },
       ],
     });
+    let reviewsList = [];
+    userReviews.forEach((review) => {
+      reviewsList.push(review.toJSON());
+    });
+    reviewsList.forEach((review) => {
+      review.Spot.Images.forEach((spot) => {
+        if (spot.preview === true) {
+          review.Spot.previewImage = spot.url;
+        } else {
+          review.Spot.previewImage = "No preview image available.";
+        }
+      });
+      delete review.Spot.Images;
+    });
 
-    res.json(userReviews)
+    if (reviewsList.Images) {
+      reviewsList.imagesSub = "Should be added into object";
+    }
+
+    console.log(reviewsList);
+    res.json({ Reviews: reviewsList });
   } catch (error) {
     console.log("Error", error);
   }
