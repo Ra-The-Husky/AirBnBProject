@@ -245,7 +245,6 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
 
   if (req.user) {
     if (id !== Number(spotId)) {
-      console.log(req.user.id);
       res.status(404);
       res.json({
         message: "Spot couldn't be found",
