@@ -45,6 +45,7 @@ function newKeyName(arr, oldKey, newKey) {
   return newArr;
 }
 
+// Get all spots
 router.get("/", async (req, res, next) => {
   const allSpots = await Spot.findAll({
     include: [
@@ -92,7 +93,7 @@ router.get("/", async (req, res, next) => {
   });
 });
 
-//Get details of a spot by its id
+// Get spot details
 router.get("/:spotId", async (req, res) => {
   const spotId = req.params.spotId;
   const spot = await Spot.findByPk(spotId, {
@@ -220,7 +221,7 @@ router.post("/", requireAuth, validateSpot, async (req, res) => {
   }
 });
 
-// Edit a spot that belongs to current user
+// Edit current user's spot
 router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
   const spotId = req.params.spotId;
 
@@ -268,7 +269,7 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
   }
 });
 
-// Deletes a spot owned by current user
+// Deletes current user's spots
 router.delete("/:spotId", requireAuth, async (req, res, next) => {
   const spotId = req.params.spotId;
   const deleteSpot = await Spot.findOne({
@@ -288,4 +289,5 @@ router.delete("/:spotId", requireAuth, async (req, res, next) => {
     }
   }
 });
+
 module.exports = router;
