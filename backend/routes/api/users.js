@@ -6,6 +6,7 @@ const { setTokenCookie, requireAuth } = require("../../utils/auth");
 const { User, Spot, Image, Review } = require("../../db/models");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
+const user = require("../../db/models/user");
 const router = express.Router();
 
 const validateSignup = [
@@ -93,8 +94,9 @@ router.get("/:userId/spots", requireAuth, async (req, res) => {
 // Get current user's reviews
 router.get("/:userId/reviews", async (req, res) => {
   try {
+
     const userId = req.params.userId;
-    let userReviews = await Review.findAll({
+    const userReviews = await Review.findAll({
       where: {
         userId: userId,
       },
@@ -105,17 +107,17 @@ router.get("/:userId/reviews", async (req, res) => {
         },
         {
           model: Spot,
-          include: { model: Image },
         },
         {
           model: Image,
+          attributes: ["id", "url"],
         },
       ],
     });
-    console.log(userReviews);
-    res.json(userReviews);
+
+    res.json(userReviews)
   } catch (error) {
-    console.log(error);
+    console.log("Error", error);
   }
 });
 
