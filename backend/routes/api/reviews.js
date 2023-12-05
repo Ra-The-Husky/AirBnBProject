@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { Review, Image } = require("../../db/models");
+const { Review, Image, Spot } = require("../../db/models");
 const { requireAuth } = require("../../utils/auth");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
@@ -22,28 +22,53 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
   const reviewId = req.params.reviewId;
   const { url } = req.body;
   const findReview = await Review.findOne({
-    where: { id: reviewId, userId: req.user.id },
+    where: { id: reviewId },
+    include: [
+      {
+        model: Image,
+      },
+    ],
   });
-  const reviewImageList = []
-  reviewImageList.push(findReview.toJSON())
 
   if (!findReview) {
     res.status(404);
     res.json({
       message: "Review couldn't be found",
     });
-  } else if (reviewImageList.length === 10) {
-    res.status(403);
-    res.json({
-      message: "Maximum number of images for this resource was reached",
+  } else {
+    const reviewImageList = [];
+    findReview.Images.forEach((image) => {
+      reviewImageList.push(image.toJSON());
     });
-  } else if (findReview.userId === req.user.id) {
-    const newReviewImage = Image.build({
-      url: url,
-    });
-    await newReviewImage.save();
-    res.status(201);
-    res.json(newReviewImage);
+
+    if (reviewImageList.length === 10) {
+      res.status(403);
+      res.json({
+        message: "Maximum number of images for this resource was reached",
+      });
+    } else if (findReview.userId === req.user.id) {
+      const newReviewImage = Image.build({
+        url: url,
+        imageableId: reviewId,
+        imageableType: "Review",
+      });
+      await newReviewImage.save();
+      const nri = newReviewImage.toJSON();
+
+      delete nri.imageableType;
+      delete nri.imageableId;
+      delete nri.createdAt;
+      delete nri.updatedAt;
+
+      // console.log(findReview);
+      res.status(201);
+      res.json(nri);
+    } else {
+      res.status(403);
+      res.json({
+        message: "Forbidden",
+      });
+    }
   }
 });
 
