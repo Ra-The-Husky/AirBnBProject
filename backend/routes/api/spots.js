@@ -278,7 +278,7 @@ router.post("/:spotId/images", requireAuth, async (req, res) => {
   const spotId = req.params.spotId;
   const { url, preview } = req.body;
   const findSpot = await Spot.findOne({
-    where: { id: spotId, ownerId: req.user.id },
+    where: { id: spotId },
   });
 
   if (!findSpot) {
@@ -294,6 +294,11 @@ router.post("/:spotId/images", requireAuth, async (req, res) => {
     await newSpotImage.save();
     res.status(201);
     res.json(newSpotImage);
+  } else {
+    res.status(403);
+    res.json({
+      message: "Forbidden",
+    });
   }
 });
 
@@ -319,7 +324,7 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
     where: { id: spotId },
   });
 
-  if (id !== Number(spotId)) {
+  if (!updateSpot) {
     res.status(404);
     res.json({
       message: "Spot couldn't be found",
@@ -339,6 +344,11 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
     });
     await updateSpot.save();
     res.json(updateSpot);
+  } else {
+    res.status(403);
+    res.json({
+      message: "Forbidden",
+    });
   }
 });
 
@@ -348,18 +358,21 @@ router.delete("/:spotId", requireAuth, async (req, res, next) => {
   const deleteSpot = await Spot.findOne({
     where: { id: spotId },
   });
-  if (req.user) {
-    if (deleteSpot && deleteSpot.ownerId === req.user.id) {
-      await deleteSpot.destroy();
-      res.json({
-        message: "Successfully deleted",
-      });
-    } else {
-      res.status(404);
-      res.json({
-        message: "Spot couldn't be found",
-      });
-    }
+  if (!deleteSpot) {
+    res.status(404);
+    res.json({
+      message: "Spot couldn't be found",
+    });
+  } else if (deleteSpot.ownerId === req.user.id) {
+    await deleteSpot.destroy();
+    res.json({
+      message: "Successfully deleted",
+    });
+  } else {
+    res.status(403);
+    res.json({
+      message: "Forbidden",
+    });
   }
 });
 

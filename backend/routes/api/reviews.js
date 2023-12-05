@@ -81,8 +81,12 @@ router.put("/:reviewId", requireAuth, validateReview, async (req, res) => {
       id: reviewId,
     },
   });
-
-  if (updateReview && updateReview.userId === req.user.id) {
+  if (!updateReview) {
+    res.status(404);
+    res.json({
+      message: "Review couldn't be found",
+    });
+  } else if (updateReview.userId === req.user.id) {
     updateReview.set({
       review: review,
       stars: stars,
@@ -90,9 +94,9 @@ router.put("/:reviewId", requireAuth, validateReview, async (req, res) => {
     await updateReview.save();
     res.json(updateReview);
   } else {
-    res.status(404);
+    res.status(403);
     res.json({
-      message: "Review couldn't be found",
+      message: "Forbidden",
     });
   }
 });
