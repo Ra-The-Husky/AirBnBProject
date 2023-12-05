@@ -26,7 +26,7 @@ router.put("/:reviewId", requireAuth, validateReview, async (req, res) => {
       id: reviewId,
     },
   });
-  if (req.user) {
+
     if (updateReview && updateReview.userId === req.user.id) {
       updateReview.set({
         review: review,
@@ -40,7 +40,7 @@ router.put("/:reviewId", requireAuth, validateReview, async (req, res) => {
         message: "Review couldn't be found",
       });
     }
-  }
+  
 });
 
 // Delete a user's review

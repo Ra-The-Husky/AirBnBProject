@@ -213,22 +213,21 @@ router.post("/", requireAuth, validateSpot, async (req, res) => {
   const { address, city, state, country, lat, lng, name, description, price } =
     req.body;
 
-    const newSpot = Spot.build({
-      ownerId: userId,
-      address: address,
-      city: city,
-      state: state,
-      country: country,
-      lat: lat,
-      lng: lng,
-      name: name,
-      description: description,
-      price: price,
-    });
-    await newSpot.save();
-    res.status(201);
-    res.json(newSpot);
-
+  const newSpot = Spot.build({
+    ownerId: userId,
+    address: address,
+    city: city,
+    state: state,
+    country: country,
+    lat: lat,
+    lng: lng,
+    name: name,
+    description: description,
+    price: price,
+  });
+  await newSpot.save();
+  res.status(201);
+  res.json(newSpot);
 });
 
 // Create a review for a spot
@@ -244,9 +243,8 @@ router.post("/:spotId", requireAuth, validateReview, async (req, res) => {
     const findReview = await Review.findOne({
       where: {
         spotId: spotId,
-        userId: req.user.id
+        userId: req.user.id,
       },
-
     });
 
     if (!findSpot) {
@@ -275,6 +273,30 @@ router.post("/:spotId", requireAuth, validateReview, async (req, res) => {
   }
 });
 
+// Adds an image to a spot
+router.post("/:spotId/images", requireAuth, async (req, res) => {
+  const spotId = req.params.spotId;
+  const { url, preview } = req.body;
+  const findSpot = await Spot.findOne({
+    where: { id: spotId, ownerId: req.user.id },
+  });
+
+  if (!findSpot) {
+    res.status(404);
+    res.json({
+      message: "Spot couldn't be found",
+    });
+  } else if (findSpot.ownerId === req.user.id) {
+    const newSpotImage = Image.build({
+      url: url,
+      preview: preview,
+    });
+    await newSpotImage.save();
+    res.status(201);
+    res.json(newSpotImage);
+  }
+});
+
 // Edit current user's spot
 router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
   const spotId = req.params.spotId;
@@ -297,29 +319,27 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
     where: { id: spotId },
   });
 
-
-    if (id !== Number(spotId)) {
-      res.status(404);
-      res.json({
-        message: "Spot couldn't be found",
-      });
-    } else if (updateSpot.ownerId === req.user.id) {
-      updateSpot.set({
-        ownerId: ownerId,
-        address: address,
-        city: city,
-        state: state,
-        country: country,
-        lat: lat,
-        lng: lng,
-        name: name,
-        description: description,
-        price: price,
-      });
-      await updateSpot.save();
-      res.json(updateSpot);
-    }
-  
+  if (id !== Number(spotId)) {
+    res.status(404);
+    res.json({
+      message: "Spot couldn't be found",
+    });
+  } else if (updateSpot.ownerId === req.user.id) {
+    updateSpot.set({
+      ownerId: ownerId,
+      address: address,
+      city: city,
+      state: state,
+      country: country,
+      lat: lat,
+      lng: lng,
+      name: name,
+      description: description,
+      price: price,
+    });
+    await updateSpot.save();
+    res.json(updateSpot);
+  }
 });
 
 // Deletes current user's spots
