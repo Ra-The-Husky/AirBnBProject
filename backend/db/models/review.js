@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       Review.belongsTo(models.User, { foreignKey: "userId" });
       Review.belongsTo(models.Spot, { foreignKey: "spotId" });
       Review.hasMany(models.Image, {
-        foreignKey: "imageableId",
+        foreignKey: "imageableId", onDelete: 'CASCADE',  hooks: true,
         constraints: false,
         scope: {
           imageableType: "Review",
