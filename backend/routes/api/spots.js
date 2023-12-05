@@ -207,12 +207,12 @@ router.get("/:spotId/reviews", async (req, res) => {
   }
 });
 
-// Create a new spot if user is logged in
+// Creates a new spot with auth user
 router.post("/", requireAuth, validateSpot, async (req, res) => {
   const userId = req.user.id;
   const { address, city, state, country, lat, lng, name, description, price } =
     req.body;
-  if (req.user) {
+
     const newSpot = Spot.build({
       ownerId: userId,
       address: address,
@@ -228,43 +228,50 @@ router.post("/", requireAuth, validateSpot, async (req, res) => {
     await newSpot.save();
     res.status(201);
     res.json(newSpot);
-  }
+
 });
 
 // Create a review for a spot
 router.post("/:spotId", requireAuth, validateReview, async (req, res) => {
-  const { review, stars } = req.body;
-  const spotId = req.params.spotId;
+  try {
+    const { review, stars } = req.body;
+    const spotId = req.params.spotId;
 
-  const findSpot = await Spot.findOne({
-    where: { id: spotId },
-    include: {
-      model: User,
-    },
-  });
+    const findSpot = await Spot.findOne({
+      where: { id: spotId },
+    });
 
-  if (!findSpot) {
-    res.status(404);
-    res.json({
-      message: "Spot couldn't be found",
+    const findReview = await Review.findOne({
+      where: {
+        spotId: spotId,
+        userId: req.user.id
+      },
+
     });
-  } else {
-    const newReview = Review.build({
-      userId: User.id,
-      spotId: Number(spotId),
-      review: review,
-      stars: stars,
-    });
-    if (newReview) {
+
+    if (!findSpot) {
+      res.status(404);
+      res.json({
+        message: "Spot couldn't be found",
+      });
+    } else if (findReview) {
       res.status(500);
       res.json({
         message: "User already has a review for this spot",
       });
     } else {
+      const newReview = Review.build({
+        userId: Number(req.user.id),
+        spotId: Number(spotId),
+        review: review,
+        stars: stars,
+      });
       await newReview.save();
       res.status(201);
       res.json(newReview);
     }
+  } catch (error) {
+    console.log(error);
   }
 });
 
@@ -290,7 +297,7 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
     where: { id: spotId },
   });
 
-  if (req.user) {
+
     if (id !== Number(spotId)) {
       res.status(404);
       res.json({
@@ -312,7 +319,7 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
       await updateSpot.save();
       res.json(updateSpot);
     }
-  }
+  
 });
 
 // Deletes current user's spots
