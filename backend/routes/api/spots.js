@@ -202,7 +202,7 @@ router.get("/:spotId/reviews", async (req, res) => {
       reviewsList.push(review.toJSON());
     });
     const completeReviews = newKeyName(reviewsList, "Images", "ReviewImages");
-    console.log(Spot.id);
+    
     res.json({ Reviews: completeReviews });
   }
 });
