@@ -7,11 +7,13 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "spotId",
       });
       Booking.belongsTo(models.User, {
-        foreignKey: "userId" });
+        foreignKey: "userId",
+      });
     }
   }
   Booking.init(
     {
+      id: { type: DataTypes, primaryKey: true, autoIncrement: true },
       spotId: DataTypes.INTEGER,
       userId: DataTypes.INTEGER,
       startDate: {

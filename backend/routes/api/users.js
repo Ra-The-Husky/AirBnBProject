@@ -40,7 +40,7 @@ function newKeyName(arr, oldKey, newKey) {
 
 // Get current user's spots
 router.get("/:userId/spots", requireAuth, async (req, res) => {
-  const userId = req.params.userId;
+  const userId = req.user.id;
   let userSpots = await Spot.findAll({
     where: {
       ownerId: userId,
@@ -95,7 +95,7 @@ router.get("/:userId/spots", requireAuth, async (req, res) => {
 
 // Get current user's bookings
 router.get("/:userId/bookings", requireAuth, async (req, res) => {
-  const userId = req.params.userId;
+  const userId = req.user.id;
   let bookings = await Booking.findAll({
     where: {
       userId: userId,
@@ -136,12 +136,17 @@ router.get("/:userId/bookings", requireAuth, async (req, res) => {
     });
     delete booking.Spot.Images;
   });
-  console.log(bookingInfo)
+
+  // const allBookingInfo = {
+  //   id: bookingInfo.id
+  // }
+  // console.log(allBookingInfo);
+  res.json({ Bookings: bookingInfo });
 });
 
 // Get current user's reviews
 router.get("/:userId/reviews", requireAuth, async (req, res) => {
-  const userId = req.params.userId;
+  const userId = req.user.id;
 
   const userReviews = await Review.findAll({
     where: {
