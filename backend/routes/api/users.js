@@ -136,11 +136,6 @@ router.get("/:userId/bookings", requireAuth, async (req, res) => {
     });
     delete booking.Spot.Images;
   });
-
-  // const allBookingInfo = {
-  //   id: bookingInfo.id
-  // }
-  // console.log(allBookingInfo);
   res.json({ Bookings: bookingInfo });
 });
 
