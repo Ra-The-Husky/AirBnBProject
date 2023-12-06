@@ -3,7 +3,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const router = express.Router();
 
-const { User, Spot, Image, Review } = require("../../db/models");
+const { User, Spot, Image, Review, Booking } = require("../../db/models");
 const { setTokenCookie, requireAuth } = require("../../utils/auth");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
@@ -93,59 +93,105 @@ router.get("/:userId/spots", requireAuth, async (req, res) => {
   }
 });
 
+// Get current user's bookings
+router.get("/:userId/bookings", requireAuth, async (req, res) => {
+  const userId = req.params.userId;
+  let bookings = await Booking.findAll({
+    where: {
+      userId: userId,
+    },
+    include: [
+      {
+        model: Spot,
+        attributes: [
+          "id",
+          "ownerId",
+          "address",
+          "city",
+          "state",
+          "country",
+          "lat",
+          "lng",
+          "name",
+          "price",
+        ],
+        include: {
+          model: Image,
+        },
+      },
+    ],
+  });
+  let bookingInfo = [];
+  bookings.forEach((booking) => {
+    bookingInfo.push(booking.toJSON());
+  });
+
+  bookingInfo.forEach((booking) => {
+    booking.Spot.Images.forEach((image) => {
+      if (image.preview === true) {
+        booking.Spot.previewImage = image.url;
+      } else {
+        booking.Spot.previewImage = "No preview image";
+      }
+    });
+    delete booking.Spot.Images;
+  });
+  console.log(bookingInfo)
+});
+
 // Get current user's reviews
 router.get("/:userId/reviews", requireAuth, async (req, res) => {
   const userId = req.params.userId;
 
-    const userReviews = await Review.findAll({
-      where: {
-        userId: userId,
+  const userReviews = await Review.findAll({
+    where: {
+      userId: userId,
+    },
+    include: [
+      {
+        model: User,
+        attributes: ["id", "firstName", "lastName"],
       },
-      include: [
-        {
-          model: User,
-          attributes: ["id", "firstName", "lastName"],
-        },
-        {
-          model: Spot,
-          attributes: [
-            "id",
-            "ownerId",
-            "address",
-            "city",
-            "state",
-            "country",
-            "lat",
-            "lng",
-            "name",
-            "price",
-          ],
-          include: { model: Image },
-        },
-        {
-          model: Image,
-          attributes: ["id", "url"],
-        },
-      ],
+      {
+        model: Spot,
+        attributes: [
+          "id",
+          "ownerId",
+          "address",
+          "city",
+          "state",
+          "country",
+          "lat",
+          "lng",
+          "name",
+          "price",
+        ],
+        include: { model: Image },
+      },
+      {
+        model: Image,
+        attributes: ["id", "url"],
+      },
+    ],
+  });
+  let reviewsList = [];
+  userReviews.forEach((review) => {
+    reviewsList.push(review.toJSON());
+  });
+  reviewsList.forEach((review) => {
+    review.Spot.Images.forEach((spot) => {
+      if (spot.preview === true) {
+        review.Spot.previewImage = spot.url;
+      } else {
+        review.Spot.previewImage = "No preview image available.";
+      }
     });
-    let reviewsList = [];
-    userReviews.forEach((review) => {
-      reviewsList.push(review.toJSON());
-    });
-    reviewsList.forEach((review) => {
-      review.Spot.Images.forEach((spot) => {
-        if (spot.preview === true) {
-          review.Spot.previewImage = spot.url;
-        } else {
-          review.Spot.previewImage = "No preview image available.";
-        }
-      });
-      delete review.Spot.Images;
-    });
+    delete review.Spot.Images;
+  });
 
-    const completeReviews = newKeyName(reviewsList, "Images", "ReviewImages");
+  const completeReviews = newKeyName(reviewsList, "Images", "ReviewImages");
 
-    res.json({ Reviews: completeReviews });
+  res.json({ Reviews: completeReviews });
 });
 
 // Sign up
