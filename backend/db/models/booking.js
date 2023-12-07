@@ -26,6 +26,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         validate: {
           isDate: true,
+
+          notEarlierThanStart(date) {
+            if (date <= this.startDate) {
+              throw new Error("endDate cannot be on or before startDate");
+            }
+          },
         },
       },
     },

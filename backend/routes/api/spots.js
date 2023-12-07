@@ -1,5 +1,5 @@
 const express = require("express");
-const { Spot, Review, Image, User } = require("../../db/models");
+const { Spot, Review, Image, User, Booking } = require("../../db/models");
 const { Op } = require("sequelize");
 const router = express.Router();
 const { requireAuth } = require("../../utils/auth");
@@ -202,7 +202,7 @@ router.get("/:spotId/reviews", async (req, res) => {
       reviewsList.push(review.toJSON());
     });
     const completeReviews = newKeyName(reviewsList, "Images", "ReviewImages");
-    
+
     res.json({ Reviews: completeReviews });
   }
 });
@@ -228,6 +228,62 @@ router.post("/", requireAuth, validateSpot, async (req, res) => {
   await newSpot.save();
   res.status(201);
   res.json(newSpot);
+});
+
+// Create a booking for a spot
+router.post("/:spotId/bookings", requireAuth, async (req, res) => {
+  try {
+    // validateBooking,
+    const { id, startDate, endDate } = req.body;
+    const spotId = req.params.spotId;
+
+    const spot = await Spot.findOne({
+      where: { id: spotId },
+    });
+
+    const booking = await Booking.findOne({
+      where: {
+        startDate: {
+          [Op.between]: [new Date(startDate), new Date(endDate)],
+        },
+      },
+    });
+
+    if (!spot) {
+      res.status(404);
+      res.json({
+        message: "Spot couldn't be found",
+      });
+    }
+    const newBooking = Booking.build({
+      id: id,
+      spotId: spotId,
+      userId: req.user.id,
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
+    });
+    await newBooking.save();
+
+    if (!booking && spot.ownerId !== req.user.id) {
+      res.status(201);
+      res.json(newBooking);
+    } else if (newBooking.endDate <= newBooking.startDate) {
+      res.status(400)
+      console.log("not good bruh")
+      res.json("Not good bruh")
+    } else {
+      res.status(403);
+      res.json({
+        message: "Sorry, this spot is already booked for the specified dates",
+        errors: {
+          startDate: "Start date conflicts with an existing booking",
+          endDate: "End date conflicts with an existing booking",
+        },
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 // Create a review for a spot

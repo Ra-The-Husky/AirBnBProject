@@ -14,21 +14,21 @@ module.exports = {
         {
           spotId: 1,
           userId: 1,
-          startDate: "10-1-2023",
-          endDate: "10-5-2023",
+          startDate: new Date("2023-10-1"),
+          endDate: new Date("2023-10-2"),
         },
-        {
-          spotId: 2,
-          userId: 2,
-          startDate: "11-5-2023",
-          endDate: "11-10-2023",
-        },
-        {
-          spotId: 3,
-          userId: 3,
-          startDate: "11-25-2023",
-          endDate: "11-30-2023",
-        },
+        // {
+        //   spotId: 2,
+        //   userId: 2,
+        //   startDate: "11-5-2023",
+        //   endDate: "11-10-2023",
+        // },
+        // {
+        //   spotId: 3,
+        //   userId: 3,
+        //   startDate: "11-25-2023",
+        //   endDate: "11-30-2023",
+        // },
       ],
       { validate: true }
     );
