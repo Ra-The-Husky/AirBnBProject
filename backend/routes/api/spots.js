@@ -271,12 +271,34 @@ router.post("/:spotId/bookings", requireAuth, async (req, res, next) => {
           });
           const start = new Date(startDate);
           const end = new Date(endDate);
-          console.log(start, end, reserved.startDate);
-          res.json({
-            start: start,
-            end: end,
-            reserve: reserve.startDate,
-          });
+          // console.log(start, end, reserved.startDate, reserved.endDate);
+          if (reserved.startDate <= start && reserved.endDate >= start) {
+            console.log("made it here");
+
+            const err = new Error(
+              "Sorry, this spot is already booked for the specified dates"
+            );
+            err.status = 403;
+            err.message =
+              "Sorry, this spot is already booked for the specified dates";
+            err.errors = {
+              startDate: "Start date conflicts with an existing booking",
+            };
+            return next(err);
+          }
+          if (end <= reserved.endDate || end <= reserved.startDate) {
+            console.log("made it here");
+            const err = new Error(
+              "Sorry, this spot is already booked for the specified dates"
+            );
+            err.status = 403;
+            err.message =
+              "Sorry, this spot is already booked for the specified dates";
+            err.errors = {
+              endDate: "End date conflicts with an existing booking",
+            };
+            return next(err);
+          }
         }
       }
     }
