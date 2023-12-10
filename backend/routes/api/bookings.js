@@ -44,12 +44,12 @@ router.put("/:bookingId", requireAuth, async (req, res, next) => {
     bookings.forEach((booking) => {
       allBookings.push(booking.toJSON());
     });
-    allBookings.forEach((booking) => {
+    for (let i = 0; i < allBookings.length; i++) {
+      const booking = allBookings[i];
       const start = new Date(startDate);
       const end = new Date(endDate);
 
       if (start >= booking.startDate && start <= booking.endDate) {
-        console.log("bad start");
         res.status(403);
         return res.json({
           message: "Sorry, this spot is already booked for the specified dates",
@@ -58,14 +58,12 @@ router.put("/:bookingId", requireAuth, async (req, res, next) => {
           },
         });
       } else if (end >= booking.startDate && end <= booking.endDate) {
-        console.log("bad end");
-        return res.json()
-        // return res.status(403).json({
-        //   message: "Sorry, this spot is already booked for the specified dates",
-        //   errors: {
-        //     endDate: "End date conflicts with an existing booking",
-        //   },
-        // });
+        return res.status(403).json({
+          message: "Sorry, this spot is already booked for the specified dates",
+          errors: {
+            endDate: "End date conflicts with an existing booking",
+          },
+        });
       } else if (end < start) {
         res.status(400);
         return res.json({
@@ -75,7 +73,7 @@ router.put("/:bookingId", requireAuth, async (req, res, next) => {
           },
         });
       }
-    });
+    }
   }
   let updatedBooking = await Booking.update(
     {
@@ -88,8 +86,8 @@ router.put("/:bookingId", requireAuth, async (req, res, next) => {
       },
     }
   );
-const newBooking = await Booking.findByPk(bookingId)
-return res.json(newBooking)
+  const newBooking = await Booking.findByPk(bookingId);
+  return res.json(newBooking);
 });
 
 module.exports = router;
