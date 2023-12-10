@@ -90,4 +90,40 @@ router.put("/:bookingId", requireAuth, async (req, res, next) => {
   return res.json(newBooking);
 });
 
+router.delete("/:bookingId", requireAuth, async (req, res, next) => {
+  const bookingId = req.params.bookingId;
+  const { startDate, endDate } = req.body;
+  const now = new Date();
+
+  const booking = await Booking.findOne({
+    where: {
+      id: bookingId,
+    },
+  });
+
+  const bookings = await Booking.findAll({
+    where: {
+      spotId: booking.spotId,
+    },
+  });
+
+  if (!booking) {
+    res.status(404);
+    return res.json({
+      message: "Booking couldn't be found",
+    });
+  }
+  if (booking.userId !== req.user.id || booking.) {
+    res.status(403);
+    return res.json({
+      message: "Forbidden",
+    });
+  } else if (booking.endDate < now) {
+    res.status(403);
+    return res.json({
+      message: "Past bookings can't be modified",
+    });
+  }
+})
+
 module.exports = router;
