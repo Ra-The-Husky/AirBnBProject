@@ -30,6 +30,7 @@ const validateSpot = [
     .withMessage("Description is required"),
   check("price")
     .exists({ checkFalsy: true })
+
     .withMessage("Price per day is required"),
   handleValidationErrors,
 ];
@@ -316,7 +317,7 @@ router.post("/:spotId/bookings", requireAuth, async (req, res, next) => {
 });
 
 // Create a review for a spot
-router.post("/:spotId", requireAuth, validateReview, async (req, res) => {
+router.post("/:spotId/reviews", requireAuth, validateReview, async (req, res) => {
   try {
     const { review, stars } = req.body;
     const spotId = req.params.spotId;
