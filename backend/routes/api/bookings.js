@@ -92,19 +92,17 @@ router.put("/:bookingId", requireAuth, async (req, res, next) => {
 
 router.delete("/:bookingId", requireAuth, async (req, res, next) => {
   const bookingId = req.params.bookingId;
-  const { startDate, endDate } = req.body;
   const now = new Date();
 
   const booking = await Booking.findOne({
     where: {
       id: bookingId,
     },
-  });
-
-  const bookings = await Booking.findAll({
-    where: {
-      spotId: booking.spotId,
-    },
+    include: [
+      {
+        model: Spot,
+      },
+    ],
   });
 
   if (!booking) {
@@ -113,17 +111,25 @@ router.delete("/:bookingId", requireAuth, async (req, res, next) => {
       message: "Booking couldn't be found",
     });
   }
-  if (booking.userId !== req.user.id || booking.) {
+  if (booking.startDate <= now) {
+    res.status(403);
+    return res.json({
+      message: "Bookings that have been started can't be deleted",
+    });
+  } else if (
+    booking.Spot.ownerId !== +req.user.id ||
+    booking.userId !== +req.user.id
+  ) {
     res.status(403);
     return res.json({
       message: "Forbidden",
     });
-  } else if (booking.endDate < now) {
-    res.status(403);
+  } else {
+    await booking.destroy();
     return res.json({
-      message: "Past bookings can't be modified",
+      message: "Successfully deleted",
     });
   }
-})
+});
 
 module.exports = router;
