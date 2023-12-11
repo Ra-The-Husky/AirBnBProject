@@ -46,6 +46,42 @@ const validateReview = [
   handleValidationErrors,
 ];
 
+const validQueries = [
+  check("page")
+    .optional()
+    .isInt({ min: 1, max: 10 })
+    .withMessage("Maximum latitude is invalid"),
+  check("size")
+    .optional()
+    .isFloat({ min: 1, max: 20 })
+    .withMessage("Maximum latitude is invalid"),
+  check("maxLat")
+    .optional()
+    .isInt({ max: 90 })
+    .withMessage("Maximum latitude is invalid"),
+  check("minLat")
+    .optional()
+    .isFloat({ min: -90 })
+    .withMessage("Minimum latitude is invalid"),
+  check("maxLng")
+    .optional()
+    .isInt({ max: 180 })
+    .withMessage("Maximum longitude is invalid"),
+  check("minLng")
+    .optional()
+    .isInt({ min: -180 })
+    .withMessage("Minimum longitude is invalid"),
+  check("minPrice")
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage("Minimum price is invalid"),
+  check("maxPrice")
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage("Maximum price is invalid"),
+  handleValidationErrors,
+];
+
 function newKeyName(arr, oldKey, newKey) {
   const newArr = arr.map((obj) => {
     const newObj = { ...obj, [newKey]: obj[oldKey] };
@@ -58,51 +94,161 @@ function newKeyName(arr, oldKey, newKey) {
 }
 
 // Get all spots
-router.get("/", async (req, res, next) => {
-  const allSpots = await Spot.findAll({
-    include: [
-      {
-        model: Review,
-      },
-      {
-        model: Image,
-      },
-    ],
-  });
-  let spotsList = [];
-  allSpots.forEach((spot) => {
-    spotsList.push(spot.toJSON());
-  });
-  // Calculates Average Rating
-  spotsList.forEach((spot) => {
-    if (spot.Reviews) {
-      let starSum = 0;
-      spot.Reviews.forEach((review) => {
-        // console.log(review.stars)
-        if (review.stars) {
-          starSum += review.stars;
-        }
-        spot.avgRating = starSum / spot.Reviews.length;
-      });
-      delete spot.Reviews;
+router.get("/", validQueries, async (req, res, next) => {
+  let { page, size } = req.query;
+  let allSpots;
+  const where = {};
+
+  page = !page ? 1 : parseInt(page);
+  size = !size ? 20 : parseInt(size);
+  let pagination = {};
+
+  if (page >= 1 && size >= 1) {
+    if (page > 10) {
+      pagination.limit = 10;
+    } else {
+      pagination.limit = size;
     }
-  });
+    if (size > 20) {
+      pagination.offset = 20 * (page - 1);
+    } else {
+      pagination.offset = size * (page - 1);
+    }
+  }
 
-  // Shows preview images or says there is none.
-  spotsList.forEach((spot) => {
-    spot.Images.forEach((image) => {
-      if (image.imagePreview === true) {
-        spot.previewImage = image.url;
-      } else {
-        spot.previewImage = "No preview image available.";
+    if (req.query) {
+      if (req.query.minLat) {
+        where.lat = {
+          [Op.gte]: req.query.minLat,
+        };
       }
-    });
-    delete spot.Images;
-  });
+      if (req.query.maxLat) {
+        where.lat = {
+          [Op.lte]: req.query.maxLat,
+        };
+      }
+      if (req.query.minLat && req.query.maxLat) {
+        where.lng = {
+          [Op.between]: [req.query.minLat, req.query.maxLat],
+        };
+      }
+      if (req.query.minLng) {
+        where.lng = {
+          [Op.gte]: req.query.minLng,
+        };
+      }
+      if (req.query.maxLng) {
+        where.lng = {
+          [Op.lte]: req.query.maxLng,
+        };
+      }
+      if (req.query.minLng && req.query.maxLng) {
+        where.lng = {
+          [Op.between]: [req.query.minLng, req.query.maxLng],
+        };
+      }
+      if (req.query.maxPrice) {
+        where.price = {
+          [Op.lte]: req.query.maxPrice,
+        };
+      }
+      if (req.query.minPrice) {
+        where.price = {
+          [Op.gte]: req.query.minPrice,
+        };
+      }
+      if (req.query.minPrice && req.query.maxPrice) {
+        where.lng = {
+          [Op.between]: [req.query.minPrice, req.query.maxPrice],
+        };
+      }
+      allSpots = await Spot.findAll({
+        where,
+        include: [{ model: Review }, { model: Image }],
+        ...pagination,
+      });
+      let spotsList = [];
+      allSpots.forEach((spot) => {
+        spotsList.push(spot.toJSON());
+      });
+      // Calculates Average Rating
+      spotsList.forEach((spot) => {
+        if (spot.Reviews) {
+          let starSum = 0;
+          spot.Reviews.forEach((review) => {
+            if (review.stars) {
+              starSum += review.stars;
+            }
+            spot.avgRating = starSum / spot.Reviews.length;
+          });
+          delete spot.Reviews;
+        }
+      });
 
-  res.json({
-    Spots: spotsList,
-  });
+      // Shows preview images or says there is none.
+      spotsList.forEach((spot) => {
+        spot.Images.forEach((image) => {
+          if (image.imagePreview === true) {
+            spot.previewImage = image.url;
+          } else {
+            spot.previewImage = "No preview image available.";
+          }
+        });
+        delete spot.Images;
+      });
+
+      return res.json({
+        Spots: spotsList,
+        page,
+        size,
+      });
+    } else {
+      allSpots = await Spot.findAll({
+        include: [
+          {
+            model: Review,
+          },
+          {
+            model: Image,
+          },
+        ],
+      });
+      let spotsList = [];
+      allSpots.forEach((spot) => {
+        spotsList.push(spot.toJSON());
+      });
+      // Calculates Average Rating
+      spotsList.forEach((spot) => {
+        if (spot.Reviews) {
+          let starSum = 0;
+          spot.Reviews.forEach((review) => {
+            if (review.stars) {
+              starSum += review.stars;
+            }
+            spot.avgRating = starSum / spot.Reviews.length;
+          });
+          delete spot.Reviews;
+        }
+      });
+
+      // Shows preview images or says there is none.
+      spotsList.forEach((spot) => {
+        spot.Images.forEach((image) => {
+          if (image.imagePreview === true) {
+            spot.previewImage = image.url;
+          } else {
+            spot.previewImage = "No preview image available.";
+          }
+        });
+        delete spot.Images;
+      });
+
+      return res.json({
+        Spots: spotsList,
+        page,
+        size,
+      });
+    }
 });
 
 // Get spot details
@@ -308,8 +454,8 @@ router.post("/:spotId/bookings", requireAuth, async (req, res, next) => {
         startDate: startDate,
         endDate: endDate,
       });
-      await newBooking.save()
-      res.json(newBooking)
+      await newBooking.save();
+      res.json(newBooking);
     }
   } catch (error) {
     console.log(error);
@@ -317,47 +463,52 @@ router.post("/:spotId/bookings", requireAuth, async (req, res, next) => {
 });
 
 // Create a review for a spot
-router.post("/:spotId/reviews", requireAuth, validateReview, async (req, res) => {
-  try {
-    const { review, stars } = req.body;
-    const spotId = req.params.spotId;
+router.post(
+  "/:spotId/reviews",
+  requireAuth,
+  validateReview,
+  async (req, res) => {
+    try {
+      const { review, stars } = req.body;
+      const spotId = req.params.spotId;
 
-    const findSpot = await Spot.findOne({
-      where: { id: spotId },
-    });
+      const findSpot = await Spot.findOne({
+        where: { id: spotId },
+      });
 
-    const findReview = await Review.findOne({
-      where: {
-        spotId: spotId,
-        userId: req.user.id,
-      },
-    });
+      const findReview = await Review.findOne({
+        where: {
+          spotId: spotId,
+          userId: req.user.id,
+        },
+      });
 
-    if (!findSpot) {
-      res.status(404);
-      res.json({
-        message: "Spot couldn't be found",
-      });
-    } else if (findReview) {
-      res.status(500);
-      res.json({
-        message: "User already has a review for this spot",
-      });
-    } else {
-      const newReview = Review.build({
-        userId: Number(req.user.id),
-        spotId: Number(spotId),
-        review: review,
-        stars: stars,
-      });
-      await newReview.save();
-      res.status(201);
-      res.json(newReview);
+      if (!findSpot) {
+        res.status(404);
+        res.json({
+          message: "Spot couldn't be found",
+        });
+      } else if (findReview) {
+        res.status(500);
+        res.json({
+          message: "User already has a review for this spot",
+        });
+      } else {
+        const newReview = Review.build({
+          userId: Number(req.user.id),
+          spotId: Number(spotId),
+          review: review,
+          stars: stars,
+        });
+        await newReview.save();
+        res.status(201);
+        res.json(newReview);
+      }
+    } catch (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
   }
-});
+);
 
 // Adds an image to a spot
 router.post("/:spotId/images", requireAuth, async (req, res) => {
