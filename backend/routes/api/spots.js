@@ -57,19 +57,19 @@ const validQueries = [
     .withMessage("Size must be greater than or equal to 1"),
   check("maxLat")
     .optional()
-    .isFloat({ max: 90 })
+    .isFloat({ min: -90, max: 90 })
     .withMessage("Maximum latitude is invalid"),
   check("minLat")
     .optional()
-    .isFloat({ min: -90 })
+    .isFloat({ min: -90, mac: 90 })
     .withMessage("Minimum latitude is invalid"),
   check("maxLng")
     .optional()
-    .isFloat({ max: 180 })
+    .isFloat({ min: -180, max: 180 })
     .withMessage("Maximum longitude is invalid"),
   check("minLng")
     .optional()
-    .isFloat({ min: -180 })
+    .isFloat({ min: -180, max: 180 })
     .withMessage("Minimum longitude is invalid"),
   check("minPrice")
     .optional()
@@ -202,54 +202,7 @@ router.get("/", validQueries, async (req, res, next) => {
       page,
       size,
     });
-  } else {
-    allSpots = await Spot.findAll({
-      include: [
-        {
-          model: Review,
-        },
-        {
-          model: Image,
-        },
-      ],
-    });
   }
-
-  let spotsList = [];
-  allSpots.forEach((spot) => {
-    spotsList.push(spot.toJSON());
-  });
-  // Calculates Average Rating
-  spotsList.forEach((spot) => {
-    if (spot.Reviews) {
-      let starSum = 0;
-      spot.Reviews.forEach((review) => {
-        if (review.stars) {
-          starSum += review.stars;
-        }
-        spot.avgRating = starSum / spot.Reviews.length;
-      });
-      delete spot.Reviews;
-    }
-  });
-
-  // Shows preview images or says there is none.
-  spotsList.forEach((spot) => {
-    spot.Images.forEach((image) => {
-      if (image.imagePreview === true) {
-        spot.previewImage = image.url;
-      } else {
-        spot.previewImage = "No preview image available.";
-      }
-    });
-    delete spot.Images;
-  });
-
-  return res.json({
-    Spots: spotsList,
-    page,
-    size,
-  });
 });
 
 // Get current user's spots
@@ -268,7 +221,7 @@ router.get("/current", requireAuth, async (req, res) => {
       },
     ],
   });
-  // if (userSpots.length >= 1) {
+  
   let usersList = [];
   userSpots.forEach((spot) => {
     usersList.push(spot.toJSON());
