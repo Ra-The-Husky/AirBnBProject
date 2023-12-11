@@ -1,9 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const { Booking, User, Spot, Image } = require("../../db/models");
+const { Booking, Spot, Image } = require("../../db/models");
 const { requireAuth } = require("../../utils/auth");
-const { check } = require("express-validator");
-const { handleValidationErrors } = require("../../utils/validation");
 
 // Get current user's bookings
 router.get("/current", requireAuth, async (req, res) => {
@@ -48,7 +46,7 @@ router.get("/current", requireAuth, async (req, res) => {
     });
     delete booking.Spot.Images;
   });
-  res.json({ Bookings: bookingInfo });
+  return res.json({ Bookings: bookingInfo });
 });
 
 // Edits a user's booking
@@ -63,18 +61,13 @@ router.put("/:bookingId", requireAuth, async (req, res, next) => {
     },
   });
 
-  const bookings = await Booking.findAll({
-    where: {
-      spotId: booking.spotId,
-    },
-  });
-
   if (!booking) {
     res.status(404);
     return res.json({
       message: "Booking couldn't be found",
     });
   }
+
   if (booking.userId !== req.user.id) {
     res.status(403);
     return res.json({
@@ -86,6 +79,12 @@ router.put("/:bookingId", requireAuth, async (req, res, next) => {
       message: "Past bookings can't be modified",
     });
   } else {
+    const bookings = await Booking.findAll({
+      where: {
+        spotId: booking.spotId,
+      },
+    });
+
     const allBookings = [];
     bookings.forEach((booking) => {
       allBookings.push(booking.toJSON());
@@ -118,6 +117,14 @@ router.put("/:bookingId", requireAuth, async (req, res, next) => {
             endDate: "endDate cannot come before startDate",
           },
         });
+      } else if (start < now) {
+        res.status(400);
+        return res.json({
+          message: "Bad Request",
+          errors: {
+            startDate: "startDate cannot be in the past",
+          },
+        });
       }
     }
   }
@@ -136,6 +143,7 @@ router.put("/:bookingId", requireAuth, async (req, res, next) => {
   return res.json(newBooking);
 });
 
+// Deletes a user's bookinh
 router.delete("/:bookingId", requireAuth, async (req, res, next) => {
   const bookingId = req.params.bookingId;
   const now = new Date();

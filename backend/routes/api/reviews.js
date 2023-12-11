@@ -193,33 +193,5 @@ router.delete("/:reviewId", async (req, res) => {
   }
 });
 
-// Deletes a review's image
-router.delete("/:reviewId/images/:imageId", requireAuth, async (req, res) => {
-  const reviewId = req.params.reviewId;
-  const imageId = req.params.imageId;
-  const deleteImage = await Image.findOne({
-    where: { imageableId: reviewId, id: imageId, imageableType: "Review" },
-  });
-  const ownerReview = await Review.findOne({
-    where: { id: reviewId },
-  });
-
-  if (!deleteImage) {
-    res.status(404);
-    res.json({
-      message: "Review Image couldn't be found",
-    });
-  } else if (ownerReview && ownerReview.userId === req.user.id) {
-    await deleteImage.destroy();
-    res.json({
-      message: "Successfully deleted",
-    });
-  } else {
-    res.status(403);
-    res.json({
-      message: "Forbidden",
-    });
-  }
-});
 
 module.exports = router;

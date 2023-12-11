@@ -4,10 +4,12 @@ const { User } = require("../../db/models");
 const { restoreUser } = require("../../utils/auth.js");
 const { requireAuth } = require("../../utils/auth.js");
 const spotsRouter = require("./spots.js");
+const spotImagesRouter = require("./spot-images.js");
 const sessionRouter = require("./session.js");
 const usersRouter = require("./users.js");
-const reviewsRouter = require("./reviews.js")
-const bookingsRouter = require("./bookings.js")
+const reviewsRouter = require("./reviews.js");
+const reviewImagesRouter = require("./review-images.js");
+const bookingsRouter = require("./bookings.js");
 
 // Add a XSRF-TOKEN cookie
 router.get("/api/csrf/restore", (req, res) => {
@@ -30,9 +32,6 @@ router.get("/api/csrf/restore", (req, res) => {
 
 router.use(restoreUser);
 
-// Connect restoreUser middleware to the API router
-// If current user session is valid, set req.user to the user in the database
-// If current user session is not valid, set req.user to null
 router.use(restoreUser);
 
 router.use("/session", sessionRouter);
@@ -45,11 +44,19 @@ router.use("/reviews", reviewsRouter);
 
 router.use("/bookings", bookingsRouter);
 
+router.use("/spot-images", spotImagesRouter);
+
+router.use("/review-images", reviewImagesRouter);
+
+
 
 router.post("/test", (req, res) => {
   res.json({ requestBody: req.body });
 });
 
+// Connect restoreUser middleware to the API router
+// If current user session is valid, set req.user to the user in the database
+// If current user session is not valid, set req.user to null
 // GET /api/restore-user
 // router.get(
 //   '/restore-user',
@@ -70,4 +77,5 @@ router.post("/test", (req, res) => {
 //     return res.json(req.user);
 //   }
 // );
+
 module.exports = router;
