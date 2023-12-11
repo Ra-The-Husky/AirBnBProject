@@ -12,14 +12,12 @@ router.delete("/:imageId", requireAuth, async (req, res, next) => {
         include : { model: Spot}
     });
     if (!deleteImage) {
-        res.status(404);
-        return res.json({
+       return res.status(404).json({
             message: "Spot Image couldn't be found",
         });
     }
     if (deleteImage.Spot.ownerId !== req.user.id) {
-      res.status(403);
-      return res.json({
+     return res.status(403).json({
         message: "Forbidden",
       });
     }

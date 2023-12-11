@@ -57,7 +57,7 @@ const validQueries = [
     .withMessage("Size must be greater than or equal to 1"),
   check("maxLat")
     .optional()
-    .isInt({ max: 90 })
+    .isFloat({ max: 90 })
     .withMessage("Maximum latitude is invalid"),
   check("minLat")
     .optional()
@@ -65,11 +65,11 @@ const validQueries = [
     .withMessage("Minimum latitude is invalid"),
   check("maxLng")
     .optional()
-    .isInt({ max: 180 })
+    .isFloat({ max: 180 })
     .withMessage("Maximum longitude is invalid"),
   check("minLng")
     .optional()
-    .isInt({ min: -180 })
+    .isFloat({ min: -180 })
     .withMessage("Minimum longitude is invalid"),
   check("minPrice")
     .optional()
@@ -267,7 +267,7 @@ router.get("/current", requireAuth, async (req, res) => {
       },
     ],
   });
-  if (userSpots.length >= 1) {
+  // if (userSpots.length >= 1) {
     let usersList = [];
     userSpots.forEach((spot) => {
       usersList.push(spot.toJSON());
@@ -302,7 +302,7 @@ router.get("/current", requireAuth, async (req, res) => {
     return res.json({
       Spots: usersList,
     });
-  }
+  // }
 });
 
 // Get spot details
@@ -685,21 +685,19 @@ router.delete("/:spotId", requireAuth, async (req, res, next) => {
     where: { id: spotId },
   });
   if (!deleteSpot) {
-    res.status(404);
-    return res.json({
+    return res.status(404).json({
       message: "Spot couldn't be found",
     });
-  } else if (deleteSpot.ownerId === req.user.id) {
-    await deleteSpot.destroy();
-    return res.json({
-      message: "Successfully deleted",
-    });
-  } else {
-    res.status(403);
-    return res.json({
+  }
+  if (deleteSpot.ownerId === req.user.id) {
+    return res.status(403).json({
       message: "Forbidden",
     });
   }
+  await deleteSpot.destroy();
+  return res.json({
+    message: "Successfully deleted",
+  });
 });
 
 module.exports = router;
