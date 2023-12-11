@@ -30,8 +30,8 @@ const validateSpot = [
     .withMessage("Description is required"),
   check("price")
     .exists({ checkFalsy: true })
-
-    .withMessage("Price per day is required"),
+    .isInt({ min: 1 })
+    .withMessage("Price per day must be a positive number"),
   handleValidationErrors,
 ];
 
@@ -41,7 +41,7 @@ const validateReview = [
     .withMessage("Review text is required"),
   check("stars")
     .exists({ checkFalsy: true })
-    .isFloat({ min: 1, max: 5 })
+    .isInt({ min: 1, max: 5 })
     .withMessage("Stars must be an integer from 1 to 5"),
   handleValidationErrors,
 ];
@@ -116,139 +116,193 @@ router.get("/", validQueries, async (req, res, next) => {
     }
   }
 
-    if (req.query) {
-      if (req.query.minLat) {
-        where.lat = {
-          [Op.gte]: req.query.minLat,
-        };
-      }
-      if (req.query.maxLat) {
-        where.lat = {
-          [Op.lte]: req.query.maxLat,
-        };
-      }
-      if (req.query.minLat && req.query.maxLat) {
-        where.lng = {
-          [Op.between]: [req.query.minLat, req.query.maxLat],
-        };
-      }
-      if (req.query.minLng) {
-        where.lng = {
-          [Op.gte]: req.query.minLng,
-        };
-      }
-      if (req.query.maxLng) {
-        where.lng = {
-          [Op.lte]: req.query.maxLng,
-        };
-      }
-      if (req.query.minLng && req.query.maxLng) {
-        where.lng = {
-          [Op.between]: [req.query.minLng, req.query.maxLng],
-        };
-      }
-      if (req.query.maxPrice) {
-        where.price = {
-          [Op.lte]: req.query.maxPrice,
-        };
-      }
-      if (req.query.minPrice) {
-        where.price = {
-          [Op.gte]: req.query.minPrice,
-        };
-      }
-      if (req.query.minPrice && req.query.maxPrice) {
-        where.lng = {
-          [Op.between]: [req.query.minPrice, req.query.maxPrice],
-        };
-      }
-      allSpots = await Spot.findAll({
-        where,
-        include: [{ model: Review }, { model: Image }],
-        ...pagination,
-      });
-      let spotsList = [];
-      allSpots.forEach((spot) => {
-        spotsList.push(spot.toJSON());
-      });
-      // Calculates Average Rating
-      spotsList.forEach((spot) => {
-        if (spot.Reviews) {
-          let starSum = 0;
-          spot.Reviews.forEach((review) => {
-            if (review.stars) {
-              starSum += review.stars;
-            }
-            spot.avgRating = starSum / spot.Reviews.length;
-          });
-          delete spot.Reviews;
-        }
-      });
-
-      // Shows preview images or says there is none.
-      spotsList.forEach((spot) => {
-        spot.Images.forEach((image) => {
-          if (image.imagePreview === true) {
-            spot.previewImage = image.url;
-          } else {
-            spot.previewImage = "No preview image available.";
-          }
-        });
-        delete spot.Images;
-      });
-
-      return res.json({
-        Spots: spotsList,
-        page,
-        size,
-      });
-    } else {
-      allSpots = await Spot.findAll({
-        include: [
-          {
-            model: Review,
-          },
-          {
-            model: Image,
-          },
-        ],
-      });
-      let spotsList = [];
-      allSpots.forEach((spot) => {
-        spotsList.push(spot.toJSON());
-      });
-      // Calculates Average Rating
-      spotsList.forEach((spot) => {
-        if (spot.Reviews) {
-          let starSum = 0;
-          spot.Reviews.forEach((review) => {
-            if (review.stars) {
-              starSum += review.stars;
-            }
-            spot.avgRating = starSum / spot.Reviews.length;
-          });
-          delete spot.Reviews;
-        }
-      });
-
-      // Shows preview images or says there is none.
-      spotsList.forEach((spot) => {
-        spot.Images.forEach((image) => {
-          if (image.imagePreview === true) {
-            spot.previewImage = image.url;
-          } else {
-            spot.previewImage = "No preview image available.";
-          }
-        });
-        delete spot.Images;
-      });
-
-      return res.json({
-        Spots: spotsList,
-        page,
-        size,
-      });
+  if (req.query) {
+    if (req.query.minLat) {
+      where.lat = {
+        [Op.gte]: req.query.minLat,
+      };
     }
+    if (req.query.maxLat) {
+      where.lat = {
+        [Op.lte]: req.query.maxLat,
+      };
+    }
+    if (req.query.minLat && req.query.maxLat) {
+      where.lng = {
+        [Op.between]: [req.query.minLat, req.query.maxLat],
+      };
+    }
+    if (req.query.minLng) {
+      where.lng = {
+        [Op.gte]: req.query.minLng,
+      };
+    }
+    if (req.query.maxLng) {
+      where.lng = {
+        [Op.lte]: req.query.maxLng,
+      };
+    }
+    if (req.query.minLng && req.query.maxLng) {
+      where.lng = {
+        [Op.between]: [req.query.minLng, req.query.maxLng],
+      };
+    }
+    if (req.query.maxPrice) {
+      where.price = {
+        [Op.lte]: req.query.maxPrice,
+      };
+    }
+    if (req.query.minPrice) {
+      where.price = {
+        [Op.gte]: req.query.minPrice,
+      };
+    }
+    if (req.query.minPrice && req.query.maxPrice) {
+      where.lng = {
+        [Op.between]: [req.query.minPrice, req.query.maxPrice],
+      };
+    }
+    allSpots = await Spot.findAll({
+      where,
+      include: [{ model: Review }, { model: Image }],
+      ...pagination,
+    });
+    let spotsList = [];
+    allSpots.forEach((spot) => {
+      spotsList.push(spot.toJSON());
+    });
+    // Calculates Average Rating
+    spotsList.forEach((spot) => {
+      if (spot.Reviews) {
+        let starSum = 0;
+        spot.Reviews.forEach((review) => {
+          if (review.stars) {
+            starSum += review.stars;
+          }
+          spot.avgRating = starSum / spot.Reviews.length;
+        });
+        delete spot.Reviews;
+      }
+    });
+
+    // Shows preview images or says there is none.
+    spotsList.forEach((spot) => {
+      spot.Images.forEach((image) => {
+        if (image.imagePreview === true) {
+          spot.previewImage = image.url;
+        } else {
+          spot.previewImage = "No preview image available.";
+        }
+      });
+      delete spot.Images;
+    });
+
+    return res.json({
+      Spots: spotsList,
+      page,
+      size,
+    });
+  } else {
+    allSpots = await Spot.findAll({
+      include: [
+        {
+          model: Review,
+        },
+        {
+          model: Image,
+        },
+      ],
+    });
+    let spotsList = [];
+    allSpots.forEach((spot) => {
+      spotsList.push(spot.toJSON());
+    });
+    // Calculates Average Rating
+    spotsList.forEach((spot) => {
+      if (spot.Reviews) {
+        let starSum = 0;
+        spot.Reviews.forEach((review) => {
+          if (review.stars) {
+            starSum += review.stars;
+          }
+          spot.avgRating = starSum / spot.Reviews.length;
+        });
+        delete spot.Reviews;
+      }
+    });
+
+    // Shows preview images or says there is none.
+    spotsList.forEach((spot) => {
+      spot.Images.forEach((image) => {
+        if (image.imagePreview === true) {
+          spot.previewImage = image.url;
+        } else {
+          spot.previewImage = "No preview image available.";
+        }
+      });
+      delete spot.Images;
+    });
+
+    return res.json({
+      Spots: spotsList,
+      page,
+      size,
+    });
+  }
+});
+
+// Get current user's spots
+router.get("/current", requireAuth, async (req, res) => {
+  const userId = req.user.id;
+  let userSpots = await Spot.findAll({
+    where: {
+      ownerId: userId,
+    },
+    include: [
+      {
+        model: Review,
+      },
+      {
+        model: Image,
+      },
+    ],
+  });
+  if (userSpots.length >= 1) {
+    let usersList = [];
+    userSpots.forEach((spot) => {
+      usersList.push(spot.toJSON());
+    });
+    // Calculates Average Rating
+    usersList.forEach((spot) => {
+      if (spot.Reviews) {
+        let starSum = 0;
+        spot.Reviews.forEach((review) => {
+          // console.log(review.stars)
+          if (review.stars) {
+            starSum += review.stars;
+          }
+          spot.avgRating = starSum / spot.Reviews.length;
+        });
+        delete spot.Reviews;
+      }
+    });
+
+    // Shows preview images or says there is none.
+    usersList.forEach((spot) => {
+      spot.Images.forEach((image) => {
+        if (image.preview === true) {
+          spot.previewImage = image.url;
+        } else {
+          spot.previewImage = "No preview image available.";
+        }
+      });
+      delete spot.Images;
+    });
+
+    return res.json({
+      Spots: usersList,
+    });
+  }
 });
 
 // Get spot details
@@ -544,7 +598,6 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
   const spotId = req.params.spotId;
 
   const {
-    id,
     ownerId,
     address,
     city,

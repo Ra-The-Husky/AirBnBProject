@@ -1,9 +1,55 @@
 const express = require("express");
 const router = express.Router();
-const { Booking, User, Spot } = require("../../db/models");
+const { Booking, User, Spot, Image } = require("../../db/models");
 const { requireAuth } = require("../../utils/auth");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
+
+// Get current user's bookings
+router.get("/current", requireAuth, async (req, res) => {
+  const userId = req.user.id;
+  let bookings = await Booking.findAll({
+    where: {
+      userId: userId,
+    },
+    include: [
+      {
+        model: Spot,
+        attributes: [
+          "id",
+          "ownerId",
+          "address",
+          "city",
+          "state",
+          "country",
+          "lat",
+          "lng",
+          "name",
+          "price",
+        ],
+        include: {
+          model: Image,
+        },
+      },
+    ],
+  });
+  let bookingInfo = [];
+  bookings.forEach((booking) => {
+    bookingInfo.push(booking.toJSON());
+  });
+
+  bookingInfo.forEach((booking) => {
+    booking.Spot.Images.forEach((image) => {
+      if (image.preview === true) {
+        booking.Spot.previewImage = image.url;
+      } else {
+        booking.Spot.previewImage = "No preview image";
+      }
+    });
+    delete booking.Spot.Images;
+  });
+  res.json({ Bookings: bookingInfo });
+});
 
 // Edits a user's booking
 router.put("/:bookingId", requireAuth, async (req, res, next) => {

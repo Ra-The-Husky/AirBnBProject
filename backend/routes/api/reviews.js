@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { Review, Image, Spot } = require("../../db/models");
+const { Review, User, Image, Spot } = require("../../db/models");
 const { requireAuth } = require("../../utils/auth");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
@@ -16,6 +16,72 @@ const validateReview = [
     .withMessage("Stars must be an integer from 1 to 5"),
   handleValidationErrors,
 ];
+
+function newKeyName(arr, oldKey, newKey) {
+  const newArr = arr.map((obj) => {
+    const newObj = { ...obj, [newKey]: obj[oldKey] };
+    if (oldKey !== newKey) {
+      delete newObj[oldKey];
+    }
+    return newObj;
+  });
+  return newArr;
+}
+
+// Get current user's reviews
+router.get("/current", requireAuth, async (req, res) => {
+  const userId = req.user.id;
+
+  const userReviews = await Review.findAll({
+    where: {
+      userId: userId,
+    },
+    include: [
+      {
+        model: User,
+        attributes: ["id", "firstName", "lastName"],
+      },
+      {
+        model: Spot,
+        attributes: [
+          "id",
+          "ownerId",
+          "address",
+          "city",
+          "state",
+          "country",
+          "lat",
+          "lng",
+          "name",
+          "price",
+        ],
+        include: { model: Image },
+      },
+      {
+        model: Image,
+        attributes: ["id", "url"],
+      },
+    ],
+  });
+  let reviewsList = [];
+  userReviews.forEach((review) => {
+    reviewsList.push(review.toJSON());
+  });
+  reviewsList.forEach((review) => {
+    review.Spot.Images.forEach((spot) => {
+      if (spot.preview === true) {
+        review.Spot.previewImage = spot.url;
+      } else {
+        review.Spot.previewImage = "No preview image available.";
+      }
+    });
+    delete review.Spot.Images;
+  });
+
+  const completeReviews = newKeyName(reviewsList, "Images", "ReviewImages");
+
+  return res.json({ Reviews: completeReviews });
+});
 
 // Adds an image to a review
 router.post("/:reviewId/images", requireAuth, async (req, res) => {
