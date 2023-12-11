@@ -116,7 +116,7 @@ router.get("/", validQueries, async (req, res, next) => {
     }
   }
 
-  if (req.query) {
+  if (Object.keys(req.query).length) {
     if (req.query.minLat) {
       where.lat = {
         [Op.gte]: req.query.minLat,
