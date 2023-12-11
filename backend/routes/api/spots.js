@@ -213,42 +213,43 @@ router.get("/", validQueries, async (req, res, next) => {
         },
       ],
     });
-    let spotsList = [];
-    allSpots.forEach((spot) => {
-      spotsList.push(spot.toJSON());
-    });
-    // Calculates Average Rating
-    spotsList.forEach((spot) => {
-      if (spot.Reviews) {
-        let starSum = 0;
-        spot.Reviews.forEach((review) => {
-          if (review.stars) {
-            starSum += review.stars;
-          }
-          spot.avgRating = starSum / spot.Reviews.length;
-        });
-        delete spot.Reviews;
+  }
+
+  let spotsList = [];
+  allSpots.forEach((spot) => {
+    spotsList.push(spot.toJSON());
+  });
+  // Calculates Average Rating
+  spotsList.forEach((spot) => {
+    if (spot.Reviews) {
+      let starSum = 0;
+      spot.Reviews.forEach((review) => {
+        if (review.stars) {
+          starSum += review.stars;
+        }
+        spot.avgRating = starSum / spot.Reviews.length;
+      });
+      delete spot.Reviews;
+    }
+  });
+
+  // Shows preview images or says there is none.
+  spotsList.forEach((spot) => {
+    spot.Images.forEach((image) => {
+      if (image.imagePreview === true) {
+        spot.previewImage = image.url;
+      } else {
+        spot.previewImage = "No preview image available.";
       }
     });
+    delete spot.Images;
+  });
 
-    // Shows preview images or says there is none.
-    spotsList.forEach((spot) => {
-      spot.Images.forEach((image) => {
-        if (image.imagePreview === true) {
-          spot.previewImage = image.url;
-        } else {
-          spot.previewImage = "No preview image available.";
-        }
-      });
-      delete spot.Images;
-    });
-
-    return res.json({
-      Spots: spotsList,
-      page,
-      size,
-    });
-  }
+  return res.json({
+    Spots: spotsList,
+    page,
+    size,
+  });
 });
 
 // Get current user's spots
@@ -268,40 +269,40 @@ router.get("/current", requireAuth, async (req, res) => {
     ],
   });
   // if (userSpots.length >= 1) {
-    let usersList = [];
-    userSpots.forEach((spot) => {
-      usersList.push(spot.toJSON());
-    });
-    // Calculates Average Rating
-    usersList.forEach((spot) => {
-      if (spot.Reviews) {
-        let starSum = 0;
-        spot.Reviews.forEach((review) => {
-          // console.log(review.stars)
-          if (review.stars) {
-            starSum += review.stars;
-          }
-          spot.avgRating = starSum / spot.Reviews.length;
-        });
-        delete spot.Reviews;
+  let usersList = [];
+  userSpots.forEach((spot) => {
+    usersList.push(spot.toJSON());
+  });
+  // Calculates Average Rating
+  usersList.forEach((spot) => {
+    if (spot.Reviews) {
+      let starSum = 0;
+      spot.Reviews.forEach((review) => {
+        // console.log(review.stars)
+        if (review.stars) {
+          starSum += review.stars;
+        }
+        spot.avgRating = starSum / spot.Reviews.length;
+      });
+      delete spot.Reviews;
+    }
+  });
+
+  // Shows preview images or says there is none.
+  usersList.forEach((spot) => {
+    spot.Images.forEach((image) => {
+      if (image.preview === true) {
+        spot.previewImage = image.url;
+      } else {
+        spot.previewImage = "No preview image available.";
       }
     });
+    delete spot.Images;
+  });
 
-    // Shows preview images or says there is none.
-    usersList.forEach((spot) => {
-      spot.Images.forEach((image) => {
-        if (image.preview === true) {
-          spot.previewImage = image.url;
-        } else {
-          spot.previewImage = "No preview image available.";
-        }
-      });
-      delete spot.Images;
-    });
-
-    return res.json({
-      Spots: usersList,
-    });
+  return res.json({
+    Spots: usersList,
+  });
   // }
 });
 
