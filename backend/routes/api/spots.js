@@ -61,7 +61,7 @@ const validQueries = [
     .withMessage("Maximum latitude is invalid"),
   check("minLat")
     .optional()
-    .isFloat({ min: -90, mac: 90 })
+    .isFloat({ min: -90, max: 90 })
     .withMessage("Minimum latitude is invalid"),
   check("maxLng")
     .optional()
@@ -221,7 +221,7 @@ router.get("/current", requireAuth, async (req, res) => {
       },
     ],
   });
-  
+
   let usersList = [];
   userSpots.forEach((spot) => {
     usersList.push(spot.toJSON());
