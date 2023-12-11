@@ -544,15 +544,15 @@ router.post("/:spotId/bookings", requireAuth, async (req, res, next) => {
           },
         });
       }
-      const newBooking = Booking.build({
-        spotId: Number(spotId),
-        userId: req.user.id,
-        startDate: startDate,
-        endDate: endDate,
-      });
-      await newBooking.save();
-      return res.json(newBooking);
     }
+    const newBooking = Booking.build({
+      spotId: Number(spotId),
+      userId: req.user.id,
+      startDate: startDate,
+      endDate: endDate,
+    });
+    await newBooking.save();
+    return res.json(newBooking);
   }
 });
 
