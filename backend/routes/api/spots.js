@@ -571,9 +571,18 @@ router.post("/:spotId/images", requireAuth, async (req, res) => {
     const newSpotImage = Image.build({
       url: url,
       preview: preview,
+      imageableId: spotId,
+      imageableType: "Spot",
     });
     await newSpotImage.save();
-    return res.json(newSpotImage);
+    const nsi = newSpotImage.toJSON();
+
+    delete nsi.imageableId;
+    delete nsi.imageableType;
+    delete nsi.createdAt;
+    delete nsi.updatedAt;
+
+    return res.json(nsi);
   } else {
     res.status(403);
     return res.json({
