@@ -172,7 +172,7 @@ router.delete("/:reviewId", async (req, res) => {
   const reviewId = req.params.reviewId;
   const deleteReview = await Review.findOne({
     where: {
-      id: reviewId,
+      id: +reviewId,
     },
   });
   if (!deleteReview) {
