@@ -8,7 +8,7 @@ const { requireAuth } = require("../../utils/auth");
 router.delete("/:imageId", requireAuth, async (req, res) => {
   const imageId = req.params.imageId;
   const deleteImage = await Image.findOne({
-    where: { id: imageId, imageableType: "Review" },
+    where: { id: +imageId, imageableType: "Review" },
     include: { model: Review },
   });
 

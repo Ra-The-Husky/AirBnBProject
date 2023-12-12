@@ -8,7 +8,7 @@ router.delete("/:imageId", requireAuth, async (req, res, next) => {
 
   const imageId = req.params.imageId;
     const deleteImage = await Image.findOne({
-        where: { id: imageId, imageableType: "Spot" },
+        where: { id: +imageId, imageableType: "Spot" },
         include : { model: Spot}
     });
     if (!deleteImage) {
