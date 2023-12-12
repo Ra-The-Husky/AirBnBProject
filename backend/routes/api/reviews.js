@@ -180,18 +180,17 @@ router.delete("/:reviewId", async (req, res) => {
     res.json({
       message: "Review couldn't be found",
     });
-  } else if (deleteReview && deleteReview.userId === req.user.id) {
-    deleteReview.destroy();
-    res.json({
-      message: "Successfully deleted",
-    });
-  } else {
+  }
+  if (deleteReview.userId !== req.user.id) {
     res.status(403);
     res.json({
       message: "Forbidden",
     });
   }
+  deleteReview.destroy();
+  res.json({
+    message: "Successfully deleted",
+  });
 });
-
 
 module.exports = router;
