@@ -128,10 +128,10 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
 
       // console.log(findReview);
       res.status(201);
-      res.json(nri);
+      return res.json(nri);
     } else {
       res.status(403);
-      res.json({
+      return res.json({
         message: "Forbidden",
       });
     }
@@ -168,7 +168,7 @@ router.put("/:reviewId", requireAuth, validateReview, async (req, res) => {
 });
 
 // Delete a user's review
-router.delete("/:reviewId", async (req, res) => {
+router.delete("/:reviewId", requireAuth, async (req, res) => {
   const reviewId = req.params.reviewId;
   const deleteReview = await Review.findOne({
     where: {
@@ -177,18 +177,18 @@ router.delete("/:reviewId", async (req, res) => {
   });
   if (!deleteReview) {
     res.status(404);
-    res.json({
+    return res.json({
       message: "Review couldn't be found",
     });
   }
   if (deleteReview.userId !== req.user.id) {
     res.status(403);
-    res.json({
+    return res.json({
       message: "Forbidden",
     });
   }
   deleteReview.destroy();
-  res.json({
+  return res.json({
     message: "Successfully deleted",
   });
 });
