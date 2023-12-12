@@ -171,16 +171,16 @@ router.delete("/:bookingId", requireAuth, async (req, res, next) => {
       message: "Bookings that have been started can't be deleted",
     });
   }
-  if (booking.userId !== +req.user.id) {
-    res.status(403);
-    return res.json({
-      message: "Forbidden",
-    });
-  }
   if (+booking.Spot.ownerId === +req.user.id) {
     await booking.destroy();
     return res.json({
       message: "Successfully deleted",
+    });
+  }
+  if (booking.userId !== +req.user.id) {
+    res.status(403);
+    return res.json({
+      message: "Forbidden",
     });
   }
   await booking.destroy();
