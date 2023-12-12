@@ -642,7 +642,7 @@ router.delete("/:spotId", requireAuth, async (req, res, next) => {
       message: "Spot couldn't be found",
     });
   }
-  if (deleteSpot.ownerId === req.user.id) {
+  if (deleteSpot.ownerId !== req.user.id) {
     return res.status(403).json({
       message: "Forbidden",
     });
