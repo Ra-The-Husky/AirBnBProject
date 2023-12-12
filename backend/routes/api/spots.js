@@ -162,47 +162,46 @@ router.get("/", validQueries, async (req, res, next) => {
         [Op.between]: [req.query.minPrice, req.query.maxPrice],
       };
     }
-    allSpots = await Spot.findAll({
-      where,
-      include: [{ model: Review }, { model: Image }],
-      ...pagination,
-    });
-    let spotsList = [];
-    allSpots.forEach((spot) => {
-      spotsList.push(spot.toJSON());
-    });
-    // Calculates Average Rating
-    spotsList.forEach((spot) => {
-      if (spot.Reviews) {
-        let starSum = 0;
-        spot.Reviews.forEach((review) => {
-          if (review.stars) {
-            starSum += review.stars;
-          }
-          spot.avgRating = starSum / spot.Reviews.length;
-        });
-        delete spot.Reviews;
+  }
+  allSpots = await Spot.findAll({
+    where,
+    include: [{ model: Review }, { model: Image }],
+    ...pagination,
+  });
+  let spotsList = [];
+  allSpots.forEach((spot) => {
+    spotsList.push(spot.toJSON());
+  });
+  // Calculates Average Rating
+  spotsList.forEach((spot) => {
+    if (spot.Reviews) {
+      let starSum = 0;
+      spot.Reviews.forEach((review) => {
+        if (review.stars) {
+          starSum += review.stars;
+        }
+        spot.avgRating = starSum / spot.Reviews.length;
+      });
+      delete spot.Reviews;
+    }
+  });
+
+  // Shows preview images or says there is none.
+  spotsList.forEach((spot) => {
+    spot.Images.forEach((image) => {
+      if (image.imagePreview === true) {
+        spot.previewImage = image.url;
+      } else {
+        spot.previewImage = "No preview image available.";
       }
     });
-
-    // Shows preview images or says there is none.
-    spotsList.forEach((spot) => {
-      spot.Images.forEach((image) => {
-        if (image.imagePreview === true) {
-          spot.previewImage = image.url;
-        } else {
-          spot.previewImage = "No preview image available.";
-        }
-      });
-      delete spot.Images;
-    });
-
-    return res.json({
-      Spots: spotsList,
-      page,
-      size,
-    });
-  }
+    delete spot.Images;
+  });
+  return res.json({
+    Spots: spotsList,
+    page,
+    size,
+  });
 });
 
 // Get current user's spots
