@@ -1,0 +1,14 @@
+#root {
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+  }
+
+li {
+align-items: center;
+font-size: large;
+}
+
+.hidden {
+  display: none;
+}
