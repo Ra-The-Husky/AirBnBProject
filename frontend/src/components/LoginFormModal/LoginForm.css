@@ -1,15 +1,17 @@
-main {
-    font-family: ;
-}
-h1 {
-  font-size: 24pt;
-  font-weight: bold;
-}
-
-label {
-  color: blue;
+.form {
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: large;
+  display: flex;
+  flex-direction: column;
+  align-self: auto;
 }
 
-form {
-   font-size: 14pt;
+.demo {
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: red;
+  border-bottom: 3px red solid;
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  padding-top: 5%;
 }

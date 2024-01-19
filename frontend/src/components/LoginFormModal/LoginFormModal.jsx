@@ -12,7 +12,7 @@ function LoginFormModal() {
   const { closeModal } = useModal();
 
   useEffect(() => {
-    const errs = {}
+    const errs = {};
     if (credential.length < 4) {
       errs.credential = true;
     }
@@ -29,28 +29,32 @@ function LoginFormModal() {
       .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
-        console.log("should be credential,", credential);
+        // console.log("should be credential,", credential);
         if (data && data.errors) {
           setErrors(data.errors);
         }
       });
   };
 
+  const demoUser = (e) => {
+    e.preventDefault();
+    setCredential('Demo-lition')
+    setPassword('password')
+  };
+
   return (
     <>
       <h1>Log In</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Username or Email
+      <form className="form" onSubmit={handleSubmit}>
+        <span placeholder="username or password">
           <input
             type="text"
             value={credential}
             onChange={(e) => setCredential(e.target.value)}
             required
           />
-        </label>
+        </span>
         <label>
-          Password
           <input
             type="password"
             value={password}
@@ -58,10 +62,11 @@ function LoginFormModal() {
             required
           />
         </label>
-        {errors.credential && <p>{errors.credential}</p>}
         <button disabled={Object.values(errors).length} type="submit">
           Log In
         </button>
+        {errors.credential && <p>{errors.credential}</p>}
+        <label className='demo' onClick={demoUser}>Demo User</label>
       </form>
     </>
   );
