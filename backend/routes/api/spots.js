@@ -188,7 +188,7 @@ router.get("/", validQueries, async (req, res, next) => {
     // Shows preview images or says there is none.
     spotsList.forEach((spot) => {
       spot.Images.forEach((image) => {
-        if (image.imagePreview === true) {
+        if (image.preview === true) {
           spot.previewImage = image.url;
         } else {
           spot.previewImage = "No preview image available.";
