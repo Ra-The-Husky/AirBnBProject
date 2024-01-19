@@ -1,12 +1,14 @@
-#root {
-    font-family: Arial, Helvetica, sans-serif;
-    display: flex;
-    flex-direction: column;
-  }
+.logo {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  cursor: pointer;
+}
 
-li {
-align-items: center;
-font-size: large;
+.button {
+  cursor: pointer;
+  display: flex;
+  align-items: flex-end;
 }
 
 .hidden {

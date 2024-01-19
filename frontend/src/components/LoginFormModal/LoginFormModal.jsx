@@ -1,9 +1,8 @@
-
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useModal } from '../../context/Modal';
-import * as sessionActions from '../../store/session';
-import './LoginForm.css';
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useModal } from "../../context/Modal";
+import * as sessionActions from "../../store/session";
+import "./LoginForm.css";
 
 function LoginFormModal() {
   const dispatch = useDispatch();
@@ -12,6 +11,17 @@ function LoginFormModal() {
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
+  useEffect(() => {
+    const errs = {}
+    if (credential.length < 4) {
+      errs.credential = true;
+    }
+    if (password.length < 6) {
+      errs.password = true;
+    }
+    setErrors(errs);
+  }, [credential, password]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors({});
@@ -19,6 +29,7 @@ function LoginFormModal() {
       .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
+        console.log("should be credential,", credential);
         if (data && data.errors) {
           setErrors(data.errors);
         }
@@ -47,10 +58,10 @@ function LoginFormModal() {
             required
           />
         </label>
-        {errors.credential && (
-          <p>{errors.credential}</p>
-        )}
-        <button type="submit">Log In</button>
+        {errors.credential && <p>{errors.credential}</p>}
+        <button disabled={Object.values(errors).length} type="submit">
+          Log In
+        </button>
       </form>
     </>
   );
