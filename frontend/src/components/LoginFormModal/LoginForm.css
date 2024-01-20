@@ -1,11 +1,29 @@
+h1 {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  display: flex;
+  justify-content: center;
+}
+
 .form {
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-size: large;
   display: flex;
   flex-direction: column;
   align-self: auto;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 
+.input {
+
+}
+.loginButton {
+background-color: red;
+margin-top: 3%;
+padding: 5%;
+display: flex;
+justify-content: center;
+}
 .demo {
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   color: red;
@@ -13,5 +31,5 @@
   display: flex;
   justify-content: center;
   margin: auto;
-  padding-top: 5%;
+  padding-top: 10%;
 }
