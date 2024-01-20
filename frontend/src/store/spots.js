@@ -4,6 +4,7 @@ export const LOAD_SPOTS = "spots/loadSpots";
 export const RECIEVE_SPOT = "spots/receiveSpot";
 export const RECIEVE_REVIEWS = "spots/receiveReviews";
 export const REMOVE_SPOT = "spots/removeSpot";
+export const NEW_SPOT = "spots/newSpot";
 // export const UPDATE_SPOT = "spots/updateSpot";
 
 //actions
@@ -20,6 +21,11 @@ export const getSpot = (spot) => ({
 export const getReview = (review) => ({
   type: RECIEVE_REVIEWS,
   review,
+});
+
+export const addSpot = (spot) => ({
+  type: NEW_SPOT,
+  spot,
 });
 
 //thunks
@@ -52,22 +58,23 @@ export const getSpotReviews = (spotId) => async (dispatch) => {
     const review = await res.json();
     // console.log("this is the spot reviews,", review);
     dispatch(getReview(review));
-    return review
+    return review;
   }
 };
 
-// export const newSpot = (payload) => async dispatch => {
-//   const res = await fetch(`/api/spots`, {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify(payload),
-//   })
-//   if (res.ok) {
-//     const spot = await res.json()
-//     dispatch(getSpot(spot))
-//     return spot
-//   }
-// }
+export const createASpot = (payload) => async dispatch => {
+  const res = await fetch(`/api/spots`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  })
+  if (res.ok) {
+    const spot = await res.json()
+    console.log("made it here, boss.")
+    dispatch(addSpot(spot))
+    return spot
+  }
+}
 
 //selectors
 
@@ -79,8 +86,11 @@ const spotsReducer = (state = initState, action) => {
       return { ...state, spot: [...action.spots] };
     case RECIEVE_SPOT:
       return { ...state, spotId: action.spot };
-      case REMOVE_SPOT:
-        return
+      case NEW_SPOT:
+        console.log("this is the action," ,action.spot)
+        return {...state, [action.spot.id]: action.spot}
+    case REMOVE_SPOT:
+      return;
     case RECIEVE_REVIEWS:
       return { ...state, review: action.review };
     default:

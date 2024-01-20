@@ -5,6 +5,7 @@ import Navigation from './components/Navigation/Navigation';
 import * as sessionActions from './store/session';
 import LandingPage from './components/LandingPage/LandingPage';
 import SpotInfo from './components/SpotInfo/SpotInfo'
+import NewSpotForm from './components/NewSpot/NewSpotForm'
 
 function Layout() {
   const dispatch = useDispatch();
@@ -37,9 +38,13 @@ const router = createBrowserRouter([
         element: <SpotInfo />
       },
       {
+        path: '/spots/new',
+        element: <NewSpotForm />
+      },
+      {
         path: '*',
         element: <h2>What you are looking for, cannot be found</h2>
-      }
+      },
     ]
   }
 ]);
