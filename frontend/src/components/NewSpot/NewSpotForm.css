@@ -1,0 +1,107 @@
+.pageTitle {
+  display: flex;
+  align-items: flex-start;
+  margin-right: auto;
+}
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: auto;
+  padding-left: 40%;
+  padding-right: 40%;
+}
+
+.firstSection {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+.firstSection .caption {
+  width: max-content;
+  height: 30px;
+}
+.firstSection label {
+  height: 45px
+}
+.firstSection input {
+  width: 100%;
+}
+.firstSection .errors{
+  display: none;
+  color: black;
+}
+.cityState {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  background-color: orange;
+}
+.cityState label {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.cityState .city input {
+  width: 125%;
+  padding-right: 10%;
+}
+.cityState .state label {
+  margin-left: 45px;
+}
+.cityState .state input {
+  width: 25%;
+  margin-left: 45%;
+}
+.latLng {
+  display: flex;
+  background-color: purple;
+}
+.latLng input {
+  width: fit-content;
+}
+.latLng .errors {
+
+}
+
+
+.images {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+}
+
+.images input {
+  display: flex;
+  margin-top: 3%;
+  width: 100%;
+}
+
+.caption {
+  font-size: 5px;
+}
+
+.errors {
+    color: red;
+    font-weight: bold;
+    font-style: italic;
+}
+
+
+.newSpot {
+    margin-top: 10px;
+    height: 40px;
+    width: 200px;
+    background: rgb(234, 8, 8);
+    color: rgb(255, 255, 255);
+    border: 3px black solid;
+    border-style: outset;
+    box-shadow: 3px 3px 3px black;
+    font-size: 1.1em;
+  }
+
+  .newSpot:hover {
+    cursor: pointer;
+  }

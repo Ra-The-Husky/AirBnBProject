@@ -87,8 +87,8 @@ const spotsReducer = (state = initState, action) => {
     case RECIEVE_SPOT:
       return { ...state, spotId: action.spot };
       case NEW_SPOT:
-        console.log("this is the action," ,action.spot)
-        return {...state, [action.spot.id]: action.spot}
+        console.log("this is the action," ,action)
+        return {...state, spot: [...action.spot]}
     case REMOVE_SPOT:
       return;
     case RECIEVE_REVIEWS:
