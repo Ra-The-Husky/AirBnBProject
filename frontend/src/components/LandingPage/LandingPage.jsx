@@ -12,6 +12,7 @@ const LandingPage = () => {
 
   useEffect(() => {
     dispatch(getAllSpots());
+
   }, [dispatch]);
 
   return (
@@ -19,10 +20,11 @@ const LandingPage = () => {
       <ul className="tiles">
         {allSpots &&
           allSpots.map((spot) => (
+
             <div key={spot.id}
-              onClick={() => {
-                navigate(`/spots/${spot.id}`);
-              }}
+            onClick={() => {
+              navigate(`/spots/${spot.id}`);
+            }}
             >
               <span className="element" key={spot.id}>
                 <p className="tooltip">{spot.name}</p>

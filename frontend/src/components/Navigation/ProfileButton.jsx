@@ -1,12 +1,14 @@
-import { useState, useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
-import * as sessionActions from '../../store/session';
-import OpenModalMenuItem from './OpenModalMenuItem';
-import LoginFormModal from '../LoginFormModal/LoginFormModal';
-import SignupFormModal from '../SignupFormModal/SignupFormModal';
+import { useState, useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
+import * as sessionActions from "../../store/session";
+import OpenModalMenuItem from "./OpenModalMenuItem";
+import LoginFormModal from "../LoginFormModal/LoginFormModal";
+import SignupFormModal from "../SignupFormModal/SignupFormModal";
+import { useNavigate } from "react-router-dom";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
 
@@ -24,16 +26,24 @@ function ProfileButton({ user }) {
       }
     };
 
-    document.addEventListener('click', closeMenu);
+    document.addEventListener("click", closeMenu);
 
     return () => document.removeEventListener("click", closeMenu);
   }, [showMenu]);
 
   const closeMenu = () => setShowMenu(false);
 
+  const management = (e) => {
+    e.preventDefault();
+
+    navigate("/spots/current");
+    closeMenu();
+  };
+
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
+    navigate("/");
     closeMenu();
   };
 
@@ -41,15 +51,15 @@ function ProfileButton({ user }) {
 
   return (
     <>
-      <button className='button' onClick={toggleMenu}>
+      <button className="button" onClick={toggleMenu}>
         <i className="fas fa-user-circle" />
       </button>
       <div className={ulClassName} ref={ulRef}>
         {user ? (
           <>
-            <p>{user.username}</p>
-            <p>{user.firstName} {user.lastName}</p>
+            <p>Hello, {user.firstName} </p>
             <p>{user.email}</p>
+            <button onClick={management}>Manage Spots</button>
             <p>
               <button onClick={logout}>Log Out</button>
             </p>
@@ -57,11 +67,13 @@ function ProfileButton({ user }) {
         ) : (
           <>
             <OpenModalMenuItem
+              className="button"
               itemText="Log In"
               onItemClick={closeMenu}
               modalComponent={<LoginFormModal />}
             />
             <OpenModalMenuItem
+              className="button"
               itemText="Sign Up"
               onItemClick={closeMenu}
               modalComponent={<SignupFormModal />}

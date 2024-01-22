@@ -1,16 +1,20 @@
 import "./SpotInfo.css";
 import { getOneSpot, getSpotReviews } from "../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { deleteSpot } from "../../store/spots";
 
 const SpotInfo = () => {
   const dispatch = useDispatch();
   const { spotId } = useParams();
+  console.log(spotId)
   const spotDeets = useSelector((state) => state.spots.spotId?.spot);
   const spotReviews = useSelector((state) => state.spots.review?.Reviews);
   //   console.log("should be the spot's details,", spotDeets);
   //   console.log("should be the spot's reviews,", spotReviews);
+
+
 
   useEffect(() => {
     dispatch(getOneSpot(spotId));
