@@ -1,10 +1,13 @@
 // import { createSelector } from "reselect";
 
+import { csrfFetch } from "./csrf";
+
 export const LOAD_SPOTS = "spots/loadSpots";
 export const RECIEVE_SPOT = "spots/receiveSpot";
 export const RECIEVE_REVIEWS = "spots/receiveReviews";
 export const REMOVE_SPOT = "spots/removeSpot";
 export const NEW_SPOT = "spots/newSpot";
+export const NEW_SPOT_IMAGE = 'spots/spotImage'
 // export const UPDATE_SPOT = "spots/updateSpot";
 
 //actions
@@ -27,6 +30,11 @@ export const addSpot = (spot) => ({
   type: NEW_SPOT,
   spot,
 });
+
+export const addSpotImage = (image) => ({
+  type: NEW_SPOT_IMAGE,
+  image,
+})
 
 //thunks
 export const getAllSpots = () => async (dispatch) => {
@@ -63,17 +71,31 @@ export const getSpotReviews = (spotId) => async (dispatch) => {
 };
 
 export const createASpot = (payload) => async dispatch => {
-  const res = await fetch(`/api/spots`, {
+  let res = await csrfFetch(`/api/spots`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   })
   if (res.ok) {
     const spot = await res.json()
-    console.log("made it here, boss.")
+    console.log("made it here, boss.", spot)
     dispatch(addSpot(spot))
-    return spot
+    return res
   }
+}
+
+export const newSpotImage = (spotId) => async dispatch => {
+  const res = await csrfFetch(`/api/spots/${spotId}/images`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(spotId),
+  })
+    if (res.ok) {
+      const image = await res.json()
+      console.log('image?', image)
+      dispatch(addSpotImage(image))
+      return res
+    }
 }
 
 //selectors
@@ -87,8 +109,9 @@ const spotsReducer = (state = initState, action) => {
     case RECIEVE_SPOT:
       return { ...state, spotId: action.spot };
       case NEW_SPOT:
-        console.log("this is the action," ,action)
-        return {...state, spot: [...action.spot]}
+        return {...state, spot: action.spot}
+        case NEW_SPOT_IMAGE:
+          return {...state, spot: [action.image]}
     case REMOVE_SPOT:
       return;
     case RECIEVE_REVIEWS:

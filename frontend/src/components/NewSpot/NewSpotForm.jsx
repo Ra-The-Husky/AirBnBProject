@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
-import { createASpot } from "../../store/spots";
+import { createASpot, newSpotImage } from "../../store/spots";
 import { useNavigate } from "react-router-dom";
 import "./NewSpotForm.css";
 
@@ -12,9 +12,9 @@ const newSpotInput = () => {
   const [lat, setLat] = useState("");
   const [lng, setLng] = useState("");
   const [description, setDescription] = useState("");
-  const [title, setTitle] = useState("");
+  const [name, setName] = useState("");
   const [price, setPrice] = useState("");
-  const [image, setImage] = useState("");
+  const [previewImage, setPreviewImage] = useState("");
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,24 +34,24 @@ const newSpotInput = () => {
       errs.state = "*State is required";
     }
     if (lat < 1) {
-      errs.lat = "*Latitude is not valid";
+      errs.lat = "*Latitude is required";
     }
     if (lng < 1) {
-      errs.lng = "*Longititude is not valid";
+      errs.lng = "*Longititude is required";
     }
     if (description.length < 30) {
-      errs.description = "*Minimum of 30 characters required";
+      errs.description = "*Description needs a minimum of 30 characters";
     }
-    if (!title) {
-      errs.title = "*Title is required";
+    if (!name) {
+      errs.title = "*Name is required";
     }
     if (price < 1) {
       errs.price = "*Price is required";
     }
-    if (!image) {
+    if (!previewImage) {
       errs.image = "*Preview Image is required";
     }
-    setErrors(errs);
+    // setErrors(errs);
   }, [
     dispatch,
     country,
@@ -61,12 +61,12 @@ const newSpotInput = () => {
     lat,
     lng,
     description,
-    title,
+    name,
     price,
-    image,
+    previewImage,
   ]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const spot = {
@@ -77,14 +77,25 @@ const newSpotInput = () => {
       lat,
       lng,
       description,
-      title,
+      name,
       price,
-      image,
+      previewImage,
     };
-    dispatch(createASpot(spot));
-    console.log(spot);
-    navigate(`/spot/${spot.id}`);
-    //   reset()
+
+    await dispatch(createASpot(spot))
+    await dispatch(newSpotImage(previewImage))
+
+    // navigate(`/spots/${spots.spot.id}`)
+    reset()
+
+    //   .then((spotId) => reset(spotId))
+    //   .then(console.log(spotId))
+    //   .then(navigate(`/spots/${spot.id}`))
+    //   .catch(async (res) => { if (res.ok) {
+    //       const data = await res.json();
+    //       if (data?.errors) setErrors(data.errors);
+    //   }
+    //   });
   };
 
   const reset = () => {
@@ -95,15 +106,28 @@ const newSpotInput = () => {
     setLat(0);
     setLng(0);
     setDescription("");
-    setTitle("");
+    setName("");
     setPrice("");
     setImage("");
   };
 
+  const testForm = () => {
+    setCountry("testCountry");
+    setAddress("testAddress8");
+    setCity("testCity");
+    setState("testState");
+    setLat(8);
+    setLng(8);
+    setDescription("This is a test description for the testSpot");
+    setName("testSpot8");
+    setPrice(8.00);
+    setPreviewImage("https://www.tygerauto.com/mm5/graphics/photos/test-sku.jpg");
+  };
+
   return (
-    <div className="form">
+    <div>
       <h1 className="pageTitle">Create a new Spot</h1>
-      <form onSubmit={handleSubmit}>
+      <form className="form" onSubmit={handleSubmit}>
         <div className="firstSection">
           <h2>Where's your place located?</h2>
           <p className="caption">
@@ -112,6 +136,7 @@ const newSpotInput = () => {
           </p>
           <label>
             Country
+            <p className="errors">{errors.country}</p>
             <input
               placeholder="Country"
               value={country}
@@ -119,9 +144,9 @@ const newSpotInput = () => {
               name="country"
             ></input>
           </label>
-          <p className="errors">{errors.country}</p>
           <label>
             Street Address
+            <p className="errors">{errors.address}</p>
             <input
               placeholder="Street Address"
               value={address}
@@ -129,7 +154,6 @@ const newSpotInput = () => {
               name="address"
             ></input>{" "}
           </label>
-          <p className="errors">{errors.address}</p>
           <div className="cityState">
             <label className="city">
               City
@@ -151,7 +175,7 @@ const newSpotInput = () => {
                 name="state"
               ></input>
             </label>
-          <p className="errors">{errors.state}</p>
+            <p className="errors">{errors.state}</p>
           </div>
           <div className="latLng">
             <label>
@@ -164,7 +188,7 @@ const newSpotInput = () => {
               ></input>
               {","}
             </label>
-              <p className="errors">{errors.lat}</p>
+            <p className="errors">{errors.lat}</p>
             <label>
               longitude
               <input
@@ -174,7 +198,7 @@ const newSpotInput = () => {
                 name="lng"
               ></input>
             </label>
-          <p className="errors">{errors.lng}</p>
+            <p className="errors">{errors.lng}</p>
           </div>
         </div>
         <div className="secondSection">
@@ -200,8 +224,8 @@ const newSpotInput = () => {
           </p>
           <input
             placeholder="Name of your spot"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             name="title"
           ></input>
           <p className="errors">{errors.title}</p>
@@ -229,25 +253,24 @@ const newSpotInput = () => {
           <div className="images">
             <input
               placeholder="Preview Image URL"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
+              value={previewImage}
+              onChange={(e) => setPreviewImage(e.target.value)}
               name="image"
             ></input>
-            <p className="errors">{errors.image}</p>
+            <p className="errors">{errors.previewImage}</p>
             <input placeholder="Image URL"></input>
             <input placeholder="Image URL"></input>
             <input placeholder="Image URL"></input>
             <input placeholder="Image URL"></input>
           </div>
         </div>
-        <button
-          disabled={Object.values(errors)}
-          className="newSpot"
-          type="submit"
-        >
+        <button type="submit" className="newSpot">
           Create Spot
         </button>
       </form>
+      <button onClick={testForm} className="newSpot">
+        Test Spot
+      </button>
     </div>
   );
 };

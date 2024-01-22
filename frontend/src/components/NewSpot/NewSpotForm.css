@@ -1,12 +1,12 @@
 .pageTitle {
   display: flex;
-  align-items: flex-start;
-  margin-right: auto;
+  justify-content: center;
 }
+
 .form {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  align-items: center;
   margin-bottom: auto;
   padding-left: 40%;
   padding-right: 40%;
@@ -16,21 +16,19 @@
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
+    justify-content: space-between;
 }
 .firstSection .caption {
   width: max-content;
   height: 30px;
 }
 .firstSection label {
-  height: 45px
+  /* height: 50px; */
 }
 .firstSection input {
   width: 100%;
 }
-.firstSection .errors{
-  display: none;
-  color: black;
-}
+
 .cityState {
   display: flex;
   flex-direction: row;
@@ -65,6 +63,9 @@
 
 }
 
+.secondSection textarea {
+  width: 100%;
+}
 
 .images {
   display: flex;

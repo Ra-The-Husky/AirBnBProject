@@ -29,7 +29,6 @@ function LoginFormModal() {
       .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
-        // console.log("should be credential,", credential);
         if (data && data.errors) {
           setErrors(data.errors);
         }
