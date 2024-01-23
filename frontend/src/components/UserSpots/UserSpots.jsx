@@ -2,23 +2,27 @@ import "./UserSpots.css";
 import { getUserSpots } from "../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function manageSpots() {
   const dispatch = useDispatch();
-  const navigate = useNavigate()
-  const userSpots = useSelector((state) => state.spots.spot);
-  console.log("should be the current user spots", userSpots);
+  const navigate = useNavigate();
+  const userSpots = useSelector((state) => state.spots.spots);
+  // console.log("should be the current user spots", userSpots);
 
-  const updateSpot = (e) => {
-    console.log('will have functionality soon')
-    navigate('/')
+  const editSpot = (e) => {
+    e.preventDefault()
+    // let spotId = userSpots.filter(spot => spot.id === userSpots[spot].id)
+    // console.log('###', spotId)
+    // navigate(`/spots/${spotId}/edit`)
   }
-
   const removeSpot = (e) => {
     e.preventDefault();
-    dispatch(deleteSpot(spotId));
-    navigate("/");
+
+      console.log('deleting modal being added soon')
+      navigate('/')
   };
+
   useEffect(() => {
     dispatch(getUserSpots(userSpots));
   }, [dispatch]);
@@ -26,23 +30,21 @@ function manageSpots() {
   return (
     <>
       <h1>Manage Spots</h1>
-      {userSpots.length ? (
+      {userSpots ? (
         <>
           {userSpots &&
             userSpots.map((spot) => (
-              <div>
-                <span className="element" key={spot.id}>
+              <div key={spot.id}>
+                <span className="element">
                   <img src={spot.previewImage} alt={spot.name} />
                 </span>
                 <p>
                   {spot.city}, {spot.state}{" "}
                 </p>
                 <p>{spot.price} night </p>
-                <i className="fa-solid fa-star"></i>
-                <p>{spot.avgRating}</p>
                 <div className="buttons">
-                <button onClick={removeSpot}>Delete</button>
-                <button onClick={updateSpot}>Update</button>
+                  <button onClick={editSpot}>Update</button>
+                  <button onClick={removeSpot}>Delete</button>
                 </div>
               </div>
             ))}

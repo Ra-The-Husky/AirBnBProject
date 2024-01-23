@@ -27,10 +27,11 @@ const validateSpot = [
     .withMessage("Name must be less than 50 characters"),
   check("description")
     .exists({ checkFalsy: true })
-    .withMessage("Description is required"),
+    .isLength({ min: 30 })
+    .withMessage("Description needs a minimum of 30 characters"),
   check("price")
     .exists({ checkFalsy: true })
-    .isInt({ min: 1 })
+    .isNumeric({ gt: 0 })
     .withMessage("Price per day must be a positive number"),
   handleValidationErrors,
 ];
@@ -268,40 +269,40 @@ router.get("/current", requireAuth, async (req, res) => {
     ],
   });
   // if (userSpots.length >= 1) {
-    let usersList = [];
-    userSpots.forEach((spot) => {
-      usersList.push(spot.toJSON());
-    });
-    // Calculates Average Rating
-    usersList.forEach((spot) => {
-      if (spot.Reviews) {
-        let starSum = 0;
-        spot.Reviews.forEach((review) => {
-          // console.log(review.stars)
-          if (review.stars) {
-            starSum += review.stars;
-          }
-          spot.avgRating = starSum / spot.Reviews.length;
-        });
-        delete spot.Reviews;
+  let usersList = [];
+  userSpots.forEach((spot) => {
+    usersList.push(spot.toJSON());
+  });
+  // Calculates Average Rating
+  usersList.forEach((spot) => {
+    if (spot.Reviews) {
+      let starSum = 0;
+      spot.Reviews.forEach((review) => {
+        // console.log(review.stars)
+        if (review.stars) {
+          starSum += review.stars;
+        }
+        spot.avgRating = starSum / spot.Reviews.length;
+      });
+      delete spot.Reviews;
+    }
+  });
+
+  // Shows preview images or says there is none.
+  usersList.forEach((spot) => {
+    spot.Images.forEach((image) => {
+      if (image.preview === true) {
+        spot.previewImage = image.url;
+      } else {
+        spot.previewImage = "No preview image available.";
       }
     });
+    delete spot.Images;
+  });
 
-    // Shows preview images or says there is none.
-    usersList.forEach((spot) => {
-      spot.Images.forEach((image) => {
-        if (image.preview === true) {
-          spot.previewImage = image.url;
-        } else {
-          spot.previewImage = "No preview image available.";
-        }
-      });
-      delete spot.Images;
-    });
-
-    return res.json({
-      Spots: usersList,
-    });
+  return res.json({
+    Spots: usersList,
+  });
   // }
 });
 
@@ -446,8 +447,19 @@ router.get("/:spotId/reviews", async (req, res) => {
 // Creates a new spot with auth user
 router.post("/", requireAuth, validateSpot, async (req, res) => {
   const userId = req.user.id;
-  const { address, city, state, country, lat, lng, name, description, price } =
-    req.body;
+  const {
+    address,
+    city,
+    state,
+    country,
+    lat,
+    lng,
+    name,
+    description,
+    price,
+    preview,
+  } = req.body;
+  console.log(req.body);
 
   const newSpot = Spot.build({
     ownerId: userId,
@@ -460,6 +472,7 @@ router.post("/", requireAuth, validateSpot, async (req, res) => {
     name: name,
     description: description,
     price: price,
+    previewImage: preview,
   });
   await newSpot.save();
   res.status(201);
@@ -617,6 +630,8 @@ router.post("/:spotId/images", requireAuth, async (req, res) => {
   } else if (findSpot.ownerId === req.user.id) {
     const newSpotImage = Image.build({
       url: url,
+      imageableId: spotId,
+      imageableType: "Spot",
       preview: preview,
     });
     await newSpotImage.save();
@@ -689,7 +704,7 @@ router.delete("/:spotId", requireAuth, async (req, res, next) => {
       message: "Spot couldn't be found",
     });
   }
-  if (deleteSpot.ownerId === req.user.id) {
+  if (deleteSpot.ownerId !== req.user.id) {
     return res.status(403).json({
       message: "Forbidden",
     });

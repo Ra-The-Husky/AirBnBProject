@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const LandingPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const allSpots = useSelector((state) => state.spots.spot);
+  const allSpots = useSelector((state) => state.spots?.spot);
   // console.log("this is the component console log,", allSpots);
 
   useEffect(() => {

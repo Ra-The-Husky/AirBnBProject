@@ -1,10 +1,10 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { createASpot} from "../../store/spots";
+import { createASpot, newSpotImage } from "../../store/spots";
 import { useNavigate } from "react-router-dom";
 import "./NewSpotForm.css";
 
-const newSpotInput = () => {
+const NewSpotInput = () => {
   const [country, setCountry] = useState("");
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
@@ -14,7 +14,10 @@ const newSpotInput = () => {
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
-  const [previewImage, setPreviewImage] = useState("");
+  const [previewImage, setPreviewImage] = useState({
+    url: "",
+    preview: false,
+  });
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -49,9 +52,9 @@ const newSpotInput = () => {
       errs.price = "*Price is required";
     }
     if (!previewImage) {
-      errs.image = "*Preview Image is required";
+      errs.previewImage = "*Preview Image is required";
     }
-    // setErrors(errs);
+    setErrors(errs);
   }, [
     dispatch,
     country,
@@ -65,6 +68,8 @@ const newSpotInput = () => {
     price,
     previewImage,
   ]);
+
+  // const spotId = useSelector(state => state.spots.spot.id)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -82,20 +87,11 @@ const newSpotInput = () => {
       previewImage,
     };
 
-    await dispatch(createASpot(spot))
-    await dispatch(newSpotImage(previewImage))
+    navigate(`/spot/${spotId}`);
+    reset();
 
-    // navigate(`/spots/${spots.spot.id}`)
-    reset()
-
-    //   .then((spotId) => reset(spotId))
-    //   .then(console.log(spotId))
-    //   .then(navigate(`/spots/${spot.id}`))
-    //   .catch(async (res) => { if (res.ok) {
-    //       const data = await res.json();
-    //       if (data?.errors) setErrors(data.errors);
-    //   }
-    //   });
+    dispatch(createASpot(spot))
+    .then((spot) => dispatch(newSpotImage(spot.id, spot.previewImage)))
   };
 
   const reset = () => {
@@ -108,20 +104,26 @@ const newSpotInput = () => {
     setDescription("");
     setName("");
     setPrice("");
-    setImage("");
+    setPreviewImage({
+      url: "",
+      preview: false,
+    });
   };
 
   const testForm = () => {
     setCountry("testCountry");
-    setAddress("testAddress8");
+    setAddress("testAddress");
     setCity("testCity");
     setState("testState");
-    setLat(8);
-    setLng(8);
+    setLat(1);
+    setLng(1);
     setDescription("This is a test description for the testSpot");
     setName("testSpot8");
-    setPrice(8.00);
-    setPreviewImage("https://www.tygerauto.com/mm5/graphics/photos/test-sku.jpg");
+    setPrice(11.11);
+    setPreviewImage({
+      url: "https://www.tygerauto.com/mm5/graphics/photos/test-sku.jpg",
+      preview: true,
+    });
   };
 
   return (
@@ -129,7 +131,7 @@ const newSpotInput = () => {
       <h1 className="pageTitle">Create a new Spot</h1>
       <form className="form" onSubmit={handleSubmit}>
         <div className="firstSection">
-          <h2>Where's your place located?</h2>
+          <h2>Where&apos;s your place located?</h2>
           <p className="caption">
             Guests will only get your exact address once they booked a
             reservation.
@@ -219,8 +221,8 @@ const newSpotInput = () => {
         <div className="thirdSection">
           <h2>Create a title for your spot</h2>
           <p className="caption">
-            Catch guests' attention with a spot title that highlights what makes
-            your place special.
+            Catch guests&apos; attention with a spot title that highlights what
+            makes your place special.
           </p>
           <input
             placeholder="Name of your spot"
@@ -253,8 +255,13 @@ const newSpotInput = () => {
           <div className="images">
             <input
               placeholder="Preview Image URL"
-              value={previewImage}
-              onChange={(e) => setPreviewImage(e.target.value)}
+              value={previewImage.url}
+              onChange={(e) =>
+                setPreviewImage({
+                  url: e.target.value,
+                  preview: true,
+                })
+              }
               name="image"
             ></input>
             <p className="errors">{errors.previewImage}</p>
@@ -275,4 +282,4 @@ const newSpotInput = () => {
   );
 };
 
-export default newSpotInput;
+export default NewSpotInput;

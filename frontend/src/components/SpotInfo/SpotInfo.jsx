@@ -1,20 +1,17 @@
 import "./SpotInfo.css";
 import { getOneSpot, getSpotReviews } from "../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { deleteSpot } from "../../store/spots";
 
 const SpotInfo = () => {
   const dispatch = useDispatch();
   const { spotId } = useParams();
-  console.log(spotId)
-  const spotDeets = useSelector((state) => state.spots.spotId?.spot);
+  console.log(spotId);
+  const spotDeets = useSelector((state) => state.spots.spot.spot);
   const spotReviews = useSelector((state) => state.spots.review?.Reviews);
   //   console.log("should be the spot's details,", spotDeets);
   //   console.log("should be the spot's reviews,", spotReviews);
-
-
 
   useEffect(() => {
     dispatch(getOneSpot(spotId));
@@ -52,8 +49,10 @@ const SpotInfo = () => {
                 ? "reviews"
                 : `${spotDeets?.numReviews} review`
             }`}</p>
-            <div >
-              <button className="reserveButton" onClick={"reserve"}>Reserve</button>
+            <div>
+              <button className="reserveButton" onClick={"reserve"}>
+                Reserve
+              </button>
             </div>
           </div>
           <div className="reviews">
@@ -65,13 +64,18 @@ const SpotInfo = () => {
                 : `${spotDeets?.numReviews} review`
             }`}</p>
             {spotReviews &&
-              spotReviews.map((review) => (
-                <div key={review.id}>
-                  <p>{`Firstname ${review.User.firstName}`}</p>
-                  <p>{review.createdAt}</p>
-                  <p>{review.review}</p>
-                </div>
-              ))}
+              spotReviews.map((review) => {
+                const date = new Date(review.updatedAt)
+                        const month = ["January", "February", "March", "April", "May", "June",  "July", "August", "September", "October", "November", "December"]
+                return (
+                  <div key={review.id}>
+                    <p>{`Firstname ${review.User.firstName}`}</p>
+                            <p><b>{review.User.firstName}</b></p>
+                            <p>{month[date.getMonth()]} {date.getFullYear()}</p>
+                            <p><b>{review.review}</b></p>
+                        </div>
+                );
+              })}
           </div>
         </div>
       </div>
