@@ -1,26 +1,31 @@
 import "./UserSpots.css";
 import { getUserSpots } from "../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+// import { useModal } from "../../context/Modal";
+// import OpenModalButton from "../OpenModalButton/OpenModalButton";
+// import DeleteModal from './SpotManagement/DeleteModal'
 
 function manageSpots() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const userSpots = useSelector((state) => state.spots.spots);
   // console.log("should be the current user spots", userSpots);
 
   const editSpot = (e) => {
-    e.preventDefault()
-    // let spotId = userSpots.filter(spot => spot.id === userSpots[spot].id)
-    // console.log('###', spotId)
-    // navigate(`/spots/${spotId}/edit`)
-  }
+    e.preventDefault();
+
+    console.log("Will edit later")
+    navigate(`/spots/1/edit`)
+  };
+
   const removeSpot = (e) => {
     e.preventDefault();
 
-      console.log('deleting modal being added soon')
-      navigate('/')
+    console.log("deleting modal being added soon");
+    navigate("/spots/current");
   };
 
   useEffect(() => {
@@ -45,6 +50,12 @@ function manageSpots() {
                 <div className="buttons">
                   <button onClick={editSpot}>Update</button>
                   <button onClick={removeSpot}>Delete</button>
+                  {/* <>
+                    <OpenModalButton
+                      itemText="Delete"
+                      modalComponent={<DeleteModal />}
+                    />
+                  </> */}
                 </div>
               </div>
             ))}

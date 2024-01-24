@@ -1,15 +1,12 @@
-// import { createSelector } from "reselect";
-
 import { csrfFetch } from "./csrf";
-
-export const LOAD_SPOTS = "spots/loadSpots";
-export const LOAD_USER_SPOTS = 'spots/loadUserSpots'
-export const RECIEVE_SPOT = "spots/receiveSpot";
-export const RECIEVE_REVIEWS = "spots/receiveReviews";
-export const REMOVE_SPOT = "spots/removeSpot";
-export const NEW_SPOT = "spots/newSpot";
-export const NEW_SPOT_IMAGE = "spots/spotImage";
-export const UPDATE_SPOT = "spots/updateSpot";
+ const LOAD_SPOTS = "spots/loadSpots";
+ const LOAD_USER_SPOTS = 'spots/loadUserSpots'
+const RECIEVE_SPOT = "spots/receiveSpot";
+ const RECIEVE_REVIEWS = "spots/receiveReviews";
+const REMOVE_SPOT = "spots/removeSpot";
+const NEW_SPOT = "spots/newSpot";
+const NEW_SPOT_IMAGE = "spots/spotImage";
+const UPDATE_SPOT = "spots/updateSpot";
 
 //actions
 export const loadSpots = (spots) => ({
@@ -107,8 +104,8 @@ export const createASpot = (payload) => async (dispatch) => {
     const spot = await res.json();
     // console.log("made it here, boss.", spot);
     dispatch(addSpot(spot));
+    return spot
   }
-  return res;
 };
 
 export const editSpot = (spotId) => async dispatch => {
@@ -126,23 +123,24 @@ export const editSpot = (spotId) => async dispatch => {
 }
 
 export const newSpotImage = (spotId, image) => async (dispatch) => {
-  const { url, preview } = image
+  const { url, preview, imageableType} = image
+  console.log('thunk spotId log', spotId)
+  // console.log('new image info', url, preview, imageableType);
   const res = await csrfFetch(`/api/spots/${spotId}/images`, {
     method: "POST",
     body: JSON.stringify({
       url,
       preview,
-      imageableType: "Spot",
+      imageableType,
       imageableId: spotId
     })
   });
 
   if (res.ok) {
     const image = await res.json();
-    console.log("image?", image);
     dispatch(addSpotImage(image));
+    return image;
   }
-  return res;
 };
 
 export const deleteSpot = (spotId) => async (dispatch) => {
@@ -154,7 +152,7 @@ export const deleteSpot = (spotId) => async (dispatch) => {
   if (res.ok) {
     const data = await res.json()
     dispatch(removeSpot(data.spotId));
-    return res
+    return data
   }
 };
 
@@ -175,7 +173,6 @@ const spotsReducer = (state = initState, action) => {
     case NEW_SPOT_IMAGE:
       return { ...state, images: action.image };
       case UPDATE_SPOT:
-        console.log('reducer console log')
       return { ...state, spotId: action.spot };
     case REMOVE_SPOT:
       delete { ...state[action.spot] };
@@ -188,14 +185,3 @@ const spotsReducer = (state = initState, action) => {
 };
 
 export default spotsReducer;
-
-//object version of the all spots reducer
-// {
-//   const spotsState = {};
-//   console.log('line 34 console log,' ,action)
-//   action.spots.forEach((spot) => {
-//     spotsState[spot.id] = spot;
-//   });
-//   console.log('line 38 console log', spotsState)
-//   return spotsState;
-// }

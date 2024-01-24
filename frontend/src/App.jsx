@@ -5,7 +5,7 @@ import Navigation from './components/Navigation/Navigation';
 import * as sessionActions from './store/session';
 import LandingPage from './components/LandingPage/LandingPage';
 import SpotInfo from './components/SpotInfo/SpotInfo'
-import NewSpotForm from './components/NewSpot/NewSpotForm'
+import CreateSpotForm from './components/NewSpot/CreateSpotForm'
 import UserSpots from './components/UserSpots/UserSpots'
 import UpdateSpotPage from './components/UpdatePage/UpdateSpotPage';
 
@@ -41,7 +41,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/spots/new',
-        element: <NewSpotForm />
+        element: <CreateSpotForm />
       },
       {
         path: '/spots/current',

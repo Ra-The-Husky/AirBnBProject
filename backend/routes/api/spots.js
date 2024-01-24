@@ -457,7 +457,7 @@ router.post("/", requireAuth, validateSpot, async (req, res) => {
     name,
     description,
     price,
-    preview,
+    previewImage,
   } = req.body;
   console.log(req.body);
 
@@ -472,7 +472,7 @@ router.post("/", requireAuth, validateSpot, async (req, res) => {
     name: name,
     description: description,
     price: price,
-    previewImage: preview,
+    previewImage: previewImage,
   });
   await newSpot.save();
   res.status(201);

@@ -8,7 +8,7 @@ const SpotInfo = () => {
   const dispatch = useDispatch();
   const { spotId } = useParams();
   console.log(spotId);
-  const spotDeets = useSelector((state) => state.spots.spot.spot);
+  const spotDeets = useSelector((state) => state.spots.spot?.spot);
   const spotReviews = useSelector((state) => state.spots.review?.Reviews);
   //   console.log("should be the spot's details,", spotDeets);
   //   console.log("should be the spot's reviews,", spotReviews);
@@ -65,15 +65,34 @@ const SpotInfo = () => {
             }`}</p>
             {spotReviews &&
               spotReviews.map((review) => {
-                const date = new Date(review.updatedAt)
-                        const month = ["January", "February", "March", "April", "May", "June",  "July", "August", "September", "October", "November", "December"]
+                const date = new Date(review.updatedAt);
+                const month = [
+                  "January",
+                  "February",
+                  "March",
+                  "April",
+                  "May",
+                  "June",
+                  "July",
+                  "August",
+                  "September",
+                  "October",
+                  "November",
+                  "December",
+                ];
                 return (
                   <div key={review.id}>
                     <p>{`Firstname ${review.User.firstName}`}</p>
-                            <p><b>{review.User.firstName}</b></p>
-                            <p>{month[date.getMonth()]} {date.getFullYear()}</p>
-                            <p><b>{review.review}</b></p>
-                        </div>
+                    <p>
+                      <b>{review.User.firstName}</b>
+                    </p>
+                    <p>
+                      {month[date.getMonth()]} {date.getFullYear()}
+                    </p>
+                    <p>
+                      <b>{review.review}</b>
+                    </p>
+                  </div>
                 );
               })}
           </div>
