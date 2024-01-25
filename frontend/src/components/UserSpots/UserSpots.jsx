@@ -1,5 +1,5 @@
 import "./UserSpots.css";
-import { getUserSpots } from "../../store/spots";
+import { getOneSpot, getUserSpots } from "../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,19 +7,12 @@ import { useNavigate } from "react-router-dom";
 // import OpenModalButton from "../OpenModalButton/OpenModalButton";
 // import DeleteModal from './SpotManagement/DeleteModal'
 
-function manageSpots() {
+function ManageSpots() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const userSpots = useSelector((state) => state.spots.spots);
   // console.log("should be the current user spots", userSpots);
-
-  const editSpot = (e) => {
-    e.preventDefault();
-
-    console.log("Will edit later")
-    navigate(`/spots/1/edit`)
-  };
 
   const removeSpot = (e) => {
     e.preventDefault();
@@ -44,18 +37,14 @@ function manageSpots() {
                   <img src={spot.previewImage} alt={spot.name} />
                 </span>
                 <p>
-                  {spot.city}, {spot.state}{" "}
+                  {spot.city}, {spot.state}{" "}<p>{spot.id}</p>
                 </p>
                 <p>{spot.price} night </p>
                 <div className="buttons">
-                  <button onClick={editSpot}>Update</button>
+                  <button onClick={() => {
+                navigate(`/spots/${spot.id}/edit`);
+              }}>Update</button>
                   <button onClick={removeSpot}>Delete</button>
-                  {/* <>
-                    <OpenModalButton
-                      itemText="Delete"
-                      modalComponent={<DeleteModal />}
-                    />
-                  </> */}
                 </div>
               </div>
             ))}
@@ -69,4 +58,4 @@ function manageSpots() {
   );
 }
 
-export default manageSpots;
+export default ManageSpots;

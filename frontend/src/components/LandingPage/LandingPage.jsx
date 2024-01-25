@@ -12,32 +12,40 @@ const LandingPage = () => {
 
   useEffect(() => {
     dispatch(getAllSpots());
-
   }, [dispatch]);
 
   return (
     <>
-      <ul className="tiles">
+      <ul className="container">
         {allSpots &&
           allSpots.map((spot) => (
-
-            <div key={spot.id}
-            onClick={() => {
-              navigate(`/spots/${spot.id}`);
-            }}
+            <div
+              key={spot.id}
+              onClick={() => {
+                navigate(`/spots/${spot.id}`);
+              }}
             >
-              <span className="element" key={spot.id}>
+              <div className="tiles">
                 <p className="tooltip">{spot.name}</p>
-                <img src={spot.previewImage} alt={spot.name} />
-              </span>
-              <div className="info">
-                <p>
-                  {spot.city}, {spot.state}{" "}
-                </p>
-                <p>{spot.price}/night </p>
+                <img
+                  src={spot.previewImage}
+                  alt={spot.name}
+                  className="previewImage"
+                />
+                <div className="info">
+                  <p className="location">
+                    {spot.city}, {spot.state}{" "}
+                  </p>
+                  <div className="rating">
+                    <i className="fa-solid fa-star"></i>
+                    <p>{!spot.avgRating ? "New" : spot.avgRating}</p>
+                  </div>
+                </div>
+                <div className="price">
+                  <p className="price-number">{spot.price}</p>
+                  <p className="night">night</p>
+                </div>
               </div>
-              <i className="fa-solid fa-star"></i>
-              <p>{!spot.avgRating ? "New" : spot.avgRating} </p>
             </div>
           ))}
       </ul>

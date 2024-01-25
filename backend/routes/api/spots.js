@@ -23,6 +23,7 @@ const validateSpot = [
     .withMessage("Longitude is not valid"),
   check("name")
     .exists({ checkFalsy: true })
+    .withMessage("Name is required")
     .isLength({ max: 50 })
     .withMessage("Name must be less than 50 characters"),
   check("description")
@@ -33,6 +34,10 @@ const validateSpot = [
     .exists({ checkFalsy: true })
     .isNumeric({ gt: 0 })
     .withMessage("Price per day must be a positive number"),
+  check("previewImage")
+    .exists({ checkFalsy: true })
+    .withMessage("Preview image is required"),
+
   handleValidationErrors,
 ];
 
@@ -459,7 +464,6 @@ router.post("/", requireAuth, validateSpot, async (req, res) => {
     price,
     previewImage,
   } = req.body;
-  console.log(req.body);
 
   const newSpot = Spot.build({
     ownerId: userId,

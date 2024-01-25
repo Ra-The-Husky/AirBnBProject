@@ -5,6 +5,8 @@ import OpenModalMenuItem from "./OpenModalMenuItem";
 import LoginFormModal from "../LoginFormModal/LoginFormModal";
 import SignupFormModal from "../SignupFormModal/SignupFormModal";
 import { useNavigate } from "react-router-dom";
+import "./Navigation.css";
+import { getOneSpot } from "../../store/spots";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -35,7 +37,7 @@ function ProfileButton({ user }) {
 
   const management = (e) => {
     e.preventDefault();
-
+    
     navigate("/spots/current");
     closeMenu();
   };
@@ -51,7 +53,7 @@ function ProfileButton({ user }) {
 
   return (
     <>
-      <button className="button" onClick={toggleMenu}>
+      <button className="profileButton" onClick={toggleMenu}>
         <i className="fas fa-user-circle" />
       </button>
       <div className={ulClassName} ref={ulRef}>

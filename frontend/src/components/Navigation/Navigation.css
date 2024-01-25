@@ -1,4 +1,30 @@
-.button {
+.navBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px rgb(131, 15, 233) solid;
+}
+
+.spotDiv {
+  margin-left: 75%;
+}
+.createSpot {
+  margin-left: 200px;
+}
+
+.profile {
+  margin-right: 35px;
+  border: 3px solid black;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  justify-content: space-between;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  width: 65px;
+}
+
+.profileButton {
   cursor: pointer;
 }
 

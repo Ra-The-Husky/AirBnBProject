@@ -7,62 +7,87 @@ import { useEffect } from "react";
 const SpotInfo = () => {
   const dispatch = useDispatch();
   const { spotId } = useParams();
-  console.log(spotId);
+  // console.log("spotId", spotId);
+  const userId = useSelector((state) => state.session.user?.id);
+  const ownerId = useSelector((state) => state.spots.spot?.spot.Owner?.id);
+  // console.log("userId", userId);
+  // console.log("ownerId", ownerId);
   const spotDeets = useSelector((state) => state.spots.spot?.spot);
   const spotReviews = useSelector((state) => state.spots.review?.Reviews);
-  //   console.log("should be the spot's details,", spotDeets);
-  //   console.log("should be the spot's reviews,", spotReviews);
 
   useEffect(() => {
     dispatch(getOneSpot(spotId));
     dispatch(getSpotReviews(spotId));
   }, [dispatch]);
+  const reserve = (e) => {
+    e.preventDefault();
 
+    alert("Feature Coming Soon");
+  };
   return (
     <>
-      <div>
-        <h1>{spotDeets?.name}</h1>
-        <div className="location">
-          <p>
-            Location: {spotDeets?.city}, {spotDeets?.state},{" "}
-            {spotDeets?.country}
-          </p>
-          <div className="pictures">
-            {spotDeets &&
-              spotDeets.SpotImages.map((image) => (
-                <img key={image.id} src={image.url} />
-              ))}
-          </div>
-          <div>
-            <p className="hosted">
-              Hosted by {spotDeets?.Owner.firstName},{" "}
-              {spotDeets?.Owner.lastName}{" "}
-            </p>
-            <p className="paragraph">{spotDeets?.description}</p>
-          </div>
-          <div className="calloutBox">
-            <p>{`$${spotDeets?.price} night`}</p>
-            <i className="fa-solid fa-star"></i>
-            <p>{spotDeets?.avgStarRating}</p>
-            <p>{`${
-              spotDeets?.numReviews > 1
-                ? "reviews"
-                : `${spotDeets?.numReviews} review`
-            }`}</p>
-            <div>
-              <button className="reserveButton" onClick={"reserve"}>
-                Reserve
-              </button>
+      <h1>{spotDeets?.name}</h1>
+      <div className="location">
+        <p>
+          Location: {spotDeets?.city}, {spotDeets?.state}, {spotDeets?.country}
+        </p>
+      </div>
+      <div className="pictures">
+        {spotDeets &&
+          spotDeets.SpotImages.map((image) => (
+            <div className="imgContainer" key={image.id}>
+              <img src={image.url} className="image" />
             </div>
+          ))}
+      </div>
+      <p className="hosted">
+        Hosted by {spotDeets?.Owner.firstName} {spotDeets?.Owner.lastName}{" "}
+      </p>
+      <div className="moreInfo">
+        <p className="paragraph">{spotDeets?.description}</p>
+        <div className="calloutBox">
+          <div className="priceNight">
+            <p className="price">{`$${spotDeets?.price}`}</p>
+            <p>night</p>
           </div>
-          <div className="reviews">
+          <div className="ratingInfo">
             <i className="fa-solid fa-star"></i>
-            <p>{spotDeets?.avgStarRating}</p>
-            <p>{`${
-              spotDeets?.numReviews > 1
-                ? "reviews"
-                : `${spotDeets?.numReviews} review`
-            }`}</p>
+            <p>{spotDeets?.avgStarRating}</p> {"."}
+            <p>
+              {spotDeets?.avgStarRating === null || spotDeets?.avgStarRating < 1
+                ? "New"
+                : spotDeets?.numReviews === 1
+                ? `${spotDeets?.numReviews} review`
+                : `${spotDeets?.numReviews} reviews`}
+            </p>
+          </div>
+          <div className="reserveContainer">
+            <button className="reserveButton" onClick={reserve}>
+              Reserve
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="reviews">
+        <i className="fa-solid fa-star"></i>
+        <p>
+          {spotDeets?.avgStarRating === null || spotDeets?.avgStarRating < 1
+            ? "New"
+            : spotDeets?.numReviews === 1
+            ? `${spotDeets?.numReviews} review`
+            : `${spotDeets?.numReviews} reviews`}
+        </p>
+        {ownerId !== userId ? (
+          <button className="reviewButton">Post your review</button>
+        ) : (
+          <></>
+        )}
+        {!spotReviews?.length ? (
+          <>
+            <p>Be the first to post a review!</p>
+          </>
+        ) : (
+          <>
             {spotReviews &&
               spotReviews.map((review) => {
                 const date = new Date(review.updatedAt);
@@ -82,7 +107,6 @@ const SpotInfo = () => {
                 ];
                 return (
                   <div key={review.id}>
-                    <p>{`Firstname ${review.User.firstName}`}</p>
                     <p>
                       <b>{review.User.firstName}</b>
                     </p>
@@ -95,8 +119,8 @@ const SpotInfo = () => {
                   </div>
                 );
               })}
-          </div>
-        </div>
+          </>
+        )}
       </div>
     </>
   );

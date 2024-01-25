@@ -8,11 +8,16 @@ function Navigation({ isLoaded }) {
 
   return (
     <nav className="navBar">
-        <NavLink to="/">
-          <i className="fa-solid fa-crown"> RoyalBnB</i>
-        </NavLink>
-        {isLoaded && <ProfileButton user={sessionUser} />}
-      <NavLink to='spots/new'>Create a New Spot</NavLink>
+      <NavLink to="/">
+        <i className="fa-solid fa-crown"> RoyalBnB</i>
+      </NavLink>
+      <div className="spotDiv" >
+        <NavLink to="spots/new" className="createSpot">Create a New Spot</NavLink>
+      </div>
+      <div className="profile">
+      <i class="fa-solid fa-bars"></i>
+      {isLoaded && <ProfileButton user={sessionUser}  /> }
+      </div>
     </nav>
   );
 }
