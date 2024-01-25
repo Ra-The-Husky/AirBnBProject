@@ -1,3 +1,4 @@
+import spot from "../../../backend/db/models/spot";
 import { csrfFetch } from "./csrf";
  const LOAD_SPOTS = "spots/loadSpots";
  const LOAD_USER_SPOTS = 'spots/loadUserSpots'
@@ -163,6 +164,9 @@ const initState = [];
 const spotsReducer = (state = initState, action) => {
   switch (action.type) {
     case LOAD_SPOTS:
+      console.log('action',action)
+      console.log('action',state)
+      console.log('action',spot)
       return { ...state, spot: [...action.spots] };
       case LOAD_USER_SPOTS:
         return {...state, spots: [...action.spots]}

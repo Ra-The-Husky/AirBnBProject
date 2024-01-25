@@ -34,10 +34,6 @@ const validateSpot = [
     .exists({ checkFalsy: true })
     .isNumeric({ gt: 0 })
     .withMessage("Price per day must be a positive number"),
-  check("previewImage")
-    .exists({ checkFalsy: true })
-    .withMessage("Preview image is required"),
-
   handleValidationErrors,
 ];
 

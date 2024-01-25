@@ -6,8 +6,8 @@ import * as sessionActions from './store/session';
 import LandingPage from './components/LandingPage/LandingPage';
 import SpotInfo from './components/SpotInfo/SpotInfo'
 import CreateSpotForm from './components/NewSpot/CreateSpotForm'
-import UserSpots from './components/UserSpots/UserSpots'
-import UpdateSpotPage from './components/UpdatePage/UpdateSpotPage';
+import UserSpots from './components/SpotManagement/UserSpots/UserSpots'
+import UpdateSpotPage from './components/SpotManagement/UserSpots/UpdatePage/UpdateSpotPage'
 
 function Layout() {
   const dispatch = useDispatch();
