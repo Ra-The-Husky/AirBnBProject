@@ -1,19 +1,15 @@
 .pictures {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 60% 1fr;
-    justify-content: stretch;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 .imgContainer {
-    height: fit-content;
-    width: fit-content;
+    height: 400px;
+    width: 600px;
 }
-.image {
-    display: grid;
-    align-content: stretch;
-    border: 2px black solid;
-    height: 50%;
 
+.image {
+    border: 2px black solid;
 }
 
 .hosted {

@@ -19,11 +19,13 @@ const SpotInfo = () => {
     dispatch(getOneSpot(spotId));
     dispatch(getSpotReviews(spotId));
   }, [dispatch]);
+
   const reserve = (e) => {
     e.preventDefault();
 
     alert("Feature Coming Soon");
   };
+  
   return (
     <>
       <h1>{spotDeets?.name}</h1>

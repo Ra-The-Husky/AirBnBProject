@@ -1,8 +1,8 @@
-import "./UserSpots.css";
-import { getOneSpot, getUserSpots } from "../../store/spots";
+import { getUserSpots } from "../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import '../LandingPage/LandingPage.css'
 // import { useModal } from "../../context/Modal";
 // import OpenModalButton from "../OpenModalButton/OpenModalButton";
 // import DeleteModal from './SpotManagement/DeleteModal'
@@ -17,8 +17,8 @@ function ManageSpots() {
   const removeSpot = (e) => {
     e.preventDefault();
 
-    console.log("deleting modal being added soon");
-    navigate("/spots/current");
+    alert("deleting modal being added soon");
+    // navigate("/");
   };
 
   useEffect(() => {
@@ -32,18 +32,22 @@ function ManageSpots() {
         <>
           {userSpots &&
             userSpots.map((spot) => (
-              <div key={spot.id}>
+              <div className="tiles" key={spot.id}>
                 <span className="element">
                   <img src={spot.previewImage} alt={spot.name} />
                 </span>
                 <p>
-                  {spot.city}, {spot.state}{" "}<p>{spot.id}</p>
+                  {spot.city}, {spot.state}
                 </p>
                 <p>{spot.price} night </p>
                 <div className="buttons">
-                  <button onClick={() => {
-                navigate(`/spots/${spot.id}/edit`);
-              }}>Update</button>
+                  <button
+                    onClick={() => {
+                      navigate(`/spots/${spot.id}/edit`);
+                    }}
+                  >
+                    Update
+                  </button>
                   <button onClick={removeSpot}>Delete</button>
                 </div>
               </div>
