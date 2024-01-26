@@ -1,0 +1,63 @@
+.pictures {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.imgContainer {
+    height: 400px;
+    width: 600px;
+}
+
+.image {
+    border: 2px black solid;
+}
+
+.hosted {
+    font-size: 50px
+}
+
+.moreInfo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    border-bottom: 3px purple solid;
+}
+.priceNight {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+
+}
+
+.price {
+    margin-right: 20px;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.calloutBox {
+    display: grid;
+    grid-template-columns: 1fr 1fr ;
+    border: 2px purple solid;
+
+    margin-bottom: 10px;
+}
+
+.reserveContainer {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+.reserveButton {
+    font-size: 20px;
+    width: max-content;
+    display: flex;
+    background-color: yellow;
+    border-radius: 20px;
+
+}
+
+.reserveButton:hover {
+    box-shadow: 5px 5px 5px;
+    background-color: green;
+}
