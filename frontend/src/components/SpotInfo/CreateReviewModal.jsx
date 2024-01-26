@@ -3,31 +3,68 @@ import { useDispatch } from "react-redux";
 import { useState } from "react";
 
 function ReviewSpotModal() {
-  const [review, setReview] = useState();
-  const [stars, setStars] = useState();
-  const dispatch = useDispatch();
-  const { closeModal } = useModal();
+    const dispatch = useDispatch();
 
-  const submitReview = (e) => {
-    e.prevenDefault();
-  };
+    const { closeModal } = useModal();
 
-  return (
-    <div className="modal">
-      <h1 className="title">How was your stay?</h1>
-      <textarea
-        className="reviewArea"
-        name="review"
-        cols="30"
-        rows="10"
-        placeholder="Leave your review here..."
-        value={review}
-      ></textarea>
-      <button className="submit" onClick={submitReview}>
-        Submit Your Review
-      </button>
-    </div>
-  );
-}
+    const spot = useSelector(state => state.spots)
+
+    const spotId = ((Object.keys(spot).join()))
+
+    const sessionUser = useSelector(state => state.session.user);
+
+    const [firstName, setFirstName] = useState('')
+    const [review, setReview] = useState('');
+    const [stars, setStars] = useState(0)
+    const [errors, setErrors] = useState({});
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+
+      setErrors({})
+
+      if(sessionUser) setFirstName(sessionUser.firstName)
+      const newReview = {
+        review,
+        stars,
+        firstName: firstName
+      }
+      await dispatch(createReview(spotId, newReview))
+      .then(closeModal)
+      .catch(async (response) => {
+        const data = await response.json();
+        if (data && data.errors) {
+          setErrors(data.errors)
+        }
+      })
+
+    }
+
+    const onChange = (number) => {
+      setStars(parseInt(number))
+    }
+
+    return (
+      <div className='reviewForm'>
+        <h1>How was your stay?</h1>
+        <form onSubmit={handleSubmit}>
+          {errors.review && <span className='errors'>{errors.review}</span>}
+          {errors.stars && <span className='errors'>{errors.stars}</span>}
+          <textarea
+            placeholder='Leave your review here...'
+            value={review}
+            onChange={(e) => setReview(e.target.value)}
+            rows="4"
+          />
+          <StarRatingInput
+            onChange={onChange}
+            stars={stars}
+            />
+          <button type='submit' disabled={(review.length < 10) || (!stars)}>Submit Your Review</button>
+
+        </form>
+      </div>
+    )
+  }
 
 export default ReviewSpotModal;

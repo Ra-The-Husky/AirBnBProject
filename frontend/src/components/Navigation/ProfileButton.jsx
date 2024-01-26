@@ -34,10 +34,17 @@ function ProfileButton({ user }) {
 
   const closeMenu = () => setShowMenu(false);
 
-  const management = (e) => {
+  const spotManagement = (e) => {
     e.preventDefault();
 
     navigate("/spots/current");
+    closeMenu();
+  };
+
+  const reviewManagement = (e) => {
+    e.preventDefault();
+
+    navigate("/reviews/current");
     closeMenu();
   };
 
@@ -60,7 +67,8 @@ function ProfileButton({ user }) {
           <>
             <p>Hello, {user.firstName} </p>
             <p>{user.email}</p>
-            <button onClick={management}>Manage Spots</button>
+            <button onClick={spotManagement}>Manage Spots</button>
+            <button onClick={reviewManagement}>Manage Reviews</button>
             <p>
               <button onClick={logout}>Log Out</button>
             </p>

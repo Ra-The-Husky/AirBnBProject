@@ -1,11 +1,19 @@
 import { csrfFetch } from "./csrf";
-import { getUserSpots, getOneSpot } from "./spots";
+import { getUserSpots, getOneSpot, getSpotReviews } from "./spots";
 
+const LOAD_USER_REVIEWS = 'reviews/userReviews'
 const REMOVE_REVIEW = "reviews/removeReview";
 const NEW_REVIEW = "reviews/newReview";
 const UPDATE_REVIEW = "reviews/updateReview";
 
+
+
 //actions
+export const loadUserReviews = (reviews) => ({
+  type: LOAD_USER_REVIEWS,
+  reviews,
+});
+
 export const addReview = (review) => ({
   type: NEW_REVIEW,
   review,
@@ -22,7 +30,18 @@ export const removeReview = (reviewId) => ({
 });
 
 //thunks
-export const createAReview = (payload) => async (dispatch) => {
+export const getUserReviews = () => async (dispatch) => {
+  const res = await fetch(`/api/reviews/current`);
+
+  if (res.ok) {
+    const userReviews = await res.json();
+    console.log("user's reviews", userReviews);
+    dispatch(loadUserReviews(userReviews));
+    return userReviews;
+  }
+};
+
+export const createAReview = (spotId) => async (dispatch) => {
   let res = await csrfFetch(`/api/spots/${spotId}/reviews`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -32,6 +51,7 @@ export const createAReview = (payload) => async (dispatch) => {
     const review = await res.json();
     // console.log("made it here, boss.", spot);
     dispatch(addReview(review));
+    dispatch(getSpotReviews(spotId))
     return review;
   }
 };
@@ -68,11 +88,13 @@ const initState = [];
 //reducers
 const reviewsReducer = (state = initState, action) => {
   switch (action.type) {
+    case LOAD_USER_REVIEWS:
+      return { ...state, reviews: [...action.reviews] };
     case NEW_REVIEW:
       return { ...state, review: action.review };
     case UPDATE_REVIEW:
       return { ...state, reviewId: action.review };
-    case REMOVE_REVIEWUPDATE_REVIEW:
+    case REMOVE_REVIEW:
       delete { ...state[action.review] };
       return { ...state };
     // case RECIEVE_REVIEWS:
