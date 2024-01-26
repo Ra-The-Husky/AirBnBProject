@@ -20,7 +20,7 @@ function ManageSpots() {
   return (
     <div className="management">
       <h1>Manage Spots</h1>
-      <button onClick={navigate('/spots/new')}>Create a New Spot</button>
+      {/* <button onClick={navigate('/spots/new')}>Create a New Spot</button> */}
         <div className="tiles">
           {userSpots &&
             userSpots.map((spot) => (

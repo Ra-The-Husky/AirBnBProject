@@ -1,12 +1,10 @@
 import { csrfFetch } from "./csrf";
 import { getUserSpots, getOneSpot, getSpotReviews } from "./spots";
 
-const LOAD_USER_REVIEWS = 'reviews/userReviews'
+const LOAD_USER_REVIEWS = "reviews/userReviews";
 const REMOVE_REVIEW = "reviews/removeReview";
 const NEW_REVIEW = "reviews/newReview";
 const UPDATE_REVIEW = "reviews/updateReview";
-
-
 
 //actions
 export const loadUserReviews = (reviews) => ({
@@ -51,7 +49,7 @@ export const createAReview = (spotId) => async (dispatch) => {
     const review = await res.json();
     // console.log("made it here, boss.", spot);
     dispatch(addReview(review));
-    dispatch(getSpotReviews(spotId))
+    dispatch(getSpotReviews(spotId));
     return review;
   }
 };
@@ -89,7 +87,8 @@ const initState = [];
 const reviewsReducer = (state = initState, action) => {
   switch (action.type) {
     case LOAD_USER_REVIEWS:
-      return { ...state, reviews: [...action.reviews] };
+      console.log('action', action)
+      return { ...state, reviews: [...action.reviews.Reviews] };
     case NEW_REVIEW:
       return { ...state, review: action.review };
     case UPDATE_REVIEW:
@@ -97,8 +96,6 @@ const reviewsReducer = (state = initState, action) => {
     case REMOVE_REVIEW:
       delete { ...state[action.review] };
       return { ...state };
-    // case RECIEVE_REVIEWS:
-    //   return { ...state, review: action.review };
     default:
       return state;
   }
