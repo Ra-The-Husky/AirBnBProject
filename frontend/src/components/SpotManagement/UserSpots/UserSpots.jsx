@@ -1,6 +1,6 @@
 import { getUserSpots } from "../../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import "../../LandingPage/LandingPage.css";
 import OpenModalButton from "../../OpenModalButton/OpenModalButton";
@@ -15,7 +15,7 @@ function ManageSpots() {
 
   useEffect(() => {
     dispatch(getUserSpots(userSpots));
-  }, [dispatch]);
+  }, [dispatch, userSpots]);
 
   return (
     <div className="management">

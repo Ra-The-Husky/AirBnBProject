@@ -1,9 +1,9 @@
 import { useModal } from "../../context/Modal";
-import { useDispatch, useSelector } from "react-redux";
-import { deleteSpot, getUserSpots } from "../../store/spots";
+import { useDispatch} from "react-redux";
+import { deleteSpot} from "../../store/spots";
 import "./DeleteModal.css";
 
-function DeleteSpotModal({ spotId, userSpots }) {
+function DeleteSpotModal({ spotId }) {
   const dispatch = useDispatch();
   const { closeModal } = useModal();
   console.log("is this the spotId?", spotId);

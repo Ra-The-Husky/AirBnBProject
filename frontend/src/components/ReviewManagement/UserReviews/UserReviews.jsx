@@ -10,13 +10,13 @@ function UserReviews() {
 
   useEffect(() => {
     dispatch(getUserReviews(userReviews));
-  }, [dispatch]);
+}, [dispatch, userReviews]);
 
   return (
     <div className="reviewManagement">
       <h1>Manage Reviews</h1>
       {userReviews &&
-        userReviews.map((review) => {
+        userReviews?.map((review) => {
             const date = new Date(review.updatedAt);
             const month = [
               "January",

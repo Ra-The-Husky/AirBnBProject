@@ -20,7 +20,7 @@ const SpotInfo = () => {
   useEffect(() => {
     dispatch(getOneSpot(spotId));
     dispatch(getSpotReviews(spotId));
-  }, [dispatch]);
+  }, [dispatch, spotId]);
 
   const reserve = (e) => {
     e.preventDefault();

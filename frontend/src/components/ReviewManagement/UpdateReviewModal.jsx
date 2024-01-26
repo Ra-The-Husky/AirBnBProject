@@ -1,6 +1,8 @@
 import { useModal } from "../../context/Modal";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useState, useSelector } from "react";
+import { updateReview } from "../../store/reviews";
+import StarRating from '../SpotInfo/StarRating'
 
 function UpdateReviewModal() {
     const dispatch = useDispatch();

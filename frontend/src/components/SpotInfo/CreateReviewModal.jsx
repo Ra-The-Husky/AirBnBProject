@@ -1,6 +1,8 @@
 import { useModal } from "../../context/Modal";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
+import { createAReview } from "../../store/reviews";
+import StarRating from "./StarRating";
 
 function ReviewSpotModal() {
     const dispatch = useDispatch();
@@ -29,7 +31,7 @@ function ReviewSpotModal() {
         stars,
         firstName: firstName
       }
-      await dispatch(createReview(spotId, newReview))
+      await dispatch(createAReview(spotId, newReview))
       .then(closeModal)
       .catch(async (response) => {
         const data = await response.json();
@@ -56,7 +58,7 @@ function ReviewSpotModal() {
             onChange={(e) => setReview(e.target.value)}
             rows="4"
           />
-          <StarRatingInput
+          <StarRating
             onChange={onChange}
             stars={stars}
             />
