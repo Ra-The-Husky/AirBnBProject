@@ -43,15 +43,15 @@ const NewSpotInput = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const validTypes = ["jpg", "png", "jpeg"];
-    const errs = {};
+  // useEffect(() => {
+    // const validTypes = ["jpg", "png", "jpeg"];
+    // const errs = {};
     // if (!previewImage.url) {
     //   errs.previewImage = "*Preview image is required";
     // }
-    if (previewImage.url.includes(validTypes)) {
-      errs.previewImage = "*Image URL must end in .jpg, .png, or .jpeg";
-    }
+    // if (previewImage.url.includes(validTypes)) {
+    //   errs.previewImage = "*Image URL must end in .jpg, .png, or .jpeg";
+    // }
     // if (!extraImageOne.url.includes(validTypes)) {
     //   errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
     // }
@@ -64,8 +64,8 @@ const NewSpotInput = () => {
     // if (!extraImageFour.url.includes(validTypes)) {
     //   errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
     // }
-    setErrors(errs);
-  }, [previewImage]);
+    // setErrors(errs);
+  // }, [previewImage]);
 
   // const spotId = useSelector((state) => state.spots.spot?.id);
 
@@ -200,7 +200,7 @@ const NewSpotInput = () => {
   };
 
   return (
-    <div>
+    <div className="formPage">
       <h1 className="pageTitle">Create a new Spot</h1>
       <form className="form" onSubmit={handleSubmit}>
         <div className="firstSection">
@@ -355,7 +355,7 @@ const NewSpotInput = () => {
               }
               name="extra image one"
             ></input>
-            <p className="errors">{errors.extraImage}</p>
+            {/* <p className="errors">{errors.extraImage}</p> */}
             <input
               placeholder="Image URL"
               value={extraImageTwo.url}

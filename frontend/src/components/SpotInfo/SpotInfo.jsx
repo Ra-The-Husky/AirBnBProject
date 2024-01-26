@@ -3,6 +3,8 @@ import { getOneSpot, getSpotReviews } from "../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
+import OpenModalButton from "../OpenModalButton/OpenModalButton";
+import CreateReviewModal from "../SpotInfo/CreateReviewModal";
 
 const SpotInfo = () => {
   const dispatch = useDispatch();
@@ -25,7 +27,7 @@ const SpotInfo = () => {
 
     alert("Feature Coming Soon");
   };
-  
+
   return (
     <>
       <h1>{spotDeets?.name}</h1>
@@ -80,7 +82,13 @@ const SpotInfo = () => {
             : `${spotDeets?.numReviews} reviews`}
         </p>
         {ownerId !== userId ? (
-          <button className="reviewButton">Post your review</button>
+          <OpenModalButton
+            className="button"
+            buttonText="Post Your Review"
+            modalComponent={
+              <CreateReviewModal  />
+            }
+          />
         ) : (
           <></>
         )}

@@ -2,10 +2,9 @@ import { getUserSpots } from "../../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import '../../LandingPage/LandingPage.css'
-// import { useModal } from "../../context/Modal";
-// import OpenModalButton from "../OpenModalButton/OpenModalButton";
-// import DeleteModal from './SpotManagement/DeleteModal'
+import "../../LandingPage/LandingPage.css";
+import OpenModalButton from "../../OpenModalButton/OpenModalButton";
+import DeleteModal from "../DeleteModal";
 
 function ManageSpots() {
   const dispatch = useDispatch();
@@ -14,22 +13,15 @@ function ManageSpots() {
   const userSpots = useSelector((state) => state.spots.spots);
   // console.log("should be the current user spots", userSpots);
 
-  const removeSpot = (e) => {
-    e.preventDefault();
-
-    alert("deleting modal being added soon");
-    // navigate("/");
-  };
-
   useEffect(() => {
     dispatch(getUserSpots(userSpots));
   }, [dispatch]);
 
   return (
-    <>
+    <div className="management">
       <h1>Manage Spots</h1>
-      {userSpots ? (
-        <>
+      <button onClick={navigate('/spots/new')}>Create a New Spot</button>
+        <div className="tiles">
           {userSpots &&
             userSpots.map((spot) => (
               <div className="tiles" key={spot.id}>
@@ -48,17 +40,17 @@ function ManageSpots() {
                   >
                     Update
                   </button>
-                  <button onClick={removeSpot}>Delete</button>
+                  <OpenModalButton
+                    className="button"
+                    buttonText="Delete"
+                    spotId={spot.id}
+                    modalComponent={<DeleteModal spotId={spot.id} Spots={userSpots} />}
+                  />
                 </div>
               </div>
             ))}
-        </>
-      ) : (
-        <div className="no-spots">
-          <button className="new-spot">Create New Spot</button>
         </div>
-      )}
-    </>
+    </div>
   );
 }
 

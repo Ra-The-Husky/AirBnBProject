@@ -1,3 +1,9 @@
+.pageForm {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
 .pageTitle {
   display: flex;
   justify-content: center;
@@ -30,7 +36,7 @@
 }
 .firstSection .countryAddress .errors{
   display: flex;
-  
+
 }
 .firstSection .countryAddress input {
   width: 100%;

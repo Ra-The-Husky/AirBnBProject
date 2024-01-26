@@ -6,7 +6,6 @@ import LoginFormModal from "../LoginFormModal/LoginFormModal";
 import SignupFormModal from "../SignupFormModal/SignupFormModal";
 import { useNavigate } from "react-router-dom";
 import "./Navigation.css";
-import { getOneSpot } from "../../store/spots";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -37,7 +36,7 @@ function ProfileButton({ user }) {
 
   const management = (e) => {
     e.preventDefault();
-    
+
     navigate("/spots/current");
     closeMenu();
   };

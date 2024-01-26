@@ -1,0 +1,47 @@
+.modal {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 4fr 4fr 4fr 4fr;
+  font-size: large;
+  border: 5px purple solid;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+}
+
+.confirmationText {
+  font-size: 25px;
+  margin: auto;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.yesDelete {
+  font-size: 35px;
+  background-color: red;
+  color: white;
+  border: 2px black solid;
+  box-sizing: border-box;
+  margin: 10px;
+  box-shadow: 3px 3px 3px black;
+  border-radius: 5px;
+}
+.yesDelete:hover {
+    box-shadow: 6px 6px 6px black;
+}
+
+.noDelete {
+  font-size: 35px;
+  background-color: grey;
+  color: white;
+  border: 2px black solid;
+  box-sizing: border-box;
+  margin: 10px;
+  box-shadow: 3px 3px 3px black;
+  border-radius: 5px;
+}
+.noDelete:hover {
+    box-shadow: 6px 6px 6px black;
+}

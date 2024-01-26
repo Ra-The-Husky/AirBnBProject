@@ -3,10 +3,10 @@ import { useState, useEffect } from "react";
 import { editSpot, newSpotImage, getOneSpot } from "../../../../store/spots";
 import { useNavigate, useParams } from "react-router-dom";
 
-const EditSpotInput = ({ spot }) => {
-  const spotInfo = useSelector((state) => state.spots?.spot?.spot);
+const EditSpotInput = () => {
+  const spotInfo = useSelector((state) => state.spots.spot?.spot);
   // console.log('spotInfo', spotInfo)
-  const spotImages = useSelector((state) => state.spots.spot?.spot?.SpotImages);
+  // const spotImages = useSelector((state) => state.spots.spot?.spot?.SpotImages);
   // console.log(spotImages)
   const { spotId } = useParams();
   const [country, setCountry] = useState(spotInfo?.country);
@@ -18,71 +18,69 @@ const EditSpotInput = ({ spot }) => {
   const [description, setDescription] = useState(spotInfo?.description);
   const [name, setName] = useState(spotInfo?.name);
   const [price, setPrice] = useState(spotInfo?.price);
-  const [previewImage, setPreviewImage] = useState({
-    url: spotImages[0]?.url,
-    preview: spotImages[0]?.preview,
-    imageableType: "Spot",
-  });
-  const [extraImageOne, setExtraImageOne] = useState({
-    url: spotImages[1]?.url,
-    preview: spotImages[1]?.preview,
-    imageableType: spotImages[1]?.url.imageableType,
-  });
-  const [extraImageTwo, setExtraImageTwo] = useState({
-    url: spotImages[2]?.url,
-    preview: spotImages[2]?.preview,
-    imageableType: spotImages[2]?.url.imageableType,
-  });
-  const [extraImageThree, setExtraImageThree] = useState({
-    url: spotImages[3]?.url,
-    preview: spotImages[3]?.preview,
-    imageableType: spotImages[3]?.url.imageableType,
-  });
-  const [extraImageFour, setExtraImageFour] = useState({
-    url: spotImages[4]?.url,
-    preview: spotImages[4]?.preview,
-    imageableType: spotImages[4]?.url.imageableType,
-  });
+  // const [previewImage, setPreviewImage] = useState({
+  //   url: spotImages[0]?.url,
+  //   preview: spotImages[0]?.preview,
+  //   imageableType: "Spot",
+  // });
+  // const [extraImageOne, setExtraImageOne] = useState({
+  //   url: spotImages[1]?.url,
+  //   preview: spotImages[1]?.preview,
+  //   imageableType: spotImages[1]?.url.imageableType,
+  // });
+  // const [extraImageTwo, setExtraImageTwo] = useState({
+  //   url: spotImages[2]?.url,
+  //   preview: spotImages[2]?.preview,
+  //   imageableType: spotImages[2]?.url.imageableType,
+  // });
+  // const [extraImageThree, setExtraImageThree] = useState({
+  //   url: spotImages[3]?.url,
+  //   preview: spotImages[3]?.preview,
+  //   imageableType: spotImages[3]?.url.imageableType,
+  // });
+  // const [extraImageFour, setExtraImageFour] = useState({
+  //   url: spotImages[4]?.url,
+  //   preview: spotImages[4]?.preview,
+  //   imageableType: spotImages[4]?.url.imageableType,
+  // });
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const validTypes = ["jpg", "png", "jpeg"];
-    const errs = {};
-    if (!previewImage) {
-      errs.previewImage = "*Preview image is required";
-    }
-    if (previewImage.url.includes(validTypes)) {
-      errs.previewImage = "*Image URL must end in .jpg, .png, or .jpeg";
-    }
-    if (!extraImageOne.url.includes(validTypes)) {
-      errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
-    }
-    if (!extraImageTwo.url.includes(validTypes)) {
-      errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
-    }
-    if (!extraImageThree.url.includes(validTypes)) {
-      errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
-    }
-    if (!extraImageFour.url.includes(validTypes)) {
-      errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
-    }
-    setErrors(errs);
-  }, [
-    dispatch,
-    previewImage,
-    extraImageOne,
-    extraImageTwo,
-    extraImageThree,
-    extraImageFour,
-  ]);
+  // useEffect(() => {
+  //   const validTypes = ["jpg", "png", "jpeg"];
+  //   const errs = {};
+  //   if (!previewImage) {
+  //     errs.previewImage = "*Preview image is required";
+  //   }
+  //   if (previewImage.url.includes(validTypes)) {
+  //     errs.previewImage = "*Image URL must end in .jpg, .png, or .jpeg";
+  //   }
+  //   if (!extraImageOne.url.includes(validTypes)) {
+  //     errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
+  //   }
+  //   if (!extraImageTwo.url.includes(validTypes)) {
+  //     errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
+  //   }
+  //   if (!extraImageThree.url.includes(validTypes)) {
+  //     errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
+  //   }
+  //   if (!extraImageFour.url.includes(validTypes)) {
+  //     errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
+  //   }
+  //   setErrors(errs);
+  // }, [
+  //   dispatch,
+  //   previewImage,
+  //   extraImageOne,
+  //   extraImageTwo,
+  //   extraImageThree,
+  //   extraImageFour,
+  // ]);
 
   useEffect(() => {
     dispatch(getOneSpot(spotId));
   }, [dispatch]);
-
-  // const spotId = useSelector((state) => state.spots.spot?.id);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -97,28 +95,28 @@ const EditSpotInput = ({ spot }) => {
       description,
       name,
       price,
-      previewImage,
+      // previewImage,
     };
 
-    const moreImages = [];
-    moreImages.push(
-      extraImageOne,
-      extraImageTwo,
-      extraImageThree,
-      extraImageFour
-    );
+    // const moreImages = [];
+    // moreImages.push(
+    //   extraImageOne,
+    //   extraImageTwo,
+    //   extraImageThree,
+    //   extraImageFour
+    // );
 
-    dispatch(editSpot(spot))
-      .then((confirmedSpot) => {
-        dispatch(newSpotImage(confirmedSpot.id, spot.previewImage));
-        navigate(`/spots/${spotId}`);
-        return confirmedSpot;
+    dispatch(editSpot(spotId, edits))
+      .then((editedSpot) => {
+        // dispatch(newSpotImage(editedSpot.id, spot.previewImage));
+        navigate(`/spots/${editedSpot.id}`);
+        // return editedSpot;
       })
-      .then(() => {
-        if (moreImages.length) {
-          moreImages.map((image) => dispatch(newSpotImage(newSpot.id, image)));
-        }
-      })
+      // .then(() => {
+      //   if (moreImages.length) {
+      //     moreImages.map((image) => dispatch(newSpotImage(newSpot.id, image)));
+      //   }
+      // })
       .catch(async (res) => {
         const data = await res.json();
         console.log("ooof caught an error or two?", {
@@ -131,7 +129,7 @@ const EditSpotInput = ({ spot }) => {
   return (
     <>
       <div>
-        <h1 className="pageTitle">Edit Spot</h1>
+        <h1 className="pageTitle">Update Your Spot</h1>
         <form className="form" onSubmit={handleSubmit}>
           <div className="firstSection">
             <h2>Where&apos;s your place located?</h2>
@@ -254,7 +252,7 @@ const EditSpotInput = ({ spot }) => {
             ></input>
             <p className="errors">{errors.price}</p>
           </div>
-          <div className="fifthSection">
+          {/* <div className="fifthSection">
             <h2>Liven up your spot with photos</h2>
             <p className="caption">
               Submit a link to at least one photo to publish your spot
@@ -323,7 +321,7 @@ const EditSpotInput = ({ spot }) => {
                 name="extra image four"
               ></input>
             </div>
-          </div>
+          </div> */}
           <button type="submit" className="newSpot">
             Create Spot
           </button>
