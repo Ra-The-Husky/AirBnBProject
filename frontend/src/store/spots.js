@@ -89,7 +89,7 @@ export const getSpotReviews = (spotId) => async (dispatch) => {
   if (res.ok) {
     const review = await res.json();
     console.log("this is the spot reviews,", review);
-    review.Reviews.reverse()
+    review.Reviews.reverse();
     dispatch(getReview(review));
     return review;
   }
@@ -145,15 +145,14 @@ export const newSpotImage = (spotId, image) => async (dispatch) => {
   }
 };
 
-export const deleteSpot = (spotId) => async (dispatch) => {
-  console.log(spotId);
+export const deleteSpot = (spotId, userId) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spotId}`, {
     method: "DELETE",
   });
 
   if (res.ok) {
     const data = await res.json();
-    dispatch(removeSpot(data))
+    dispatch(getUserSpots());
     return data;
   }
 };
@@ -176,11 +175,10 @@ const spotsReducer = (state = initState, action) => {
       return { ...state, images: action.image };
     case UPDATE_SPOT:
       return { ...state, spotId: action.spot };
-    case REMOVE_SPOT:
-      delete { ...state[action.spot] };
-      return { ...state };
     case RECIEVE_REVIEWS:
       return { ...state, review: action.review };
+    // case NEW_REVIEW:
+    //   return { ...state, review: action.review };
     default:
       return state;
   }

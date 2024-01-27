@@ -23,10 +23,11 @@
     border-bottom: 3px purple solid;
 }
 .priceNight {
+    grid-area: a;
     display: flex;
-    justify-content: left;
+    justify-content: center;
+    margin-right: 40%;
     align-items: center;
-
 }
 
 .price {
@@ -37,21 +38,36 @@
 
 .calloutBox {
     display: grid;
-    grid-template-columns: 1fr 1fr ;
+    grid-template-areas:
+    "a b"
+    "c c";
     border: 2px purple solid;
-
     margin-bottom: 10px;
 }
 
+.ratingInfo {
+    grid-area: b;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: fit-content;
+    margin-left: 50%;
+}
 .reserveContainer {
+    grid-area: c;
     display: flex;
     justify-content: center;
     align-content: center;
+    width: 100%;
+    padding-bottom: 15px;
+
 }
 .reserveButton {
+    grid-area: c;
     font-size: 20px;
-    width: max-content;
+    width: 200px;
     display: flex;
+    justify-content: center;
     background-color: yellow;
     border-radius: 20px;
 

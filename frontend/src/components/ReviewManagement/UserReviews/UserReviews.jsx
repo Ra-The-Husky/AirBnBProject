@@ -50,7 +50,7 @@ function UserReviews() {
                   </p>
                   <OpenModalButton
                     buttonText="Update"
-                    modalComponent={<UpdateReviewModal />}
+                    modalComponent={<UpdateReviewModal reviewInfo={review} spotName={review?.Spot.name} />}
                   />
                   <OpenModalButton
                     buttonText="Delete"

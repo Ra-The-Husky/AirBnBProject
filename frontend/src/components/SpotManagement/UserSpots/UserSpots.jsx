@@ -18,19 +18,26 @@ function ManageSpots() {
   };
 
   useEffect(() => {
-    dispatch(getUserSpots(userSpots));
+    dispatch(getUserSpots());
   }, [dispatch]);
 
   return (
     <>
       <h1>Manage Spots</h1>
-      <button onClick={createASpot} className="button">Create A Spot</button>
-
+      <button onClick={createASpot} className="button">
+        Create A Spot
+      </button>
       <div className="container">
         {userSpots &&
           userSpots.map((spot) => (
-            <div className="tiles" key={spot.id}>
-              <span className="element">
+            <div
+              className="tiles"
+
+            >
+              <span className="element" onClick={() => {
+                navigate(`/spots/${spot.id}`);
+              }}
+              key={spot.id}>
                 <img
                   src={spot.previewImage}
                   alt={spot.name}
@@ -58,9 +65,7 @@ function ManageSpots() {
                 <OpenModalButton
                   className="button"
                   buttonText="Delete"
-                  modalComponent={
-                    <DeleteSpotModal spotId={spot.id} Spots={userSpots} />
-                  }
+                  modalComponent={<DeleteSpotModal spotId={spot.id} />}
                 />
               </div>
             </div>

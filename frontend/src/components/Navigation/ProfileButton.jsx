@@ -50,8 +50,7 @@ function ProfileButton({ user }) {
 
   const logout = (e) => {
     e.preventDefault();
-    dispatch(sessionActions.logout());
-    navigate("/");
+    dispatch(sessionActions.logout()).then(navigate("/"))
     closeMenu();
   };
 
@@ -59,8 +58,8 @@ function ProfileButton({ user }) {
 
   return (
     <>
-      <button className="profileButton" onClick={toggleMenu}>
-        <i className="fas fa-user-circle" />
+      <i className="fas fa-user-circle" /><button className="profileButton" onClick={toggleMenu}>
+
       </button>
       <div className={ulClassName} ref={ulRef}>
         {user ? (

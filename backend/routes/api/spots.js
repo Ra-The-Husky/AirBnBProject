@@ -181,7 +181,7 @@ router.get("/", validQueries, async (req, res, next) => {
           if (review.stars) {
             starSum += review.stars;
           }
-          spot.avgRating = starSum / spot.Reviews.length;
+          spot.avgRating = (starSum / spot.Reviews.length).toFixed(1);
         });
         delete spot.Reviews;
       }
@@ -227,7 +227,7 @@ router.get("/", validQueries, async (req, res, next) => {
           if (review.stars) {
             starSum += review.stars;
           }
-          spot.avgRating = starSum / spot.Reviews.length;
+          spot.avgRating = (starSum / spot.Reviews.length).toFixed(1);
         });
         delete spot.Reviews;
       }
@@ -345,8 +345,7 @@ router.get("/:spotId", async (req, res) => {
       },
     });
     //Calculates spot's average stars
-    const avgStars = sumStars / numReviews;
-
+    const avgStars = (sumStars / numReviews).toFixed(1);
     const data = {};
     data.spot = {
       id: spot.id,

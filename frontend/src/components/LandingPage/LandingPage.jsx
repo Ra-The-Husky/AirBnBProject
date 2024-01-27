@@ -7,8 +7,7 @@ import { useNavigate } from "react-router-dom";
 const LandingPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const allSpots = useSelector((state) => state.spots?.spot);
-  // console.log("this is the component console log,", allSpots);
+  const allSpots = Object.values(useSelector((state) => state.spots.spot ? state.spots.spot : []));
 
   useEffect(() => {
     dispatch(getAllSpots());
@@ -16,7 +15,7 @@ const LandingPage = () => {
 
   return (
     <>
-      <ul className="container">
+      <div className="container">
         {allSpots &&
           allSpots.map((spot) => (
             <div
@@ -43,12 +42,12 @@ const LandingPage = () => {
                 </div>
                 <div className="price">
                   <p className="price-number">{spot.price}</p>
-                  <p className="night">night</p>
+                  <p className="night"> night</p>
                 </div>
               </div>
             </div>
           ))}
-      </ul>
+      </div>
     </>
   );
 };
