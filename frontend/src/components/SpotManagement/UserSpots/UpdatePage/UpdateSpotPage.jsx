@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { editSpot, newSpotImage, getOneSpot } from "../../../../store/spots";
+import { editSpot, getOneSpot } from "../../../../store/spots";
 import { useNavigate, useParams } from "react-router-dom";
 
 const EditSpotInput = () => {
@@ -80,7 +80,7 @@ const EditSpotInput = () => {
 
   useEffect(() => {
     dispatch(getOneSpot(spotId));
-  }, [dispatch]);
+  }, [dispatch, spotId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import "./LandingPage.css";
+import "./LoadSpots.css";
 import { useEffect } from "react";
 import { getAllSpots } from "../../store/spots";
 import { useNavigate } from "react-router-dom";

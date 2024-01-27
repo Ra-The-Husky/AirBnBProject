@@ -21,7 +21,7 @@ function Navigation({ isLoaded }) {
         <></>
       )}
       <div className="profile">
-        <i class="fa-solid fa-bars"></i>
+        <i className="fa-solid fa-bars"></i>
         {isLoaded && <ProfileButton user={sessionUser} />}
       </div>
     </nav>

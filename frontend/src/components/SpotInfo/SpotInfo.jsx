@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
-import CreateReviewModal from "../SpotInfo/CreateReviewModal";
+import CreateReviewModal from "../ReviewManagement/CreateReviewModal";
+import DeleteReviewModal from "../ReviewManagement/DeleteReviewModal";
 
 const SpotInfo = () => {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ const SpotInfo = () => {
   useEffect(() => {
     dispatch(getOneSpot(spotId));
     dispatch(getSpotReviews(spotId));
-  }, [dispatch]);
+  }, [dispatch, spotId]);
 
   const reserve = (e) => {
     e.preventDefault();
@@ -85,9 +86,7 @@ const SpotInfo = () => {
           <OpenModalButton
             className="button"
             buttonText="Post Your Review"
-            modalComponent={
-              <CreateReviewModal  />
-            }
+            modalComponent={<CreateReviewModal spotId={spotId} />}
           />
         ) : (
           <></>
@@ -126,6 +125,21 @@ const SpotInfo = () => {
                     <p>
                       <b>{review.review}</b>
                     </p>
+                    <div>
+                      {review.User.id === userId ? (
+                        <OpenModalButton
+                          buttonText="Delete"
+                          modalComponent={
+                            <DeleteReviewModal
+                              reviewId={review.id}
+                              spotId={spotId}
+                            />
+                          }
+                        />
+                      ) : (
+                        <></>
+                      )}
+                    </div>
                   </div>
                 );
               })}

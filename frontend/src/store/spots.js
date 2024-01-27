@@ -88,7 +88,8 @@ export const getSpotReviews = (spotId) => async (dispatch) => {
 
   if (res.ok) {
     const review = await res.json();
-    // console.log("this is the spot reviews,", review);
+    console.log("this is the spot reviews,", review);
+    review.Reviews.reverse()
     dispatch(getReview(review));
     return review;
   }

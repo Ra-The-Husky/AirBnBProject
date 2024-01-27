@@ -1,6 +1,21 @@
+@media screen {
+
+}
 html, body, input, textarea, button, select, a {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size: 14px;
   }
 
-  
+  .button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .filled {
+    color: #000;
+  }
+  .empty {
+    color: #ccc;
+  }

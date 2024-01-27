@@ -39,12 +39,13 @@ export const getUserReviews = () => async (dispatch) => {
   }
 };
 
-export const createAReview = (spotId) => async (dispatch) => {
+export const createAReview = (spotId, payload) => async (dispatch) => {
   let res = await csrfFetch(`/api/spots/${spotId}/reviews`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
+
   if (res.ok) {
     const review = await res.json();
     // console.log("made it here, boss.", spot);
@@ -52,6 +53,7 @@ export const createAReview = (spotId) => async (dispatch) => {
     dispatch(getSpotReviews(spotId));
     return review;
   }
+  return res
 };
 
 export const editReview = (reviewId, edits) => async (dispatch) => {
@@ -69,7 +71,7 @@ export const editReview = (reviewId, edits) => async (dispatch) => {
   }
 };
 
-export const deleteReview = (reviewId) => async (dispatch) => {
+export const deleteReview = (reviewId, spotId) => async (dispatch) => {
   console.log(reviewId);
   const res = await csrfFetch(`/api/reviews/${reviewId}`, {
     method: "DELETE",
@@ -78,6 +80,7 @@ export const deleteReview = (reviewId) => async (dispatch) => {
   if (res.ok) {
     const data = await res.json();
     dispatch(removeReview(data));
+    dispatch(getOneSpot(spotId))
     return data;
   }
 };
@@ -87,7 +90,6 @@ const initState = [];
 const reviewsReducer = (state = initState, action) => {
   switch (action.type) {
     case LOAD_USER_REVIEWS:
-      console.log('action', action)
       return { ...state, reviews: [...action.reviews.Reviews] };
     case NEW_REVIEW:
       return { ...state, review: action.review };
