@@ -48,7 +48,7 @@ const SpotInfo = () => {
   };
 
   return (
-    <>
+    <div className="spotInfoPage">
       <h1>{spotDeets?.name}</h1>
       <div className="location">
         <p>

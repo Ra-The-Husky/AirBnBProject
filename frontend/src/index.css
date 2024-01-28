@@ -1,33 +1,47 @@
-  html,
-  body,
-  input,
-  textarea,
-  button,
-  select,
-  a {
-    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
-      sans-serif;
-    font-size: 30px;
-  }
+html,
+body,
+input,
+textarea,
+button,
+select,
+a {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: 30px;
+}
 
-  p {
-    font-size: 24px;
-  } */
+p {
+  font-size: 24px;
+}
 
-  .submitButton {
-    font-size: 35px;
-    background-color: rgb(244, 232, 3);
-    color: black;
-    border: 2px black solid;
-    box-sizing: border-box;
-    margin: 10px;
-    box-shadow: 3px 3px 3px black;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  .submitButton:hover {
-    box-shadow: 6px 6px 6px black;
-  }
+.submitButton {
+  font-size: 35px;
+  background-color: gold;
+  color: black;
+  border: 2px black solid;
+  box-sizing: border-box;
+  margin: 10px;
+  box-shadow: 3px 3px 3px black;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.submitButton:hover {
+  box-shadow: 6px 6px 6px black;
+  background: linear-gradient(45deg, gold, silver, white, yellow, gold);
+  background-size: 500% 500%;
+  animation: animate 8s ease infinite ;
+}
+
+@keyframes animate {
+0% {
+  background-position: 0% 50%;
+}
+50% {
+  background-position: 100% 50%;
+}
+100% {
+  background-position: 0% 50%;
+}
+}
 
 .filled {
   color: #000;
