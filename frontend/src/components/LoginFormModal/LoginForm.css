@@ -1,9 +1,22 @@
-.loginButton {
-background-color: red;
-margin-top: 3%;
-padding: 5%;
-display: flex;
-justify-content: center;
+.profileForm {
+  display: flex;
+  flex-direction: column;
+  font-size: large;
+  border: 5px purple solid;
+  align-items: center;
+  width: fit-content;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 3px;
+}
+
+.input {
+  font-size: 20px;
+  display: flex;
 }
 
 .demo {
@@ -13,4 +26,9 @@ justify-content: center;
   justify-content: center;
   margin: auto;
   padding-top: 10%;
+}
+.demo:hover {
+  color: blue;
+  border-bottom: 3px blue solid;
+cursor: pointer;
 }

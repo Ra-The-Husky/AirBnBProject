@@ -37,39 +37,45 @@ function LoginFormModal() {
 
   const demoUser = (e) => {
     e.preventDefault();
-    setCredential('Demo-lition')
-    setPassword('password')
+    setCredential("Demo-lition");
+    setPassword("password");
   };
 
   return (
-    <>
+    <div className="profileForm">
       <h1>Log In</h1>
-      <form className="form" onSubmit={handleSubmit}>
-        <div>
-          <input className="input"
-            type="text"
-            placeholder="Username or Email"
-            value={credential}
-            onChange={(e) => setCredential(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button className='loginButton' disabled={Object.values(errors).length} type="submit">
+      <form className="fields" onSubmit={handleSubmit}>
+        <input
+          className="input"
+          type="text"
+          placeholder="Username or Email"
+          value={credential}
+          onChange={(e) => setCredential(e.target.value)}
+          required
+        />
+
+        <input
+        className="input"
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+
+        <button
+          className="submitButton"
+          disabled={Object.values(errors).length}
+          type="submit"
+        >
           Log In
         </button>
         {errors.credential && <p>{errors.credential}</p>}
-        <label className='demo' onClick={demoUser}>Demo User</label>
+        <label className="demo" onClick={demoUser}>
+          Demo User
+        </label>
       </form>
-    </>
+    </div>
   );
 }
 

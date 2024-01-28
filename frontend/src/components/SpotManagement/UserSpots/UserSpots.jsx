@@ -1,56 +1,77 @@
 import { getUserSpots } from "../../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "../../LandingPage/LandingPage.css";
+import { useEffect } from "react";
+import { useNavigate, NavLink } from "react-router-dom";
+import "../../LandingPage/LoadSpots.css";
 import OpenModalButton from "../../OpenModalButton/OpenModalButton";
-import DeleteModal from "../DeleteModal";
+import DeleteSpotModal from "../DeleteSpotModal";
 
 function ManageSpots() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const userSpots = useSelector((state) => state.spots.spots);
-  // console.log("should be the current user spots", userSpots);
+  const createASpot = (e) => {
+    e.preventDefault();
+
+    navigate("/spots/new");
+  };
 
   useEffect(() => {
-    dispatch(getUserSpots(userSpots));
+    dispatch(getUserSpots());
   }, [dispatch]);
 
   return (
-    <div className="management">
+    <>
       <h1>Manage Spots</h1>
-      {/* <button onClick={navigate('/spots/new')}>Create a New Spot</button> */}
-        <div className="tiles">
-          {userSpots &&
-            userSpots.map((spot) => (
-              <div className="tiles" key={spot.id}>
-                <span className="element">
-                  <img src={spot.previewImage} alt={spot.name} />
-                </span>
-                <p>
+      <button onClick={createASpot} className="button">
+        Create A Spot
+      </button>
+      <div className="container">
+        {userSpots &&
+          userSpots.map((spot) => (
+            <div
+              className="tiles"
+
+            >
+              <span className="element" onClick={() => {
+                navigate(`/spots/${spot.id}`);
+              }}
+              key={spot.id}>
+                <img
+                  src={spot.previewImage}
+                  alt={spot.name}
+                  className="previewImage"
+                />
+              </span>
+              <div className="info">
+                <p className="location">
                   {spot.city}, {spot.state}
                 </p>
-                <p>{spot.price} night </p>
-                <div className="buttons">
-                  <button
-                    onClick={() => {
-                      navigate(`/spots/${spot.id}/edit`);
-                    }}
-                  >
-                    Update
-                  </button>
-                  <OpenModalButton
-                    className="button"
-                    buttonText="Delete"
-                    spotId={spot.id}
-                    modalComponent={<DeleteModal spotId={spot.id} Spots={userSpots} />}
-                  />
+                <div className="rating">
+                  <i className="fa-solid fa-star"></i>
+                  <p>{!spot.avgRating ? "New" : spot.avgRating}</p>
                 </div>
+                <p>{spot.price} night </p>
               </div>
-            ))}
-        </div>
-    </div>
+              <div className="buttons">
+                <button
+                  onClick={() => {
+                    navigate(`/spots/${spot.id}/edit`);
+                  }}
+                >
+                  Update
+                </button>
+                <OpenModalButton
+                  className="button"
+                  buttonText="Delete"
+                  modalComponent={<DeleteSpotModal spotId={spot.id} />}
+                />
+              </div>
+            </div>
+          ))}
+      </div>
+    </>
   );
 }
 

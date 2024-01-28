@@ -12,7 +12,7 @@ function Navigation({ isLoaded }) {
         <i className="fa-solid fa-crown"> RoyalBnB</i>
       </NavLink>
       {sessionUser ? (
-        <div className="spotDiv">
+        <div className="createSpot">
           <NavLink to="spots/new" className="createSpot">
             Create a New Spot
           </NavLink>
@@ -21,8 +21,9 @@ function Navigation({ isLoaded }) {
         <></>
       )}
       <div className="profile">
-        <i class="fa-solid fa-bars"></i>
-        {isLoaded && <ProfileButton user={sessionUser} />}
+        <div className="profileMenu">
+          {isLoaded && <ProfileButton user={sessionUser} />}
+        </div>
       </div>
     </nav>
   );

@@ -50,8 +50,7 @@ function ProfileButton({ user }) {
 
   const logout = (e) => {
     e.preventDefault();
-    dispatch(sessionActions.logout());
-    navigate("/");
+    dispatch(sessionActions.logout()).then(navigate("/"));
     closeMenu();
   };
 
@@ -59,20 +58,27 @@ function ProfileButton({ user }) {
 
   return (
     <>
-      <button className="profileButton" onClick={toggleMenu}>
-        <i className="fas fa-user-circle" />
-      </button>
+      <div className="icons">
+        <i className="fa-solid fa-bars"></i>{" "}
+        <i className="fas fa-user-circle" onClick={toggleMenu} />
+      </div>
       <div className={ulClassName} ref={ulRef}>
         {user ? (
-          <>
-            <p>Hello, {user.firstName} </p>
-            <p>{user.email}</p>
-            <button onClick={spotManagement}>Manage Spots</button>
-            <button onClick={reviewManagement}>Manage Reviews</button>
-            <p>
-              <button onClick={logout}>Log Out</button>
-            </p>
-          </>
+          <div className="profileInfo">
+            <div className="userInfo">
+              <p>Hello, {user.firstName} </p>
+              <p>{user.email}</p>
+            </div>
+            <div className="profileButtons">
+              <div className="managementButtons">
+                <button onClick={spotManagement}>Manage Spots</button>
+                <button onClick={reviewManagement}>Manage Reviews</button>
+              </div>
+              <button className="yesDelete" onClick={logout}>
+                Log Out
+              </button>
+            </div>
+          </div>
         ) : (
           <>
             <OpenModalMenuItem

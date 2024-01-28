@@ -2,25 +2,44 @@ import "./SpotInfo.css";
 import { getOneSpot, getSpotReviews } from "../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
-import CreateReviewModal from "../SpotInfo/CreateReviewModal";
+import CreateReviewModal from "../ReviewManagement/CreateReviewModal";
+import DeleteReviewModal from "../ReviewManagement/DeleteReviewModal";
 
 const SpotInfo = () => {
   const dispatch = useDispatch();
   const { spotId } = useParams();
-  // console.log("spotId", spotId);
+  const [newSpot, setNewSpot] = useState(true);
   const userId = useSelector((state) => state.session.user?.id);
-  const ownerId = useSelector((state) => state.spots.spot?.spot.Owner?.id);
-  // console.log("userId", userId);
-  // console.log("ownerId", ownerId);
+  const ownerId = useSelector((state) => state.spots.spot?.spot?.Owner.id);
   const spotDeets = useSelector((state) => state.spots.spot?.spot);
   const spotReviews = useSelector((state) => state.spots.review?.Reviews);
+  const user = useSelector((state) => state.session.user);
+  let hasReview = false;
+
+  spotReviews?.forEach((review) => {
+    if (review.User?.id === userId) {
+      hasReview = true;
+    }
+  });
+  async function generic() {
+    await dispatch(getSpotReviews(spotId)).then((reviews) => {
+      console.log(reviews.Reviews);
+      if (reviews.Reviews.length > 0) {
+        setNewSpot(false);
+      }
+    });
+  }
 
   useEffect(() => {
     dispatch(getOneSpot(spotId));
-    dispatch(getSpotReviews(spotId));
-  }, [dispatch]);
+    dispatch(getSpotReviews(spotId)).then((reviews) => {
+      if (reviews.Reviews.length > 0) {
+        setNewSpot(false);
+      }
+    });
+  }, [dispatch, spotId]);
 
   const reserve = (e) => {
     e.preventDefault();
@@ -29,7 +48,7 @@ const SpotInfo = () => {
   };
 
   return (
-    <>
+    <div className="spotInfoPage">
       <h1>{spotDeets?.name}</h1>
       <div className="location">
         <p>
@@ -55,12 +74,15 @@ const SpotInfo = () => {
             <p>night</p>
           </div>
           <div className="ratingInfo">
-            <i className="fa-solid fa-star"></i>
-            <p>{spotDeets?.avgStarRating}</p> {"."}
+            <i className="fa-solid fa-star"> </i>
             <p>
-              {spotDeets?.avgStarRating === null || spotDeets?.avgStarRating < 1
-                ? "New"
-                : spotDeets?.numReviews === 1
+              {spotDeets?.avgStarRating !== "NaN"
+                ? spotDeets?.avgStarRating
+                : "New"}{" "}
+            </p>
+            <p hidden={newSpot}>
+              &#x2022;{" "}
+              {spotDeets?.numReviews === 1
                 ? `${spotDeets?.numReviews} review`
                 : `${spotDeets?.numReviews} reviews`}
             </p>
@@ -73,24 +95,28 @@ const SpotInfo = () => {
         </div>
       </div>
       <div className="reviews">
-        <i className="fa-solid fa-star"></i>
-        <p>
-          {spotDeets?.avgStarRating === null || spotDeets?.avgStarRating < 1
-            ? "New"
-            : spotDeets?.numReviews === 1
-            ? `${spotDeets?.numReviews} review`
-            : `${spotDeets?.numReviews} reviews`}
-        </p>
-        {ownerId !== userId ? (
+        <div className="reviewHeading">
+          <i className="fa-solid fa-star"></i>
+          <p>
+            {spotDeets?.avgStarRating !== "NaN"
+              ? spotDeets?.avgStarRating
+              : "New"}
+          </p>
+          <p hidden={newSpot}>
+            {" "}&#x2022;{" "}
+            {spotDeets?.numReviews === 1
+              ? `${spotDeets?.numReviews} review`
+              : `${spotDeets?.numReviews} reviews`}
+          </p>
+        </div>
+        {!user || ownerId === userId || hasReview ? (
+          <></>
+        ) : (
           <OpenModalButton
             className="button"
             buttonText="Post Your Review"
-            modalComponent={
-              <CreateReviewModal  />
-            }
+            modalComponent={<CreateReviewModal spotId={spotId} />}
           />
-        ) : (
-          <></>
         )}
         {!spotReviews?.length ? (
           <>
@@ -126,13 +152,29 @@ const SpotInfo = () => {
                     <p>
                       <b>{review.review}</b>
                     </p>
+                    <div>
+                      {review.User.id === userId ? (
+                        <OpenModalButton
+                          buttonText="Delete"
+                          modalComponent={
+                            <DeleteReviewModal
+                              onButtonClick={generic}
+                              reviewId={review.id}
+                              spotId={spotId}
+                            />
+                          }
+                        />
+                      ) : (
+                        <></>
+                      )}
+                    </div>
                   </div>
                 );
               })}
           </>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

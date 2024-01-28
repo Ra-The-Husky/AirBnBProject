@@ -21,14 +21,14 @@ module.exports = {
           {
             spotId: 2,
             userId: 2,
-            review: "Leaving a review just to say it sucked. I was generous with the '2'.",
-            stars: 2,
+            review: "Leaving a review just cuz.",
+            stars: 4,
           },
           {
             spotId: 3,
             userId: 3,
-            review: "My rating tells you enough. Seriously worth, ngl!!",
-            stars: 5,
+            review: "My rating tells you enough.",
+            stars: 2,
           },
           {
             spotId: 4,
@@ -46,7 +46,7 @@ module.exports = {
             spotId: 2,
             userId: 3,
             review: "it was aight ig",
-            stars: 3,
+            stars: 4,
           },
         ],
         { validate: true }
