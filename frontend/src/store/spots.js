@@ -145,14 +145,14 @@ export const newSpotImage = (spotId, image) => async (dispatch) => {
   }
 };
 
-export const deleteSpot = (spotId, userId) => async (dispatch) => {
+export const deleteSpot = (spotId) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spotId}`, {
     method: "DELETE",
   });
 
   if (res.ok) {
     const data = await res.json();
-    dispatch(getUserSpots(userId));
+    dispatch(getUserSpots());
     return data;
   }
 };
