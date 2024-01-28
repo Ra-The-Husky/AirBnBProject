@@ -1,86 +1,101 @@
 .spotInfoPage {
-
 }
 .pictures {
-    display: grid;
-    grid-template-areas: 'a b'
-    'c d';
+  display: grid;
+  grid-template-areas:
+    "a b"
+    "c d";
+  grid-column-gap: 15px;
+  margin: 50px auto;
+  width: auto;
+  display: grid;
+  grid-template-rows: auto;
+  row-gap: 50px;
+  padding: 1em;
+  height: fit-content;
+  width: fit-content;
 }
 
 .imgContainer {
-
+  width: fit-content;
+  height: fit-content;
 }
 
 .image {
-    border: 2px black solid;
+  border: 2px black solid;
+  height: 100%;
 }
 
 .hosted {
-    font-size: 50px
+  font-size: 50px;
 }
 
 .moreInfo {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
-    border-bottom: 3px purple solid;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  border-bottom: 3px purple solid;
 }
 .priceNight {
-    grid-area: a;
-    display: flex;
-    justify-content: center;
-    margin-right: 40%;
-    align-items: center;
+  grid-area: a;
+  display: flex;
+  justify-content: center;
+  margin-right: 40%;
+  align-items: center;
 }
 
 .price {
-    margin-right: 20px;
-    font-size: 25px;
-    font-weight: bold;
+  margin-right: 20px;
+  font-size: 25px;
+  font-weight: bold;
 }
 
 .calloutBox {
-    display: grid;
-    grid-template-areas:
+  display: grid;
+  grid-template-areas:
     "a b"
     "c c";
-    border: 2px purple solid;
-    margin-bottom: 10px;
+  border: 2px purple solid;
+  margin-bottom: 10px;
 }
 
 .ratingInfo {
-    grid-area: b;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    width: fit-content;
-    margin-left: 50%;
+  grid-area: b;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: fit-content;
+  margin-left: 50%;
+  column-gap: 6px;
 }
 .reserveContainer {
-    grid-area: c;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    width: 100%;
-    padding-bottom: 15px;
-
+  grid-area: c;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  width: 100%;
+  padding-bottom: 15px;
 }
 .reserveButton {
-    grid-area: c;
-    font-size: 20px;
-    width: 200px;
-    display: flex;
-    justify-content: center;
-    background-color: yellow;
-    border-radius: 20px;
-
+  grid-area: c;
+  font-size: 20px;
+  width: 200px;
+  display: flex;
+  justify-content: center;
+  background-color: yellow;
+  border-radius: 20px;
 }
-
 .reserveButton:hover {
-    box-shadow: 5px 5px 5px;
-    background-color: green;
+  box-shadow: 5px 5px 5px;
+  background-color: green;
+}
+.reviewHeading {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 3px;
+  column-gap: 6px;
 }
 
 @media screen and max-width(1000) {
-    
 }

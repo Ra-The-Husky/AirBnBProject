@@ -95,18 +95,20 @@ const SpotInfo = () => {
         </div>
       </div>
       <div className="reviews">
-        <i className="fa-solid fa-star"></i>
-        <p>
-          {spotDeets?.avgStarRating !== "NaN"
-            ? spotDeets?.avgStarRating
-            : "New"}
-        </p>
-        <p hidden={newSpot}>
-          &#x2022;{" "}
-          {spotDeets?.numReviews === 1
-            ? `${spotDeets?.numReviews} review`
-            : `${spotDeets?.numReviews} reviews`}
-        </p>
+        <div className="reviewHeading">
+          <i className="fa-solid fa-star"></i>
+          <p>
+            {spotDeets?.avgStarRating !== "NaN"
+              ? spotDeets?.avgStarRating
+              : "New"}
+          </p>
+          <p hidden={newSpot}>
+            {" "}&#x2022;{" "}
+            {spotDeets?.numReviews === 1
+              ? `${spotDeets?.numReviews} review`
+              : `${spotDeets?.numReviews} reviews`}
+          </p>
+        </div>
         {!user || ownerId === userId || hasReview ? (
           <></>
         ) : (
@@ -153,10 +155,10 @@ const SpotInfo = () => {
                     <div>
                       {review.User.id === userId ? (
                         <OpenModalButton
-                        buttonText="Delete"
-                        modalComponent={
-                          <DeleteReviewModal
-                          onButtonClick={generic}
+                          buttonText="Delete"
+                          modalComponent={
+                            <DeleteReviewModal
+                              onButtonClick={generic}
                               reviewId={review.id}
                               spotId={spotId}
                             />
@@ -172,7 +174,7 @@ const SpotInfo = () => {
           </>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
