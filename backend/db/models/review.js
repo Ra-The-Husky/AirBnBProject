@@ -34,6 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           isNumeric: true,
+          len: [1, 5]
         },
       },
     },

@@ -27,9 +27,11 @@
   margin: 10px;
   box-shadow: 3px 3px 3px black;
   border-radius: 5px;
+
 }
 .yesDelete:hover {
     box-shadow: 6px 6px 6px black;
+    cursor: pointer;
 }
 
 .noDelete {
@@ -44,4 +46,5 @@
 }
 .noDelete:hover {
     box-shadow: 6px 6px 6px black;
+    cursor: pointer;
 }

@@ -1,18 +1,12 @@
 import { useModal } from "../../context/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
+import StarRating from './StarRating'
 import { createAReview } from "../../store/reviews";
-import StarRating from "./StarRating";
 
-function ReviewSpotModal() {
+function ReviewSpotModal({ spotId }) {
     const dispatch = useDispatch();
-
     const { closeModal } = useModal();
-
-    const spot = useSelector(state => state.spots)
-
-    const spotId = ((Object.keys(spot).join()))
-
     const sessionUser = useSelector(state => state.session.user);
 
     const [firstName, setFirstName] = useState('')
@@ -31,6 +25,7 @@ function ReviewSpotModal() {
         stars,
         firstName: firstName
       }
+
       await dispatch(createAReview(spotId, newReview))
       .then(closeModal)
       .catch(async (response) => {

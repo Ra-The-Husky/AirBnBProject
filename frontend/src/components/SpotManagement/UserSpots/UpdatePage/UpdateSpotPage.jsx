@@ -322,7 +322,7 @@ const EditSpotInput = () => {
               ></input>
             </div>
           </div> */}
-          <button type="submit" className="newSpot">
+          <button type="submit" className="submitButton">
             Create Spot
           </button>
         </form>

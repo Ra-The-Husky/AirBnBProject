@@ -1,0 +1,102 @@
+.container {
+  grid-column-gap: 15px;
+  margin: 50px auto;
+  width: auto;
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: repeat(4, 25% [col-start]);
+  row-gap: 50px;
+  padding: 1em;
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    margin: 50px auto;
+    width: auto;
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: repeat(1, 300px [col-start]);
+    row-gap: 50px;
+    padding: 1em;
+  }
+}
+@media screen and (max-width: 1240px) {
+  .container {
+    grid-column-gap: 15px;
+    margin: 50px auto;
+    width: auto;
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: repeat(3, 25% [col-start]);
+    row-gap: 50px;
+    padding: 1em;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .container {
+    margin: 50px auto;
+    width: auto;
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: repeat(2, 300px [col-start]);
+    row-gap: 50px;
+    padding: 1em;
+  }
+}
+
+
+.tiles {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  width: 100%;
+}
+
+.tiles:hover {
+  cursor: pointer;
+  border: 3px solid rgb(255, 255, 255);
+  box-shadow: 3px 3px 3px;
+}
+
+.tiles:hover .tooltip {
+  display: flex;
+  justify-content: center;
+}
+
+.tooltip {
+  display: none;
+  position: absolute;
+  padding: 5px;
+  border: 5px solid black;
+  cursor: pointer;
+  margin: 175px;
+}
+
+.previewImage {
+  border: 3px black solid;
+  height: 500px;
+  width: 100%;
+}
+
+.info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.rating {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-left: 150px;
+}
+
+.price {
+  display: flex;
+  font-weight: bold;
+}
+
+.night {
+  margin-left: 5px;
+}

@@ -3,7 +3,7 @@ import { getSpotReviews } from "./spots";
 
 const LOAD_USER_REVIEWS = "reviews/userReviews";
 const REMOVE_REVIEW = "reviews/removeReview";
-const NEW_REVIEW = "reviews/newReview";
+
 const UPDATE_REVIEW = "reviews/updateReview";
 
 //actions
@@ -12,10 +12,7 @@ export const loadUserReviews = (reviews) => ({
   reviews,
 });
 
-export const addReview = (review) => ({
-  type: NEW_REVIEW,
-  review,
-});
+
 
 export const updateReview = (review) => ({
   type: UPDATE_REVIEW,
@@ -39,20 +36,23 @@ export const getUserReviews = () => async (dispatch) => {
   }
 };
 
+
 export const createAReview = (spotId, payload) => async (dispatch) => {
   let res = await csrfFetch(`/api/spots/${spotId}/reviews`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
+
   if (res.ok) {
     const review = await res.json();
-    // console.log("made it here, boss.", spot);
-    dispatch(addReview(review));
     dispatch(getSpotReviews(spotId));
+    dispatch(getOneSpot(spotId))
     return review;
   }
+  return res;
 };
+
 
 export const editReview = (reviewId, edits) => async (dispatch) => {
   const res = await csrfFetch(`/api/reviews/${reviewId}`, {
@@ -61,15 +61,16 @@ export const editReview = (reviewId, edits) => async (dispatch) => {
     body: JSON.stringify(edits),
   });
   if (res.ok) {
-    console.log("made it here?");
     const updatedReview = await res.json();
     console.log(updatedReview);
-    dispatch(updateReview(updatedReview));
+    dispatch(updateSpot(updatedReview));
+    dispatch(getUserReviews())
     return updatedReview;
   }
+  return res
 };
 
-export const deleteReview = (reviewId) => async (dispatch) => {
+export const deleteReview = (reviewId, spotId) => async (dispatch) => {
   console.log(reviewId);
   const res = await csrfFetch(`/api/reviews/${reviewId}`, {
     method: "DELETE",
@@ -77,7 +78,9 @@ export const deleteReview = (reviewId) => async (dispatch) => {
 
   if (res.ok) {
     const data = await res.json();
-    dispatch(removeReview(data));
+    dispatch(getOneSpot(spotId))
+    dispatch(getSpotReviews(spotId))
+    dispatch(getUserReviews())
     return data;
   }
 };
@@ -87,10 +90,8 @@ const initState = [];
 const reviewsReducer = (state = initState, action) => {
   switch (action.type) {
     case LOAD_USER_REVIEWS:
-      console.log('action', action)
       return { ...state, reviews: [...action.reviews.Reviews] };
-    case NEW_REVIEW:
-      return { ...state, review: action.review };
+
     case UPDATE_REVIEW:
       return { ...state, reviewId: action.review };
     case REMOVE_REVIEW:
