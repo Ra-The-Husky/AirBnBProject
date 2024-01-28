@@ -1,5 +1,5 @@
 import { csrfFetch } from "./csrf";
-import { getSpotReviews } from "./spots";
+import { getSpotReviews, getOneSpot } from "./spots";
 
 const LOAD_USER_REVIEWS = "reviews/userReviews";
 const REMOVE_REVIEW = "reviews/removeReview";
@@ -63,7 +63,7 @@ export const editReview = (reviewId, edits) => async (dispatch) => {
   if (res.ok) {
     const updatedReview = await res.json();
     console.log(updatedReview);
-    dispatch(updateSpot(updatedReview));
+    dispatch(updateReview(updatedReview));
     dispatch(getUserReviews())
     return updatedReview;
   }

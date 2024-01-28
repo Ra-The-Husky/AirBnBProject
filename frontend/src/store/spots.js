@@ -152,7 +152,7 @@ export const deleteSpot = (spotId, userId) => async (dispatch) => {
 
   if (res.ok) {
     const data = await res.json();
-    dispatch(getUserSpots());
+    dispatch(getUserSpots(userId));
     return data;
   }
 };

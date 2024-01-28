@@ -1,7 +1,7 @@
 import { getUserSpots } from "../../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../../LandingPage/LoadSpots.css";
 import OpenModalButton from "../../OpenModalButton/OpenModalButton";
 import DeleteSpotModal from "../DeleteSpotModal";
@@ -30,14 +30,13 @@ function ManageSpots() {
       <div className="container">
         {userSpots &&
           userSpots.map((spot) => (
-            <div
-              className="tiles"
-
-            >
-              <span className="element" onClick={() => {
-                navigate(`/spots/${spot.id}`);
-              }}
-              key={spot.id}>
+            <div className="tiles" key={spot.id}>
+              <span
+                className="element"
+                onClick={() => {
+                  navigate(`/spots/${spot.id}`);
+                }}
+              >
                 <img
                   src={spot.previewImage}
                   alt={spot.name}
