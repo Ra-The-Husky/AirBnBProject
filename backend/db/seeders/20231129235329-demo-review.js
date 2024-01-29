@@ -50,7 +50,7 @@ module.exports = {
           },
           {
             spotId: 3,
-            userId: 4,
+            userId: 1,
             review: "After the first couple of nights, the silence of the place got under my skin. Like I love quiet time alone, but it was way too quiet. I felt, idk, isolated almost. Like a prisoner to my own room. Wouldn't recommend if you're one of those sleepers that use outdoor noises and white noise, cuz you'll hear nothing.",
             stars: 2,
           },

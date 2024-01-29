@@ -8,9 +8,12 @@ function Navigation({ isLoaded }) {
 
   return (
     <nav className="navBar">
-      <NavLink to="/">
-        <i className="fa-solid fa-crown"> RoyalBnB</i>
+      <div className="mainIcon">
+      <NavLink to="/"> <img src="/klipartz.png" alt='gold crown icon' style={{height: 75}} />
       </NavLink>
+      <p>LuxuryBnB</p>
+      </div>
+
       {sessionUser ? (
         <div className="createSpot">
           <NavLink to="spots/new" className="createSpot">

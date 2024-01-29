@@ -88,7 +88,7 @@ const SpotInfo = () => {
             </p>
           </div>
           <div className="reserveContainer">
-            <button className="reserveButton" onClick={reserve}>
+            <button className="shineButton" onClick={reserve}>
               Reserve
             </button>
           </div>
@@ -123,7 +123,7 @@ const SpotInfo = () => {
             <p>Be the first to post a review!</p>
           </>
         ) : (
-          <>
+          <div className="reviewList">
             {spotReviews &&
               spotReviews.map((review) => {
                 const date = new Date(review.updatedAt);
@@ -142,7 +142,7 @@ const SpotInfo = () => {
                   "December",
                 ];
                 return (
-                  <div key={review.id}>
+                  <div className='reviewInfo'key={review.id}>
                     <p>
                       <b>{review.User.firstName}</b>
                     </p>
@@ -171,7 +171,7 @@ const SpotInfo = () => {
                   </div>
                 );
               })}
-          </>
+          </div>
         )}
       </div>
     </div>

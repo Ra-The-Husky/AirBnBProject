@@ -55,8 +55,13 @@
   grid-template-areas:
     "a b"
     "c c";
-  border: 2px purple solid;
+  border: 5px gold solid;
+  background-color: #CAC4CE;
   margin-bottom: 10px;
+  width: 100%;
+}
+.calloutBox:hover{
+  box-shadow: 4px 4px black;
 }
 
 .ratingInfo {
@@ -65,9 +70,10 @@
   align-items: center;
   justify-content: space-around;
   width: fit-content;
-  margin-left: 50%;
+  margin-left: 25%;
   column-gap: 6px;
 }
+
 .reserveContainer {
   grid-area: c;
   display: flex;
@@ -76,19 +82,19 @@
   width: 100%;
   padding-bottom: 15px;
 }
-.reserveButton {
+
+.shineButton {
   grid-area: c;
   font-size: 20px;
   width: 200px;
   display: flex;
   justify-content: center;
-  background-color: yellow;
-  border-radius: 20px;
+  box-shadow: 3px 3px;
 }
-.reserveButton:hover {
-  box-shadow: 5px 5px 5px;
-  background-color: green;
+.shineButton:hover {
+  box-shadow: 5px 5px;
 }
+
 .reviewHeading {
   display: flex;
   flex-direction: row;
@@ -97,5 +103,8 @@
   column-gap: 6px;
 }
 
-@media screen and max-width(1000) {
+@media screen and max-width(1400) {
+  .ratingInfo {
+    margin-left: auto;
+  }
 }

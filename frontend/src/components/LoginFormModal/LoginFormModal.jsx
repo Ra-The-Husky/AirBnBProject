@@ -64,13 +64,13 @@ function LoginFormModal() {
         />
 
         <button
-          className="submitButton"
+          className="button"
           disabled={Object.values(errors).length}
           type="submit"
         >
           Log In
         </button>
-        {errors.credential && <p>{errors.credential}</p>}
+        <p className="errors">{errors.credential}</p>
         <label className="demo" onClick={demoUser}>
           Demo User
         </label>

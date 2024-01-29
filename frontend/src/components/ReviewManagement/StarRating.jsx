@@ -26,7 +26,7 @@ const StarRating = ({ stars, onChange }) => {
               setClick(true);
             }}
           >
-            <i className="fa fa-star"></i>
+            <i className="fa fa-star"></i>{" "}
           </div>
         ))}
         Stars
