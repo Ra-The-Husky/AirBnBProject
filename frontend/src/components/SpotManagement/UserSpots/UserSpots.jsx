@@ -37,14 +37,14 @@ function ManageSpots() {
       <div className="container">
         {userSpots &&
           userSpots.map((spot) => (
-            <div className="tiles">
+            <div className="tiles" key={spot.id}>
 
               <div
                 className="element"
                 onClick={() => {
                   navigate(`/spots/${spot.id}`);
                 }}
-                key={spot.id}
+
               >
                 <img
                   src={spot.previewImage}
