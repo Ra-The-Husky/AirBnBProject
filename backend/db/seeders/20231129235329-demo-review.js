@@ -33,13 +33,13 @@ module.exports = {
           {
             spotId: 4,
             userId: 5,
-            review: "The bed was so comfy and shaped to my body so well, I was literally sleeping on air. My only issue was that breakfast took a while and it wasn't good.",
+            review: "The bed was so comfy and shaped to my body so well, I was literally sleeping on air.",
             stars: 3,
           },
           {
             spotId: 5,
             userId: 1,
-            review: "For a spot that boasts only the best, I can hardly call those shoddy pillows passable. Not to mention the slow service and annoying light fixtures everywhere. Wasn't worth my hard earned inheritance.",
+            review: "Wasn't worth my hard earned inheritance.",
             stars: 2,
           },
           {
@@ -51,7 +51,7 @@ module.exports = {
           {
             spotId: 3,
             userId: 1,
-            review: "After the first couple of nights, the silence of the place got under my skin. Like I love quiet time alone, but it was way too quiet. I felt, idk, isolated almost. Like a prisoner to my own room. Wouldn't recommend if you're one of those sleepers that use outdoor noises and white noise, cuz you'll hear nothing.",
+            review: "Like I love quiet time alone, but it was way too quiet. I felt, idk, isolated almost. Like a prisoner to my own room.",
             stars: 2,
           },
           {
