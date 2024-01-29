@@ -30,7 +30,6 @@ export const getUserReviews = () => async (dispatch) => {
 
   if (res.ok) {
     const userReviews = await res.json();
-    console.log("user's reviews", userReviews);
     dispatch(loadUserReviews(userReviews));
     return userReviews;
   }
@@ -62,7 +61,6 @@ export const editReview = (reviewId, edits) => async (dispatch) => {
   });
   if (res.ok) {
     const updatedReview = await res.json();
-    console.log(updatedReview);
     dispatch(updateSpot(updatedReview));
     dispatch(getUserReviews())
     return updatedReview;
@@ -71,7 +69,6 @@ export const editReview = (reviewId, edits) => async (dispatch) => {
 };
 
 export const deleteReview = (reviewId, spotId) => async (dispatch) => {
-  console.log(reviewId);
   const res = await csrfFetch(`/api/reviews/${reviewId}`, {
     method: "DELETE",
   });

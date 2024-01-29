@@ -56,7 +56,6 @@ export const getAllSpots = () => async (dispatch) => {
 
   if (res.ok) {
     const data = await res.json();
-    // console.log('line 20 console log,' ,data)
     dispatch(loadSpots(data.Spots));
     return data;
   }
@@ -67,7 +66,6 @@ export const getUserSpots = () => async (dispatch) => {
 
   if (res.ok) {
     const userSpots = await res.json();
-    // console.log("user's spots", userSpots.Spots);
     dispatch(loadUserSpots(userSpots.Spots));
     return userSpots;
   }
@@ -88,7 +86,6 @@ export const getSpotReviews = (spotId) => async (dispatch) => {
 
   if (res.ok) {
     const review = await res.json();
-    console.log("this is the spot reviews,", review);
     review.Reviews.reverse();
     dispatch(getReview(review));
     return review;
@@ -103,7 +100,6 @@ export const createASpot = (payload) => async (dispatch) => {
   });
   if (res.ok) {
     const spot = await res.json();
-    // console.log("made it here, boss.", spot);
     dispatch(addSpot(spot));
     return spot;
   }
@@ -116,9 +112,7 @@ export const editSpot = (spotId, edits) => async (dispatch) => {
     body: JSON.stringify(edits),
   });
   if (res.ok) {
-    console.log("made it here?");
     const updatedSpot = await res.json();
-    console.log(updatedSpot);
     dispatch(updateSpot(updatedSpot));
     return updatedSpot;
   }
@@ -126,8 +120,6 @@ export const editSpot = (spotId, edits) => async (dispatch) => {
 
 export const newSpotImage = (spotId, image) => async (dispatch) => {
   const { url, preview, imageableType } = image;
-  // console.log("thunk spotId log", spotId);
-  // console.log('new image info', url, preview, imageableType);
   const res = await csrfFetch(`/api/spots/${spotId}/images`, {
     method: "POST",
     body: JSON.stringify({

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import StarRating from './StarRating'
 import { createAReview } from "../../store/reviews";
+import './ReviewModal.css'
 
 function ReviewSpotModal({ spotId }) {
     const dispatch = useDispatch();
@@ -44,20 +45,25 @@ function ReviewSpotModal({ spotId }) {
     return (
       <div className='reviewForm'>
         <h1>How was your stay?</h1>
-        <form onSubmit={handleSubmit}>
+        <form className='profileForm' onSubmit={handleSubmit}>
           {errors.review && <span className='errors'>{errors.review}</span>}
           {errors.stars && <span className='errors'>{errors.stars}</span>}
           <textarea
+          className="input"
             placeholder='Leave your review here...'
             value={review}
             onChange={(e) => setReview(e.target.value)}
             rows="4"
           />
+          <div className="stars">
+
           <StarRating
             onChange={onChange}
             stars={stars}
+            className='stars'
             />
-          <button type='submit' disabled={(review.length < 10) || (!stars)}>Submit Your Review</button>
+          </div>
+          <button type='submit' className='button' disabled={(review.length < 10) || (!stars)}>Submit Your Review</button>
 
         </form>
       </div>

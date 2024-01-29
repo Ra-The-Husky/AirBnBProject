@@ -1,6 +1,7 @@
 import { useModal } from "../../context/Modal";
 import { useDispatch } from "react-redux";
 import { deleteReview } from "../../store/reviews";
+import './ReviewModal.css'
 
 function DeleteReviewModal({ reviewId, spotId, onButtonClick }) {
   const dispatch = useDispatch();
@@ -15,7 +16,7 @@ function DeleteReviewModal({ reviewId, spotId, onButtonClick }) {
   };
 
   return (
-    <div className="modal">
+    <div className="profileForm">
       <h1 className="title">Confirm Delete</h1>
       <p className="confirmationText">
         Are you sure you want to remove this spot from the listings?

@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { useState} from "react";
+import { useState } from "react";
 import { createASpot, newSpotImage } from "../../store/spots";
 import { useNavigate } from "react-router-dom";
 import "./CreateSpot.css";
@@ -44,27 +44,27 @@ const NewSpotInput = () => {
   const navigate = useNavigate();
 
   // useEffect(() => {
-    // const validTypes = ["jpg", "png", "jpeg"];
-    // const errs = {};
-    // if (!previewImage.url) {
-    //   errs.previewImage = "*Preview image is required";
-    // }
-    // if (previewImage.url.includes(validTypes)) {
-    //   errs.previewImage = "*Image URL must end in .jpg, .png, or .jpeg";
-    // }
-    // if (!extraImageOne.url.includes(validTypes)) {
-    //   errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
-    // }
-    // if (!extraImageTwo.url.includes(validTypes)) {
-    //   errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
-    // }
-    // if (!extraImageThree.url.includes(validTypes)) {
-    //   errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
-    // }
-    // if (!extraImageFour.url.includes(validTypes)) {
-    //   errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
-    // }
-    // setErrors(errs);
+  // const validTypes = ["jpg", "png", "jpeg"];
+  // const errs = {};
+  // if (!previewImage.url) {
+  //   errs.previewImage = "*Preview image is required";
+  // }
+  // if (previewImage.url.includes(validTypes)) {
+  //   errs.previewImage = "*Image URL must end in .jpg, .png, or .jpeg";
+  // }
+  // if (!extraImageOne.url.includes(validTypes)) {
+  //   errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
+  // }
+  // if (!extraImageTwo.url.includes(validTypes)) {
+  //   errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
+  // }
+  // if (!extraImageThree.url.includes(validTypes)) {
+  //   errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
+  // }
+  // if (!extraImageFour.url.includes(validTypes)) {
+  //   errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
+  // }
+  // setErrors(errs);
   // }, [previewImage]);
 
   // const spotId = useSelector((state) => state.spots.spot?.id);
@@ -96,27 +96,24 @@ const NewSpotInput = () => {
     // if (Object.values(errors)) {
     //   return console.log(errors);
     // } else {
-      dispatch(createASpot(spot))
-        .then((confirmedSpot) => {
-          dispatch(newSpotImage(confirmedSpot.id, spot.previewImage));
-          return confirmedSpot;
-        })
-        .then((newSpot) => {
-          if (moreImages.length) {
-            moreImages.map((image) =>
-            dispatch(newSpotImage(newSpot.id, image))
-            );
-          }
-          navigate(`/spots/${newSpot.id}`);
-          reset();
-        })
-        .catch(async (res) => {
-          const data = await res.json();
-          console.log("ooof caught an error or two?", {
-            errors: data.errors,
-          });
+    dispatch(createASpot(spot))
+      .then((confirmedSpot) => {
+        dispatch(newSpotImage(confirmedSpot.id, spot.previewImage));
+        return confirmedSpot;
+      })
+      .then((newSpot) => {
+        if (moreImages.length) {
+          moreImages.map((image) => dispatch(newSpotImage(newSpot.id, image)));
+        }
+        navigate(`/spots/${newSpot.id}`);
+        reset();
+      })
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data?.errors) {
           setErrors(data.errors);
-        });
+        }
+      });
     // }
   };
 
@@ -164,36 +161,38 @@ const NewSpotInput = () => {
 
   const testForm = () => {
     setCountry("United States");
-    setAddress("347 Newluc Circle");
-    setCity("Dreamingale");
-    setState("FL");
+    setAddress("4 Minos Court");
+    setCity("Effervencia");
+    setState("IL");
     setLat(Math.random() * 100);
     setLng(Math.random() * -100);
-    setDescription("A real dream come true. Relax in this luxurious modern home in a peaceful quiet neighborhood");
-    setName("Chill Haven");
-    setPrice(Math.round(Math.random() * 500));
+    setDescription(
+      "A real dream come true. Relax in this luxurious modern home in a peaceful quiet neighborhood"
+    );
+    setName("Milagros Acogedor");
+    setPrice(Math.round(Math.random() * 250));
     setPreviewImage({
-      url: "https://i.pinimg.com/736x/b6/8b/c3/b68bc3b9d5ff27f7c0c874819e64e322.jpg",
+      url: "https://i.pinimg.com/564x/5e/6b/ee/5e6bee7e69baa1cac89351894ac19402.jpg",
       preview: true,
       imageableType: "Spot",
     });
     setExtraImageOne({
-      url: "https://media.designcafe.com/wp-content/uploads/2023/07/05195443/modern-interior-design.jpg",
+      url: "https://i.pinimg.com/736x/72/0f/1e/720f1efcde831979af9d09eeda23ca75.jpg",
       preview: true,
       imageableType: "Spot",
     });
     setExtraImageTwo({
-      url: "https://media.designcafe.com/wp-content/uploads/2019/12/20235313/modern-bathroom-designs-for-your-home.jpg",
+      url: "https://i.pinimg.com/736x/14/c3/68/14c368b66f4b8283f930923821c2b957.jpg",
       preview: true,
       imageableType: "Spot",
     });
     setExtraImageThree({
-      url: "https://cdn.homedit.com/wp-content/uploads/2014/01/modern-white-large-dining-table.jpg",
+      url: "https://hgtvhome.sndimg.com/content/dam/images/hgtv/fullset/2013/4/10/3/CI-Rustic-Elegance_rustic-master-bathroom-with-soak-tub-pg32_3x4.jpg.rend.hgtvcom.616.822.suffix/1400979699637.jpeg",
       preview: true,
       imageableType: "Spot",
     });
     setExtraImageFour({
-      url: "https://media.designcafe.com/wp-content/uploads/2019/12/20234901/master-bedroom-design-for-your-home-4.jpg",
+      url: "https://i.pinimg.com/564x/2a/ea/a5/2aeaa54af003acd8f65470d00a1a5415.jpg",
       preview: true,
       imageableType: "Spot",
     });
@@ -210,26 +209,31 @@ const NewSpotInput = () => {
             reservation.
           </p>
           <div className="countryAddress">
-            <label>
-              Country
-              <p className="errors">{errors.country}</p>
-              <input
-                placeholder="Country"
-                value={country}
-                onChange={(e) => setCountry(e.target.value)}
-                name="country"
-              ></input>
-            </label>
-            <label>
-              Street Address
-              <p className="errors">{errors.address}</p>
-              <input
-                placeholder="Street Address"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                name="address"
-              ></input>{" "}
-            </label>
+            <div className="country">
+              <label>
+                Country
+                <p className="errors">{errors.country}</p>
+                <input
+                  className="input"
+                  placeholder="Country"
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
+                  name="country"
+                ></input>
+              </label>
+            </div>
+            <div className="address">
+              <label>
+                Street Address
+                <p className="errors">{errors.address}</p>
+                <input
+                  placeholder="Street Address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  name="address"
+                ></input>{" "}
+              </label>
+            </div>
           </div>
           <div className="cityState">
             <label className="city">
@@ -337,12 +341,13 @@ const NewSpotInput = () => {
                   url: e.target.value,
                   preview: true,
                   imageableType: "Spot",
-
                 })
               }
               name="preview image"
             ></input>
-              {errors.previewImage && <p className="errors">{errors.previewImage}</p>}
+            {errors.previewImage && (
+              <p className="errors">{errors.previewImage}</p>
+            )}
             <input
               placeholder="Image URL"
               value={extraImageOne.url}
@@ -397,10 +402,10 @@ const NewSpotInput = () => {
         <button type="submit" className="newSpot">
           Create Spot
         </button>
-      </form>
       <button onClick={testForm} className="newSpot">
         Test Spot
       </button>
+      </form>
     </div>
   );
 };
