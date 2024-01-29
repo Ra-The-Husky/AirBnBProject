@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { useState} from "react";
+import { useState } from "react";
 import { createASpot, newSpotImage } from "../../store/spots";
 import { useNavigate } from "react-router-dom";
 import "./CreateSpot.css";
@@ -44,27 +44,27 @@ const NewSpotInput = () => {
   const navigate = useNavigate();
 
   // useEffect(() => {
-    // const validTypes = ["jpg", "png", "jpeg"];
-    // const errs = {};
-    // if (!previewImage.url) {
-    //   errs.previewImage = "*Preview image is required";
-    // }
-    // if (previewImage.url.includes(validTypes)) {
-    //   errs.previewImage = "*Image URL must end in .jpg, .png, or .jpeg";
-    // }
-    // if (!extraImageOne.url.includes(validTypes)) {
-    //   errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
-    // }
-    // if (!extraImageTwo.url.includes(validTypes)) {
-    //   errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
-    // }
-    // if (!extraImageThree.url.includes(validTypes)) {
-    //   errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
-    // }
-    // if (!extraImageFour.url.includes(validTypes)) {
-    //   errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
-    // }
-    // setErrors(errs);
+  // const validTypes = ["jpg", "png", "jpeg"];
+  // const errs = {};
+  // if (!previewImage.url) {
+  //   errs.previewImage = "*Preview image is required";
+  // }
+  // if (previewImage.url.includes(validTypes)) {
+  //   errs.previewImage = "*Image URL must end in .jpg, .png, or .jpeg";
+  // }
+  // if (!extraImageOne.url.includes(validTypes)) {
+  //   errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
+  // }
+  // if (!extraImageTwo.url.includes(validTypes)) {
+  //   errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
+  // }
+  // if (!extraImageThree.url.includes(validTypes)) {
+  //   errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
+  // }
+  // if (!extraImageFour.url.includes(validTypes)) {
+  //   errs.extraImage = "*Image URL must end in .jpg, .png, or .jpeg";
+  // }
+  // setErrors(errs);
   // }, [previewImage]);
 
   // const spotId = useSelector((state) => state.spots.spot?.id);
@@ -96,27 +96,24 @@ const NewSpotInput = () => {
     // if (Object.values(errors)) {
     //   return console.log(errors);
     // } else {
-      dispatch(createASpot(spot))
-        .then((confirmedSpot) => {
-          dispatch(newSpotImage(confirmedSpot.id, spot.previewImage));
-          return confirmedSpot;
-        })
-        .then((newSpot) => {
-          if (moreImages.length) {
-            moreImages.map((image) =>
-            dispatch(newSpotImage(newSpot.id, image))
-            );
-          }
-          navigate(`/spots/${newSpot.id}`);
-          reset();
-        })
-        .catch(async (res) => {
-          const data = await res.json();
-          console.log("ooof caught an error or two?", {
-            errors: data.errors,
-          });
+    dispatch(createASpot(spot))
+      .then((confirmedSpot) => {
+        dispatch(newSpotImage(confirmedSpot.id, spot.previewImage));
+        return confirmedSpot;
+      })
+      .then((newSpot) => {
+        if (moreImages.length) {
+          moreImages.map((image) => dispatch(newSpotImage(newSpot.id, image)));
+        }
+        navigate(`/spots/${newSpot.id}`);
+        reset();
+      })
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data?.errors) {
           setErrors(data.errors);
-        });
+        }
+      });
     // }
   };
 
@@ -169,7 +166,9 @@ const NewSpotInput = () => {
     setState("IL");
     setLat(Math.random() * 100);
     setLng(Math.random() * -100);
-    setDescription("A real dream come true. Relax in this luxurious modern home in a peaceful quiet neighborhood");
+    setDescription(
+      "A real dream come true. Relax in this luxurious modern home in a peaceful quiet neighborhood"
+    );
     setName("Milagros Acogedor");
     setPrice(Math.round(Math.random() * 250));
     setPreviewImage({
@@ -210,26 +209,31 @@ const NewSpotInput = () => {
             reservation.
           </p>
           <div className="countryAddress">
-            <label>
-              Country
-              <p className="errors">{errors.country}</p>
-              <input
-                placeholder="Country"
-                value={country}
-                onChange={(e) => setCountry(e.target.value)}
-                name="country"
-              ></input>
-            </label>
-            <label>
-              Street Address
-              <p className="errors">{errors.address}</p>
-              <input
-                placeholder="Street Address"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                name="address"
-              ></input>{" "}
-            </label>
+            <div className="country">
+              <label>
+                Country
+                <p className="errors">{errors.country}</p>
+                <input
+                  className="input"
+                  placeholder="Country"
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
+                  name="country"
+                ></input>
+              </label>
+            </div>
+            <div className="address">
+              <label>
+                Street Address
+                <p className="errors">{errors.address}</p>
+                <input
+                  placeholder="Street Address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  name="address"
+                ></input>{" "}
+              </label>
+            </div>
           </div>
           <div className="cityState">
             <label className="city">
@@ -337,12 +341,13 @@ const NewSpotInput = () => {
                   url: e.target.value,
                   preview: true,
                   imageableType: "Spot",
-
                 })
               }
               name="preview image"
             ></input>
-              {errors.previewImage && <p className="errors">{errors.previewImage}</p>}
+            {errors.previewImage && (
+              <p className="errors">{errors.previewImage}</p>
+            )}
             <input
               placeholder="Image URL"
               value={extraImageOne.url}
@@ -397,10 +402,10 @@ const NewSpotInput = () => {
         <button type="submit" className="newSpot">
           Create Spot
         </button>
-      </form>
       <button onClick={testForm} className="newSpot">
         Test Spot
       </button>
+      </form>
     </div>
   );
 };

@@ -1,29 +1,26 @@
-.spotInfoPage {
-}
-.pictures {
+
+.imgContainer {
   display: grid;
   grid-template-areas:
-    "a b"
-    "c d";
-  grid-column-gap: 15px;
+    "a b c d";
+  grid-column-gap: 10px;
+  grid-row-gap: 5px;
   margin: 50px auto;
-  width: auto;
+  width: fit-content;
   display: grid;
   grid-template-rows: auto;
   row-gap: 50px;
   padding: 1em;
-  height: fit-content;
-  width: fit-content;
 }
 
-.imgContainer {
-  width: fit-content;
-  height: fit-content;
+.imgContainer img:nth-child(3) {
+  grid-area: a;
 }
 
 .image {
   border: 2px black solid;
-  height: 100%;
+  height: 250px;
+  width: 250px;
 }
 
 .hosted {

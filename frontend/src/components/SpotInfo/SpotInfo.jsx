@@ -25,7 +25,6 @@ const SpotInfo = () => {
   });
   async function generic() {
     await dispatch(getSpotReviews(spotId)).then((reviews) => {
-      console.log(reviews.Reviews);
       if (reviews.Reviews.length > 0) {
         setNewSpot(false);
       }
@@ -55,12 +54,12 @@ const SpotInfo = () => {
           Location: {spotDeets?.city}, {spotDeets?.state}, {spotDeets?.country}
         </p>
       </div>
-      <div className="pictures">
+      <div className="imgContainer" >
         {spotDeets &&
           spotDeets.SpotImages.map((image) => (
-            <div className="imgContainer" key={image.id}>
-              <img src={image.url} className="image" />
-            </div>
+
+              <img key={image.id} src={image.url} className="image" />
+
           ))}
       </div>
       <p className="hosted">

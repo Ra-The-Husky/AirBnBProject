@@ -91,7 +91,7 @@
 }
 .managementButtons button:hover{
   box-shadow: 3px 3px 3px black;
-  background-color: lightgreen;
+  background-color: slateblue;
   cursor: pointer;
 }
 
