@@ -25,7 +25,6 @@ const SpotInfo = () => {
   });
   async function generic() {
     await dispatch(getSpotReviews(spotId)).then((reviews) => {
-      console.log(reviews.Reviews);
       if (reviews.Reviews.length > 0) {
         setNewSpot(false);
       }
@@ -55,12 +54,12 @@ const SpotInfo = () => {
           Location: {spotDeets?.city}, {spotDeets?.state}, {spotDeets?.country}
         </p>
       </div>
-      <div className="pictures">
+      <div className="imgContainer" >
         {spotDeets &&
           spotDeets.SpotImages.map((image) => (
-            <div className="imgContainer" key={image.id}>
-              <img src={image.url} className="image" />
-            </div>
+
+              <img key={image.id} src={image.url} className="image" />
+
           ))}
       </div>
       <p className="hosted">
@@ -88,7 +87,7 @@ const SpotInfo = () => {
             </p>
           </div>
           <div className="reserveContainer">
-            <button className="reserveButton" onClick={reserve}>
+            <button className="shineButton" onClick={reserve}>
               Reserve
             </button>
           </div>
@@ -123,7 +122,7 @@ const SpotInfo = () => {
             <p>Be the first to post a review!</p>
           </>
         ) : (
-          <>
+          <div className="reviewList">
             {spotReviews &&
               spotReviews.map((review) => {
                 const date = new Date(review.updatedAt);
@@ -142,7 +141,7 @@ const SpotInfo = () => {
                   "December",
                 ];
                 return (
-                  <div key={review.id}>
+                  <div className='reviewInfo'key={review.id}>
                     <p>
                       <b>{review.User.firstName}</b>
                     </p>
@@ -171,7 +170,7 @@ const SpotInfo = () => {
                   </div>
                 );
               })}
-          </>
+          </div>
         )}
       </div>
     </div>

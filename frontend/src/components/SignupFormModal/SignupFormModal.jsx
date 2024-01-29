@@ -107,11 +107,12 @@ function SignupFormModal() {
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />
-
         {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
-        <button className="submitButton" type="submit">
-          Sign Up
-        </button>
+        <div className="buttonContainer">
+          <button className="button" type="submit">
+            Sign Up
+          </button>
+        </div>
       </form>
     </div>
   );
